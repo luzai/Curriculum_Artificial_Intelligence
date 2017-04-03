@@ -53,7 +53,7 @@ start: start node number for searching
 end: end node number for searching
 endflag: a bool variable for determining whether searching has reached the end node
 */
-void dfs(MGraph G, int start, int end, bool& return_flag,vector<int> path)
+void dfs(MGraph G, int start, int end, bool& return_flag,vector<int>& path)
 {
 	if (return_flag == true)
 		return;

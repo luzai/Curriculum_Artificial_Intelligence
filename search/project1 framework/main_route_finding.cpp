@@ -4,8 +4,8 @@
 
 #pragma warning(disable:4996)
 
-//#define Astar
-# define Search
+#define Astar
+//# define Search
 int main()
 {
 
@@ -36,7 +36,7 @@ int main()
 	dfs1(graph, start, end);
 	bfs(graph, start, end);
 #else
-	if (freopen("in2.txt", "r",stdin)==NULL)
+	if (freopen("in_AStar.txt", "r",stdin)==NULL)
 	{
 		cerr << "Fail";
 		exit(1);
@@ -52,11 +52,11 @@ int main()
 	cin >> end;
 	cout << "Your input is " << end << endl;
 	vector<int> result_path;
-	for (auto it = graph.graph_nodes_.begin(); it != graph.graph_nodes_.end(); it++)
-	{
-		cout << it->nodeNum;
-	}
-	AStarShortestPathSearch(graph, graph.graph_nodes_[start],graph.graph_nodes_[end], result_path);
+	GraphNode init, final;
+	init.nodeNum = start;
+	final.nodeNum = end;
+	
+	AStarShortestPathSearch(graph,init ,final, result_path);
 	displaySearchPath(result_path,graph);
 #endif
 
