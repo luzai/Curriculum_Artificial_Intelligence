@@ -26,6 +26,13 @@ struct TicTacToeState
 			state[i/3][i%3] = 0;
 		}
 	}
+	TicTacToeState(const TicTacToeState& a)
+	{
+		for (int i = 0; i < 9; ++i)
+		{
+			state[i / 3][i % 3] = a.state[i/3][i%3];
+		}
+	}
 };
 
 struct Action

@@ -4,7 +4,7 @@
 #include<vector>
 #include<queue>
 #include <iostream>
-
+#include <sstream>
 using namespace std;
 
 struct EightPuzzleState{
@@ -24,14 +24,18 @@ struct EightPuzzleState{
 	string to_str()
 	{
 		
-		string t = "";
+		string t;
+		stringstream buf;
 		for (int r = 0; r < 3; r++)
 		{
 			for (int c = 0; c < 3; c++)
 			{
-//				 t+= itoa( state[r][c]);
+				buf << state[r][c];
 			}
 		}
+
+		buf >> t;
+//		cout << t;
 		return t;
 	}
 	bool operator== (EightPuzzleState a){

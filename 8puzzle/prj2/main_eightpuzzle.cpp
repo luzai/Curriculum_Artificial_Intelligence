@@ -1,21 +1,16 @@
 #include "eightpuzzle.hpp"
 #include <vector>
 #include <iostream>
+#include <sstream>
 using namespace std;
 int main()
 {
 	EightPuzzleState iniState;
-	generateState(&iniState,10); // randomly generate a initial state, the second variable indicates how 
+	generateState(&iniState,150); // randomly generate a initial state, the second variable indicates how 
 								// far the initial state is from final state, for debugging, choose 10.
 								// For testing, you may choose 50 - 150. 
 	vector<int> moves;
-	std::string name = "nemo";
-	int age = 1000;
-	std::ostringstream out;
-	out << "name: " << name << ", age: " << age;
-	std::cout << out.str() << '\n';
-	return 0;
-
+//	iniState.to_str();
 	AStarSearchFor8Puzzle(iniState, moves);
 
 	int status = runMoves(&iniState, moves);

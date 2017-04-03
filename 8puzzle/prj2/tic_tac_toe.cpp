@@ -2,14 +2,124 @@
 #include "iostream"
 #include "string"
 #include <vector>
+#include <algorithm>
 using namespace std;
-
+#pragma warning(disable:4996)
 /*	Search the next step by MinMaxSearch with depth limited strategy.
 	currentState is the current state of the game, see structure TicTacToeState for more details.
 		WARNING: The search depth is limited to 3, computer uses circles(1).
 	r and c are returned row and column index that computer player will draw a circle on. 0<=r<=2, 0<=c<=2
 	Your code starts here
 */
+
+void getAvailableActions(TicTacToeState currentState,
+	vector<Action>& actions)
+{
+	int chess_count = 0;
+
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 3; j++)
+			if (currentState.state[i][j] == 0) {
+		Action* _new = (Action*)malloc(sizeof(Action));
+		_new->row = i; _new->col = j;
+		actions.push_back(*_new);
+			}
+			else
+				chess_count++;
+	if (chess_count == 1){
+		vector<Action>().swap(actions);
+		Action* _new = (Action*)malloc(sizeof(Action));
+		if (currentState.state[1][1] == 0)
+		{
+			_new->row = 1; _new->col = 1;
+		}
+		else {
+			_new->row = 0; _new->col = 0;
+		}
+		actions.push_back(*_new);
+	}
+}
+
+int mCheckGameStatus(const TicTacToeState& state)
+{
+	int a[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+	int player = 0;
+	//012 for sum of rows  345 for sum for cols  67 for cross
+	for (int i = 0; i < 3; i++)
+	{
+		a[0] += state.state[0][i];
+		a[1] += state.state[1][i];
+		a[2] += state.state[2][i];
+		a[3] += state.state[i][0];
+		a[4] += state.state[i][1];
+		a[5] += state.state[i][2];
+		a[6] += state.state[i][i];
+		a[7] += state.state[i][2 - i];
+	}
+	for (int i = 0; i < 8; i++)
+	{
+		if (a[i] == 3)
+			return 1;
+		else if (a[i] == -3)
+			return -1;
+	}
+	int numSpaces = 0;
+	for (int i = 0; i < 3; ++i)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			if (state.state[i][j] == 0)
+			{
+				numSpaces++;
+			}
+		}
+	}
+	if (numSpaces == 0)
+	{
+		return 0;//draw
+	}
+	// in the play
+	return 2;
+}
+
+TicTacToeState resState(TicTacToeState currState, Action action,int player)
+{
+	TicTacToeState nextState(currState);
+	nextState.state[action.row][action.col] = player;
+	return nextState;
+}
+
+int minValue(const TicTacToeState& currentState);
+int maxValue(const TicTacToeState& currentState)
+{
+	int current_val = mCheckGameStatus(currentState);
+	if (current_val != 2)
+		return current_val;
+	int value = -999;
+	vector<Action> actions;
+	getAvailableActions(currentState, actions);
+	for (int i = 0; i < actions.size(); i++)
+	{
+		value = max(value, minValue(resState(currentState, actions[i],1)  ) );
+	}
+	return value;
+}
+
+int minValue(const TicTacToeState& currentState)
+{
+	int current_val = mCheckGameStatus(currentState);
+	if (current_val != 2)
+		return current_val;
+	int value = 999;
+	vector<Action> actions;
+	getAvailableActions(currentState, actions);
+	for (int i = 0; i < actions.size(); i++)
+	{
+		value = min(value, maxValue(resState(currentState, actions[i], -1)  ) );
+	}
+	return value;
+}
+
 void miniMaxSearchForTicTacToe(const TicTacToeState& currentState, int& r, int& c)
 {
 	vector<Action> actions;
@@ -17,7 +127,7 @@ void miniMaxSearchForTicTacToe(const TicTacToeState& currentState, int& r, int& 
 	getAvailableActions(currentState, actions);
 	for (int i = 0; i < (int)actions.size(); ++i)
 	{
-		values.push_back(MIN_Value(actionResult(currentState, actions[i], 1), currentState));
+		values.push_back(minValue(resState(currentState, actions[i], 1) )  );
 	}
 	int max_idx = 0;
 	int max_val = values[max_idx];

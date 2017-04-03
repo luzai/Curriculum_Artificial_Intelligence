@@ -72,24 +72,30 @@ void getSuccessors(EightPuzzleState* current,vector<EightPuzzleState*>& successo
 		}
 	}
 }
-
-bool checkInCloseList(EightPuzzleState* curr,unordered_set<EightPuzzleState*> close_list)
+bool checkInCloseList(EightPuzzleState* curr, vector<EightPuzzleState*> close_list)
 {
 	assert(curr != nullptr);
 	///For close_list is vector:
-//	for (int i=0;i<(int)close_list.size();i++)
-//	{
-//		if (*curr==*(close_list[i]))
-//		{
-//			free(curr);
-////			curr = nullptr;
-//			return true;
-//		}
-//}
+		for (int i=0;i<(int)close_list.size();i++)
+		{
+			if (*curr==*(close_list[i]))
+			{
+				free(curr);
+	
+				return true;
+			}
+	}
+	
+	return false;
+}
+bool checkInCloseList(EightPuzzleState* curr,unordered_set<string> close_list)
+{
+	assert(curr != nullptr);
 	/// for hash set:
-	if (close_list.count(curr)>0)
+	/// has exits curr in close list
+	if (close_list.count(curr->to_str())>0)
 	{
-		cout << "CAO";
+//		cout << "here";
 		free(curr);
 		return true;
 	}
@@ -124,7 +130,7 @@ bool checkInOpenList(EightPuzzleState* curr,
 void AStarSearchFor8Puzzle(EightPuzzleState& iniState, vector<int>& moves)
 {
 	priority_queue<EightPuzzleState*, vector<EightPuzzleState*>, cmpLarge> openlist;
-	unordered_set<EightPuzzleState*> closelist;
+	unordered_set<string> closelist;
 	EightPuzzleState* startPos = &iniState;
 	EightPuzzleState* current;
 	
@@ -149,7 +155,7 @@ void AStarSearchFor8Puzzle(EightPuzzleState& iniState, vector<int>& moves)
 			return;
 		}
 		openlist.pop();
-		closelist.insert(current);
+		closelist.insert(current->to_str());
 		vector<EightPuzzleState*> successors;
 		getSuccessors(current,successors);
 		
@@ -172,6 +178,7 @@ void AStarSearchFor8Puzzle(EightPuzzleState& iniState, vector<int>& moves)
 				openlist.push(successors[i]);
 			}
 		}
+
 
 	}
 }
