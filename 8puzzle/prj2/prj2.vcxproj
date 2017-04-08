@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="eightpuzzle.cpp" />
+    <ClCompile Include="main_eightpuzzle.cpp" />
     <ClCompile Include="main_tic_tac_toe.cpp" />
     <ClCompile Include="tic_tac_toe.cpp" />
   </ItemGroup>

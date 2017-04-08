@@ -14,9 +14,10 @@ void createGraph(Graph &G)
 {
 	cout << "enter the number of nodes in the graph:" << endl;
 	cin >> G.n;
+	cout << "your input is " << G.n << endl;
 	cout << "enter the number of edges in the graph:" << endl;
 	cin >> G.e;
-
+	cout << "your input is " << G.e << endl;
 	int i, j;
 	int s, t; //start and end node number
 	int v;  //value of edge between node s and t
@@ -35,14 +36,16 @@ void createGraph(Graph &G)
 	{
 		cin >> s >> t >> v;
 		G.edges[s][t] = v;
-
-		cout << "next:" << endl;
+		cout << "your input is " << " " << s << " " << t << " " << v << endl;
+		cout << "next:" ;
 	}
-	cout << "enter heuristic val" << endl;
+	cout << "enter heuristic val" << endl<<"Your input is:";
 	for (int i = 0; i < G.n; i++)
 	{
 		cin >> G.H[i];
+		cout << G.H[i] << " ";
 	}
+	cout << endl;
 }
 bool checkInCloseList(GraphNode* curr, vector<GraphNode*> close_list)
 {

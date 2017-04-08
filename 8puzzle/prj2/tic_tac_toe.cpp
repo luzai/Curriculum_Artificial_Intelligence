@@ -20,23 +20,23 @@ void getAvailableActions(TicTacToeState currentState,
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
 			if (currentState.state[i][j] == 0) {
-		Action* _new = (Action*)malloc(sizeof(Action));
-		_new->row = i; _new->col = j;
-		actions.push_back(*_new);
+		Action* m_action = (Action*)malloc(sizeof(Action));
+		m_action->row = i; m_action->col = j;
+		actions.push_back(*m_action);
 			}
 			else
 				chess_count++;
 	if (chess_count == 1){
 		vector<Action>().swap(actions);
-		Action* _new = (Action*)malloc(sizeof(Action));
+		Action* m_action = (Action*)malloc(sizeof(Action));
 		if (currentState.state[1][1] == 0)
 		{
-			_new->row = 1; _new->col = 1;
+			m_action->row = 1; m_action->col = 1;
 		}
 		else {
-			_new->row = 0; _new->col = 0;
+			m_action->row = 0; m_action->col = 0;
 		}
-		actions.push_back(*_new);
+		actions.push_back(*m_action);
 	}
 }
 

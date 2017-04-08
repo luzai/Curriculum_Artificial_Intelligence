@@ -6,6 +6,7 @@
 #include<queue>
 #include<stack>
 #include <unordered_set>
+#include "Astar.h"
 
 using namespace std;
 
@@ -41,7 +42,7 @@ void createMGraph(MGraph &G)
 		cin >> s >> t >> v;    
 		G.edges[s][t] = v;
 		cout <<"your input is "<<" "<< s<<" " << t<<" " << v<<endl;
-		cout << "next:" << endl;
+		cout << "next:" ;
 	}
 }
 /* Your implmentation of DFS, BFS for searching 
@@ -60,10 +61,10 @@ void dfs(MGraph G, int start, int end, bool& return_flag,vector<int>& path)
 	
 	if (start == end)
 	{
-		cout << "Rout: ";
+		cout << "!!DFS find Route: ";
 		for (int i = 0; i < (int)path.size(); ++i)
 		{
-			cout << path[i] << " ";
+			cout << node[ path[i]] << " ";
 		}
 		cout<< endl;
 		return_flag = true;
@@ -102,25 +103,59 @@ void dfs(MGraph G, int start, int end, bool& return_flag,vector<int>& path)
    start: start node number for searching
    end: end node number for searching
 */
-void dfs1(MGraph G, int start, int end)  
+void dfs1(MGraph G, int start, int end)
 {
 	stack<int> s;
+	bool vis_dfs1[maxn] = { false };
+	vis_dfs1[start] = true;
+	int index = -1;
+	vector<int> path;
 
-	vis[start] = true;
-	/* 
+	if (start == end) return;
+	s.push(start);
+	path.push_back(start);
+	while (!s.empty()){
+		for (int i = 0; i < G.n; i++){
+			int top = s.top();
+			if (G.edges[top][i] == 0) continue;
+			if (i == end)
+			{
+				path.push_back(i);
+				cout << "!!DFS1 find Route(use stack): ";
+				for (int i = 0; i < (int)path.size(); ++i)
+				{
+					cout << node[path[i]] << " ";
+				}
+				cout << endl;
+				return;
+			}
+			if (!vis_dfs1[i] && i != index)
+			{
+				path.push_back(i);
+				vis_dfs1[i] = true;
+				s.push(i);
+				continue;
+			}
+			if (i == G.n) index = top;
+		}
+		s.pop();
+		path.pop_back();
+	}
+	return;
+	/*
 	check if start node is end node;
 
 	s.push(start);  //push start node into stack
 
 	while (!s.empty())
-	
-		get top node in the stack;
 
-		for (all the neighboring nodes) //访问与顶点i相邻的顶点
-		
-			if (not visited)
-			
-				operations to the node	
+	get top node in the stack;
+
+	for (all the neighboring nodes) //访问与顶点i相邻的顶点
+
+	if (not visited)
+
+	operations to the node
 	*/
 }
 
@@ -146,8 +181,8 @@ void bfs(MGraph G, int start, int end)
 		  //BFS traversal
 	
 	*/
-
-	vis[start] = true;
+	bool vis_bfs[maxn]={false};
+	vis_bfs[start] = true;
 	vector<int> now_path;
 	now_path.push_back(start);
 	Q.push(now_path);
@@ -157,20 +192,20 @@ void bfs(MGraph G, int start, int end)
 		vector<int> now_path = Q.front();
 		Q.pop();
 		if (now_path.back() == end){
-			cout << "Solution find by BFS: ";
+			cout << "!!Solution find by BFS: ";
 			for (auto it = now_path.begin(); it+1 != now_path.end(); ++it)
-				cout << *it <<  " --> ";
-			cout << now_path.back();
+				cout << node[*it] << " --> ";
+			cout << node[ now_path.back()];
 			cout << endl;
 			return;
 		}
 		for (int j = 0; j < G.n; j++)
 		{
-			if (G.edges[now_path.back()][j] != 0 && vis[j]==false){
+			if (G.edges[now_path.back()][j] != 0 && vis_bfs[j]==false){
 				vector<int> new_path(now_path);
 				new_path.push_back(j);
 				Q.push(new_path);
-				vis[j] = true;
+				vis_bfs[j] = true;
 			}
 
 		}

@@ -23,13 +23,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main_tic_tac_toe.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="tic_tac_toe.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="eightpuzzle.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="main_eightpuzzle.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="main_tic_tac_toe.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

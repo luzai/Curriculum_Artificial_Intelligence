@@ -28,21 +28,52 @@ NOTICE:
    This definition is actually consistent with where your finger moves to
     when you are playing 8 puzzle game.
     Your code start here
-*/
+	*/
 int g_mat_v2[9][9] = {
-	{ 0,1,2,1,2,3,2,3,4 },
-	{ 1,0,1,2,1,2,3,2,3 },
-	{ 2,1,0,3,2,1,4,3,2 },
-	{ 1,2,3,0,1,2,1,2,3 },
-	{ 2,1,2,1,0,1,2,1,2 },
-	{ 3,2,1,2,1,0,3,2,1 },
-	{ 2,3,4,1,2,3,0,1,2 },
-	{ 3,2,3,2,1,2,1,0,1 },
-	{ 4,3,2,3,2,1,2,1,0 }
+			{ 0, 1, 2, 1, 2, 3, 2, 3, 4 },
+			{ 1, 0, 1, 2, 1, 2, 3, 2, 3 },
+			{ 2, 1, 0, 3, 2, 1, 4, 3, 2 },
+			{ 1, 2, 3, 0, 1, 2, 1, 2, 3 },
+			{ 2, 1, 2, 1, 0, 1, 2, 1, 2 },
+			{ 3, 2, 1, 2, 1, 0, 3, 2, 1 },
+			{ 2, 3, 4, 1, 2, 3, 0, 1, 2 },
+			{ 3, 2, 3, 2, 1, 2, 1, 0, 1 },
+			{ 4, 3, 2, 3, 2, 1, 2, 1, 0 }
 };
+
+//search h_value in matric version3 using absulute distance
+double g_mat_v3[9][9] = {
+		{ 0, 1, 2, 1, 1.414, 2.236, 2, 2.236, 2.828 },
+		{ 1, 0, 1, 1.414, 1, 1.414, 2.236, 2, 2.236 },
+		{ 2, 1, 0, 2.236, 1.414, 1, 2.828, 2.236, 2 },
+		{ 1, 1.414, 2.236, 0, 1, 2, 1, 1.414, 2.236 },
+		{ 1.414, 1, 1.414, 1, 0, 1, 1.414, 1, 1.414 },
+		{ 2.236, 1.414, 1, 2, 1, 0, 2.236, 1.414, 1 },
+		{ 2, 2.236, 2.828, 1, 1.414, 2.236, 0, 1, 2 },
+		{ 2.236, 2, 2.236, 1.414, 1, 1.414, 1, 0, 1 },
+		{ 2.828, 2.236, 2, 2.236, 1.414, 1, 2, 1, 0 }
+};
+int calc_h(EightPuzzleState* state) {
+	int value = 0;
+	for (int j = 0; j < 3; j++)
+		for (int k = 0; k < 3; k++)
+			value += state->state[j][k] != (j * 3 + k + 1);
+	value -= state->state[2][2] == -1;
+	return value;
+}
 
 int calc_h_v2(EightPuzzleState* state) {
 	int value = 0;
+	for (int j = 0; j < 3; j++)
+		for (int k = 0; k < 3; k++)
+			//value += state->state[j][k] != (j * 3 + k + 1);
+			if (state->state[j][k]>0)
+				value += g_mat_v2[state->state[j][k] - 1][j * 3 + k];
+	return value;
+}
+
+double calc_h_v3(EightPuzzleState* state) {
+	double value = 0;
 	for (int j = 0; j < 3; j++)
 		for (int k = 0; k < 3; k++)
 			//value += state->state[j][k] != (j * 3 + k + 1);
@@ -68,7 +99,9 @@ void getSuccessors(EightPuzzleState* current,vector<EightPuzzleState*>& successo
 			tp->state[r_1][c_1] = tp->state[r_2][c_2];
 			tp->state[r_2][c_2] = -1;
 			tp->g = current->g + 1;
+//			tp->h = calc_h(tp);
 			tp->h = calc_h_v2(tp);
+//			tp->h = calc_h_v3(tp);
 		}
 	}
 }
