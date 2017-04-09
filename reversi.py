@@ -683,6 +683,24 @@ def clickHandle(event):
                 depth = 6
                 playGame()
 
+def inputHandle():
+    global depth
+    if running:
+        xy=raw_input("input  x  y ; r restart; q quit:  ")
+        if xy=='q':
+            root.destroy()
+            exit(-1)
+        elif xy=='r':
+            playGame()
+        else:
+            x,y=[int(i) for i in xy.split(" ")]
+            if board.player==0:
+                if 0 <= x <= 7 and 0 <= y <= 7:
+                    if valid(board.array, board.player, x, y):
+                        board.boardMove(x, y)
+    else:
+        depth=input("choose hard level: 1,4,6:  ")
+        playGame()
 
 def keyHandle(event):
     symbol = event.keysym
@@ -764,8 +782,8 @@ def parse_args():
                         help='playerA',
                         default='computer', type=str)
     parser.add_argument('-b', dest='player_b',
-                        help='playerB',
-                        default='gui',type=str)
+                        help='playerB:gui cli',
+                        default='cli',type=str)
 
 
     args = parser.parse_args()
@@ -774,13 +792,21 @@ def parse_args():
 
 args=parse_args()
 
-runGame()
+if args.player_b=='gui':
+    runGame()
 
-# Binding, setting
-screen.bind("<Button-1>", clickHandle)
-screen.bind("<Key>", keyHandle)
-screen.focus_set()
+    # Binding, setting
+    screen.bind("<Button-1>", clickHandle)
+    screen.bind("<Key>", keyHandle)
+    screen.focus_set()
 
-# Run forever
-root.wm_title("Reversi")
-root.mainloop()
+    # Run forever
+    root.wm_title("Reversi")
+    root.mainloop()
+else:
+    runGame()
+    root.wm_title("Reversi")
+    inputHandle()
+    while(True):
+        inputHandle()
+
