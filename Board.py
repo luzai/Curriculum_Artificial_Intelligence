@@ -11,8 +11,11 @@ class Board(object):
         # White goes first (0 is white and player,1 is black and computer)
         self.screen = in_screen
         self.player = 0
-        self.passed = False
-        self.won = False
+
+        self.ttl_score=0
+        self.computer_score=0
+        self.player_score=0
+
         # Initializing an empty board
         self.array = []
         for x in range(8):
@@ -38,8 +41,6 @@ class Board(object):
 
             # Vertical line
             self.screen.create_line(lineShift, 50, lineShift, 450, fill="#111")
-
-        self.screen.update()
 
         self.update()
 
@@ -204,29 +205,19 @@ class Board(object):
                         self.screen.create_oval(68 + 50 * x, 68 + 50 * y, 32 + 50 * (x + 1), 32 + 50 * (y + 1),
                                                 tags="highlight", fill="#008000", outline="#008000")
 
-        if not self.won:
-            # Draw the scoreboard and update the screen
-            self.drawScoreBoard()
-            self.screen.update()
 
-        else:
-            self.screen.create_text(250, 550, anchor="c", font=("Consolas", 15), text="The game is done!")
+        # Draw the scoreboard and update the screen
+        self.drawScoreBoard()
+        self.screen.update()
 
-    def passTest(self):
-        mustPass = True
+
+    def mustPass(self, player):
+        must_pass = True
         for x in range(8):
             for y in range(8):
-                if self.valid(self, self.array, self.player, x, y):
-                    mustPass = False
-        if mustPass:
-            self.player = 1 - self.player
-            if self.passed == True:
-                self.won = True
-            else:
-                self.passed = True
-            self.update()
-        else:
-            self.passed = False
+                if self.valid(self.array, player, x, y  ):
+                    must_pass = False
+        return must_pass
 
     def drawScoreBoard(self):
 
@@ -258,12 +249,15 @@ class Board(object):
                                 text=player_score)
         self.screen.create_text(400, 550, anchor="w", tags="score", font=("Consolas", 50), fill="black",
                                 text=computer_score)
+        self.computer_score=computer_score
+        self.player_score=player_score
+        self.ttl_score= computer_score + player_score
 
     def move(self, passedArray, x, y):
         # Must copy the passedArray so we don't alter the original
         array = deepcopy(passedArray)
         # Set colour and set the moved location to be that colour
-        if board.player == 0:
+        if self.player == 0:
             colour = "w"
 
         else:
@@ -321,7 +315,7 @@ class Board(object):
         return array
 
     def boardMove(self, x, y):
-        global nodes
+
         # Move and update screen
         self.oldarray = self.array
         self.oldarray[x][y] = "w"
@@ -338,11 +332,24 @@ class DumbAgent(object):
         return actions[0] if len(actions)!=0 else None
 
 def clickHandle(event):
-    global agent
-    xMouse = event.x
-    yMouse = event.y
+    global agent,board
+    if board.mustPass(0)==True and board.mustPass(1)==True:
+        if board.player_score>board.computer_score:
+            over_text="You Win"
+        elif board.player_score<board.computer_score:
+            over_text="Computer Win"
+        else:
+            over_text="Balance"
 
-    if board.player == 0:
+        board.screen.create_text(250, 550, anchor="c", font=("Consolas", 15), text=over_text)
+
+    # print board.player
+    assert board.player == 0, "not your move?"
+    print board.get_action(0)
+    if board.mustPass(0)==True:
+        print "You Have No Choose"
+        board.player=1-board.player
+    else:
         # Delete the highlights
         x = int((event.x - 50) / 50)
         y = int((event.y - 50) / 50)
@@ -353,11 +360,14 @@ def clickHandle(event):
             if board.valid(board.array, board.player, x, y):
                 board.boardMove(x, y)
 
-
-    action=agent.get_action(board)
-    sleep(1)
-    if action is not None:
+    assert  board.player==1,"not computer move?"
+    if board.mustPass(1)==True:
+        board.player = 1 - board.player
+        print "Computer No Choose"
+    else:
+        action=agent.get_action(board)
         board.boardMove(*action)
+
 
 
 if __name__ == "__main__":

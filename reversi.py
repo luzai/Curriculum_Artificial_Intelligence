@@ -11,6 +11,7 @@
 # Library import
 import sys
 import argparse
+
 if sys.version_info >= (3,):
     from tkinter import *
 else:
@@ -683,24 +684,26 @@ def clickHandle(event):
                 depth = 6
                 playGame()
 
+
 def inputHandle():
     global depth
     if running:
-        xy=raw_input("input  x  y ; r restart; q quit:  ")
-        if xy=='q':
+        xy = raw_input("input  x  y ; r restart; q quit:  ")
+        if xy == 'q':
             root.destroy()
             exit(-1)
-        elif xy=='r':
+        elif xy == 'r':
             playGame()
         else:
-            x,y=[int(i) for i in xy.split(" ")]
-            if board.player==0:
+            x, y = [int(i) for i in xy.split(" ")]
+            if board.player == 0:
                 if 0 <= x <= 7 and 0 <= y <= 7:
                     if valid(board.array, board.player, x, y):
                         board.boardMove(x, y)
     else:
-        depth=input("choose hard level: 1,4,6:  ")
+        depth = input("choose hard level: 1,4,6:  ")
         playGame()
+
 
 def keyHandle(event):
     symbol = event.keysym
@@ -747,9 +750,9 @@ def runGame():
         for x in range(i + 1):
             # Star with double shadow
             if sys.version_info > (3,):
-                text="\u2605"
+                text = "\u2605"
             else:
-                text=u"\u2605"
+                text = u"\u2605"
             screen.create_text(25 + (x + 1) * spacing + 155 * i, 326, anchor="c", text=text, font=("Consolas", 25),
                                fill="#b29600")
             screen.create_text(25 + (x + 1) * spacing + 155 * i, 327, anchor="c", text=text, font=("Consolas", 25),
@@ -783,16 +786,16 @@ def parse_args():
                         default='computer', type=str)
     parser.add_argument('-b', dest='player_b',
                         help='playerB:gui cli',
-                        default='cli',type=str)
-
+                        default='gui', type=str)
 
     args = parser.parse_args()
 
     return args
 
-args=parse_args()
 
-if args.player_b=='gui':
+args = parse_args()
+
+if args.player_b == 'gui':
     runGame()
 
     # Binding, setting
@@ -807,6 +810,5 @@ else:
     runGame()
     root.wm_title("Reversi")
     inputHandle()
-    while(True):
+    while (True):
         inputHandle()
-
