@@ -1,0 +1,187 @@
+% !Mode:: "TeX:UTF-8"
+
+\documentclass{mcmthesis}
+\mcmsetup{CTeX = false,   % 使用 CTeX 套装时，设置为 true
+	tcn = {\color{red}67859}, problem = {\color{red}D}
+	%        }
+	,
+	sheet = false, titleinsheet = true, keywordsinsheet = true,
+	titlepage = true, abstract = true}
+\usepackage{palatino}
+\usepackage{enumitem} % Required for manipulating the whitespace between and within lists
+\usepackage{listings}
+\usepackage{multirow}
+\usepackage{nicefrac}
+\usepackage{sectsty}
+\sectionfont{\color{MidnightBlue}\selectfont}
+\subsectionfont{\color{MidnightBlue!50!RoyalBlue}\selectfont}
+\subsubsectionfont{\color{SkyBlue!5!RoyalBlue}\selectfont}
+\usepackage{booktabs}
+\usepackage{lipsum}
+\usepackage{varioref} % More descriptive referencing
+\setlength\parindent{0pt}
+\usepackage{subfig}
+%\usepackage[UTF8,nocap]{ctex}
+%\usepackage[subfigure,titles]{tocloft}
+\usepackage[subfigure]{tocloft}
+%\renewcommand\cftsecfont{\color{MidnightBlue}}
+%\renewcommand\cftpartpagefont{\color{RoyalBlue}}
+%\setlength\cftbeforesecskip{-4pt}
+%\setlength\cftbeforesubsecskip{-3.3pt}
+%\setlength\cftbeforesubsubsecskip{-5.2pt}
+%\renewcommand\cftsecafterpnum{\vskip-4pt}
+%\renewcommand{\cftsubsecafterpnum}{\vskip-3.3pt}
+%\renewcommand{\cftsubsubsecafterpnum}{\vskip-5.2pt}
+%\usepackage[round]{natbib}
+%\bibliographystyle{plainnat}
+\usepackage{mmstyles}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{graphicx}
+
+
+%\usepackage{subfig} % Required for creating figures with multiple parts (subfigures)
+%\usepackage{subfigure}
+%\usepackage[square,sort,comma,numbers]{natbib}
+
+
+\title{Solve Symmetric TSP using ILP}
+\author{{\itshape Xinglu Wang} \quad {\itshape 3140102282} \quad {\itshape ISEE 1403, ZJU}}
+\begin{document}
+
+\maketitle
+ 
+\setcounter{tocdepth}{2} % Set the depth of the table of contents to show sections and subsections only
+\tableofcontents
+		
+\section*{Abstract }
+In this report, I first formulate Traveling Salesman Problem(TSP) as  Integer Linear Program(ILP), then collect data for landmarks around HangZhou, use SageMath to solve the ILP, get the exact solution. 
+
+\textbf{Keywords:} TSP, ILP
+\section{Formulation}
+TSP is a combinatorial optimization problem to find the shortest possible hamiltonian circuit for a complete weighted graph. There are several key elements:
+\begin{itemize}
+	\item Hamiltonian circuit means starting from vertex no. 0, ending at no. 0 and travel all vertexes once and only once. 
+	\item For a real-world problem, the weights for graph are non-negative. But the weights do no necessarily be symmetric, because weights can be time or cost. I choose asymmetric  TSP to solve.
+\end{itemize} 
+\subsection{Definition}	 
+\begin{center}
+	\begin{tabular}{c|l}
+	\hline
+	$\vs = (s_i)$ & At $i$ step, the index of visited city is $s_i$, $ 0 \le i \le n-1$\\
+	$\vt= (t_i)$ & City $i$ is visited at step $t_i$ \\ \hline \hline
+	$\mX = (x_{i j} )$ & Decision variable, $x_{ij}={\begin{cases}1&{\text{the path goes from city }}i{\text{ to city }}j\\0&{\text{otherwise}}\end{cases}}$  \\
+	$\pi(\cdot )$ & $\pi(i)=j  \text{ if } x_{i j}=1$, $ 0 \le i,j \le n-1$ \\ \hline \hline
+	$\mC=(c_{ij})$ & Cost Matrix \\ 
+	\hline
+	\end{tabular}
+\end{center}
+
+
+\subsection{ILP formulation}
+We formulate this question step by step, first we list all sufficient constrains:
+
+\begin{align}
+\mathop{\mathrm{Minmize \ \  }}       & \sum _{i=0}^{n-1}\sum _{j=0,{\color{Red} j\neq i}}^{n-1}c_{ij}x_{ij} &  & \label{eq:obj}          \\
+\mathop{\mathrm{subject \  to \ \  }} & \sum _{i=0,i\neq j}^{n-1}x_{ij}=1                          &  & j=0,\ldots ,n-1;   \label{eq:row}       \\
+& \sum _{j=0,j\neq i}^{n-1}x_{ij}=1                          &  & i=0,\ldots ,n-1;         \label{eq:col} \\
+& x_{ij} \geq 0, x_{ij} \in \Zbb                                           &  & i,j=0,\ldots ,n-1. \notag
+\end{align}
+
+The objective function \eqref{eq:obj} need to minimize costs, we simply drop $x_{ii}$ throughout the problem, since $x_{ii}=0$ is trivial. The constrains \eqref{eq:row} means each city be arrived at from exactly one other city while equation \eqref{eq:col} means from each city there is a departure to exactly one other city. We do not need to add $x_{ij} \le 1 $ since others are enough to conclude it. 
+
+But these constraints are not necessary conditions for TSP. This formulation in fact the formulation of Assignment Problem belong to P hard class. We still need to add constraints to avoid subtour and we will find that TSP belong to NP hard level class. I choose to add $n$ auxiliary variables so that I just need to add $n(n-1)$ constrain. 
+\begin{align}
+	\mathop{\mathrm{Minmize \ \  }}       & \sum _{i=0}^{n-1}\sum _{j=0,j\neq i}^{n-1}c_{ij}x_{ij} &  & \notag                     \\
+	\mathop{\mathrm{subject \  to \ \  }} & \sum _{i=0,i\neq j}^{n-1}x_{ij}=1                    &  & j=0,\ldots ,n-1;  \notag     \\
+	                                      & \sum _{j=0,j\neq i}^{n-1}x_{ij}=1                    &  & i=0,\ldots ,n-1;      \notag \\
+	                                      & \color{Blue} t_{j} \ge t_{i}+1-n(1-x_{ij})x  &  & 0\leq i\leq n-1, {\color{Red}1 \le} j \le n-1, i \neq j   \label{eq:new}     \\
+	                                      & x_{ij} \geq 0, x_{ij} \in \Zbb                     &  & i,j=0,\ldots ,n-1. \notag
+\end{align}
+Note that $j \ge 1 $ in \eqref{eq:new} means we do not consider salesman going back to No.0. In fact, if we let $t_{n}$ denote the time step salesman go back to No.0, we have:
+\begin{equation}\label{eq:my}
+t_{n}=t_{n-1}+1=n 
+\end{equation}
+ To prove correctness.  First, Cyclic permutation without subtour conclude \eqref{eq:new}. Because \eqref{eq:new} is equivalent to statement that   if the next visited city for $i$ is $j$ ($x_{ij}=1$) ,then $t_j=t_i+1$. If $x_{ij}=0$, then we add a trivial constraint $t_j \ge t_j +1-n$.  The equivalent statement is satisfied. Second, \eqref{eq:new} eliminates all subtour. We can prove it by tricky contrapositive. Suppose the feasible solution $\mX$ contain more than one subtour. Then there exist $\vs=(i_1,\dots,i_r)$ not containing 0. Note that $i_r$ in this circle will go back to $i_1$, so there is additional equation $t_{i_1}=t_{i_r}+1$  quite different with \eqref{eq:my}. Go along this cycle, we find that $0=r$, and the contradiction lies in the fact that the cycle do not containing 0.
+
+\section{Experiments}
+
+The steps to solve the ILP include: prepare location data for landmarks around HangZhou, solve the ILP by MILP class and visualize the final results on Map. The equivalent code for \eqref{eq:new} is shown below:
+
+\begin{lstlisting}[language=Python]
+p=MixedIntegerLinearProgram(maximization=False) 
+# Define Varibles:
+x=p.new_variable(nonnegative=True,integer=True)
+t=p.new_variable(nonnegative=True,integer=True)
+n=dist.nrows()
+obj_func=0
+# Define Obj Function:
+for i in range(n):
+	for j in range(n):
+		obj_func+=x[i,j]*dist[i,j] if i!=j else 0
+p.set_objective(obj_func)
+# Add Constrains
+for i in range(n):
+	p.add_constraint(sum([x[i,j] for j in range(n) if i!=j ])==1)
+for j in range(n):
+	p.add_constraint(sum([x[i,j] for i in range(n) if i!=j ])==1)
+for i in range(n):
+	for j in range(1,n):
+		if i==j :
+			continue
+		p.add_constraint(t[j]>=t[i]+1-n*(1-x[i,j]))
+for i in range(n):
+	p.add_constraint(t[i]<=n-1)
+
+#p.show()
+p.solve()
+\end{lstlisting}
+
+Apply ILP to a toy case with 20 landmarks around HangZhou, we get a optimal strategy to travel around HangZhou, which is quite interesting. Ref. to Fig~\vref{fig:tsp_res}. Then I also use TSP solver in Sage to partially verify that my code is correct. The approximate optimal solution got by some heuristic algorithm is the same as the exact optimal solution. The I try to not just travelling Hangzhou, and travel JiangZheHu Region(Yangtze River delta). Visualized on the map, Ref. to Fig~\vref{fig:jiangzhehu}. 
+
+\begin{figure}
+	\centering
+	\subfloat[Initial feasible solution for TSP]{\includegraphics[width=.45\columnwidth]{init_map}} \quad  
+	\subfloat[Transform into complete weight graph]{\includegraphics[width=.45\columnwidth]{topology}} 
+	\\
+	\subfloat[The optimal solution find by ILP]{\includegraphics[width=.45\columnwidth]{tsp_res}\label{fig:tsp_res}}  \quad 
+	\subfloat[Approximately optimal find by Sage]{\includegraphics[width=.45\columnwidth]{tsp_sage} }
+	\caption[Results]{ We can see for 20-pts, two solutions are the same.  } 
+\end{figure}
+\begin{figure}
+	\centering
+	\subfloat[TSP on Hangzhou]{\includegraphics[width=.47\columnwidth]{GMap}} \quad  
+	\subfloat[TSP on JiangZheHu]{\includegraphics[width=.47\columnwidth]{GMap_Jzh}\label{fig:jiangzhehu}} 
+	\caption[Results]{JiangZheHu is a wider range than Hangzhou. We limit number of landmarks to about 20 for speed.} 
+\end{figure}
+
+I just take 20 landmarks from 49 collected coordinate data. The reason lies in I find 50 points consume seemingly endless time. I also have some basic test on running time, and find it grow explosively. Ref. to Fig~\vref{fig:elaspe}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=.5\columnwidth]{benchmark}
+	\caption[Running time]{X-axis: number of landmarks, Y-axis: elapsed time in seconds. Running time starts to grow explosively at $n=17$ and becomes $200s$  at  $n=19$  suddenly}
+	\label{fig:elaspe}.
+\end{figure}
+		
+
+\begin{appendices}
+\section{Lab Code}
+My codes are somewhat lengthy, so I just put some important code, hope not to impact the compactness of this report.
+	\subsection{Crawling Data of CHINA Landmarks}
+	\lstinputlisting[language=Python]{./code/test.py}
+	\subsection{Solve By Sage}
+	\lstinputlisting[language=Python]{./code/sage.py}
+	\subsection{Draw on GMap}
+	\lstinputlisting[language=Matlab]{./code/lOptHw.m}	
+	%\textbf{\textcolor[rgb]{0.98,0.00,0.00}{Input matlab source:}}
+	
+	%some more text \textcolor[rgb]{0.98,0.00,0.00}{\textbf{Input C++ source:}}
+	%\lstinputlisting[language=C++]{./code/mcmthesis-sudoku.cpp}
+	
+%			\section{Landmarks Around HangZhou }
+%			\input{./code/city_data.tex}		
+\end{appendices}
+
+	
+\end{document}
