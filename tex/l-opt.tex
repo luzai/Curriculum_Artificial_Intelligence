@@ -59,24 +59,28 @@ In this report, I first formulate Traveling Salesman Problem(TSP) as  Integer Li
 
 \textbf{Keywords:} TSP, ILP
 \section{Formulation}
-TSP is a combinatorial optimization problem to find the shortest possible hamiltonian circuit for a complete weighted graph. There are several key elements:
-\begin{itemize}
-	\item Hamiltonian circuit means starting from vertex no. 0, ending at no. 0 and travel all vertexes once and only once. 
-	\item For a real-world problem, the weights for graph are non-negative. But the weights do no necessarily be symmetric, because weights can be time or cost. I choose asymmetric  TSP to solve.
-\end{itemize} 
+TSP is a combinatorial optimization problem to find the shortest possible hamiltonian circuit for a complete weighted graph. % \vref{tab:ok}
 \subsection{Definition}	 
-\begin{center}
-	\begin{tabular}{c|l}
+\begin{table} 
+	\centering
+	{\begin{tabular}{c|l} 
 	\hline
 	$\vs = (s_i)$ & At $i$ step, the index of visited city is $s_i$, $ 0 \le i \le n-1$\\
-	$\vt= (t_i)$ & City $i$ is visited at step $t_i$ \\ \hline \hline
+	$\vt= (t_i)$ & City $i$ is visited at step $t_i$, $ 0 \le i \le n-1$\\ \hline \hline
 	$\mX = (x_{i j} )$ & Decision variable, $x_{ij}={\begin{cases}1&{\text{the path goes from city }}i{\text{ to city }}j\\0&{\text{otherwise}}\end{cases}}$  \\
 	$\pi(\cdot )$ & $\pi(i)=j  \text{ if } x_{i j}=1$, $ 0 \le i,j \le n-1$ \\ \hline \hline
 	$\mC=(c_{ij})$ & Cost Matrix \\ 
 	\hline
 	\end{tabular}
-\end{center}
+	\caption{The notation that will be used}
+	\label{tab:ok}}
+\end{table}
 
+There are several key elements:
+\begin{itemize}
+	\item Hamiltonian circuit means starting from vertex No. 0, ending at No. 0 and travel all vertexes once and only once. Note that $x_{ij}|_{i=n-1,j=0}$ will consider go back while  $t_i$ will not consider the time consumed when go back since there is \textit{no} $t_i|_{i=n}$.
+	\item For a real-world problem, the weights for graph are non-negative. But the weights do no necessarily be symmetric, because weights can be time or cost. I choose \textit{unsymmetrical}  TSP to solve for its generality. Thus, I should note that $\mC$ is symmetric because the data I collect is distance while the solution $\mX$ is unsymmetrical because it describe \textit{directed} graph.
+\end{itemize} 
 
 \subsection{ILP formulation}
 We formulate this question step by step, first we list all sufficient constrains:
@@ -141,16 +145,16 @@ Apply ILP to a toy case with 20 landmarks around HangZhou, we get a optimal stra
 
 \begin{figure}
 	\centering
-	\subfloat[Initial feasible solution for TSP]{\includegraphics[width=.45\columnwidth]{init_map}} \quad  
-	\subfloat[Transform into complete weight graph]{\includegraphics[width=.45\columnwidth]{topology}} 
+	\subfloat[Initial feasible solution for TSP]{\includegraphics[width=.4\columnwidth]{init_map}} \quad  
+	\subfloat[Transform into complete weight graph]{\includegraphics[width=.4\columnwidth]{topology}} 
 	\\
-	\subfloat[The optimal solution find by ILP]{\includegraphics[width=.45\columnwidth]{tsp_res}\label{fig:tsp_res}}  \quad 
-	\subfloat[Approximately optimal find by Sage]{\includegraphics[width=.45\columnwidth]{tsp_sage} }
-	\caption[Results]{ We can see for 20-pts, two solutions are the same.  } 
+	\subfloat[The optimal solution find by ILP]{\includegraphics[width=.4\columnwidth]{tsp_res}\label{fig:tsp_res}}  \quad 
+	\subfloat[Approximately optimal find by Sage]{\includegraphics[width=.4\columnwidth]{tsp_sage} \label{fig:tsp_sage} }
+	\caption[Results]{The plot  of  TSP class \vref{fig:tsp_sage} only keep topological relations, but after simple transformation, we find for 20-pts, two solutions $\mX$ are equivalent. (Here the transformation means change from undirected graph's $\mX=(x_{ij})$ with $i < j$  to directed graph's $\mX$ ) } 
 \end{figure}
 \begin{figure}
 	\centering
-	\subfloat[TSP on Hangzhou]{\includegraphics[width=.47\columnwidth]{GMap}} \quad  
+	\subfloat[TSP on Hangzhou]{\includegraphics[width=.48\columnwidth]{GMap}} \   
 	\subfloat[TSP on JiangZheHu]{\includegraphics[width=.47\columnwidth]{GMap_Jzh}\label{fig:jiangzhehu}} 
 	\caption[Results]{JiangZheHu is a wider range than Hangzhou. We limit number of landmarks to about 20 for speed.} 
 \end{figure}
