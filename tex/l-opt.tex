@@ -45,7 +45,7 @@
 %\usepackage[square,sort,comma,numbers]{natbib}
 
 
-\title{Solve Symmetric TSP using ILP}
+\title{Solve   TSP by ILP}
 \author{{\itshape Xinglu Wang} \quad {\itshape 3140102282} \quad {\itshape ISEE 1403, ZJU}}
 \begin{document}
 
@@ -55,12 +55,12 @@
 \tableofcontents
 		
 \section*{Abstract }
-In this report, I first formulate Traveling Salesman Problem(TSP) as  Integer Linear Program(ILP), then collect data for landmarks around HangZhou, use SageMath to solve the ILP, get the exact solution. 
+In this report, I  formulate Traveling Salesman Problem (TSP) as  Integer Linear Program (ILP), then collect data for landmarks around HangZhou, use SageMath to solve the ILP and get the exact solution. Although limiting the number of landmarks to $20$, I make some simple comparison with Heuristic Algorithm and visualize the routes on GMap. I find all the procedure  quite interesting and exciting and learn  a lot!
 
 \textbf{Keywords:} TSP, ILP
-\section{Formulation}
-TSP is a combinatorial optimization problem to find the shortest possible hamiltonian circuit for a complete weighted graph. % \vref{tab:ok}
-\subsection{Definition}	 
+\section{TSP Problem}
+TSP is a combinatorial optimization problem to find the shortest possible Hamiltonian circuit for a complete weighted graph. % \vref{tab:ok}
+\subsection{Notation}	 
 \begin{table} 
 	\centering
 	{\begin{tabular}{c|l} 
@@ -72,18 +72,18 @@ TSP is a combinatorial optimization problem to find the shortest possible hamilt
 	$\mC=(c_{ij})$ & Cost Matrix \\ 
 	\hline
 	\end{tabular}
-	\caption{The notation that will be used}
+	\caption{The notations that will be used}
 	\label{tab:ok}}
 \end{table}
 
 There are several key elements:
 \begin{itemize}
-	\item Hamiltonian circuit means starting from vertex No. 0, ending at No. 0 and travel all vertexes once and only once. Note that $x_{ij}|_{i=n-1,j=0}$ will consider go back while  $t_i$ will not consider the time consumed when go back since there is \textit{no} $t_i|_{i=n}$.
-	\item For a real-world problem, the weights for graph are non-negative. But the weights do no necessarily be symmetric, because weights can be time or cost. I choose \textit{unsymmetrical}  TSP to solve for its generality. Thus, I should note that $\mC$ is symmetric because the data I collect is distance while the solution $\mX$ is unsymmetrical because it describe \textit{directed} graph.
+	\item Hamiltonian circuit means the travel route starting from vertex No. 0, ending at No. 0 and visiting all vertexes once and only once. Note that $x_{ij}|_{i=n-1,j=0}$ denote the distance  go back from No.n-1 to No.0 while  $t_i$ will not consider the time consumed when going back since there is \textit{no} $t_i|_{i=n}$.
+	\item It is common for weights of the graph to become non-negative. But for a real-world problem, the weights do no necessarily be symmetric, because weights can represent time or cost. I choose \textit{unsymmetrical}  TSP to solve for its generality ans simplicity Thus, I should be careful that $\mC$ is symmetric because the data I collect is distance while the solution $\mX$ is unsymmetrical because it describe \textit{directed} graph.
 \end{itemize} 
 
-\subsection{ILP formulation}
-We formulate this question step by step, first we list all sufficient constrains:
+\subsection{Formulation as ILP }
+We formulate this question step by step, first consider a relaxed version ILP of TSP with some necessary(but not sufficient) constrains:
 
 \begin{align}
 \mathop{\mathrm{Minmize \ \  }}       & \sum _{i=0}^{n-1}\sum _{j=0,{\color{Red} j\neq i}}^{n-1}c_{ij}x_{ij} &  & \label{eq:obj}          \\
@@ -92,9 +92,9 @@ We formulate this question step by step, first we list all sufficient constrains
 & x_{ij} \geq 0, x_{ij} \in \Zbb                                           &  & i,j=0,\ldots ,n-1. \notag
 \end{align}
 
-The objective function \eqref{eq:obj} need to minimize costs, we simply drop $x_{ii}$ throughout the problem, since $x_{ii}=0$ is trivial. The constrains \eqref{eq:row} means each city be arrived at from exactly one other city while equation \eqref{eq:col} means from each city there is a departure to exactly one other city. We do not need to add $x_{ij} \le 1 $ since others are enough to conclude it. 
+It objective function \eqref{eq:obj} (and all the following  equations  throughout the problem), we simply drop $x_{ii}$, since $x_{ii}=0$ is trivial. The constrain \eqref{eq:row} means each city be arrived at from exactly one other city while equation \eqref{eq:col} means from each city there is a departure to exactly one other city. We do not need to add $x_{ij} \le 1 $ since the rests are enough to conclude it. 
 
-But these constraints are not necessary conditions for TSP. This formulation in fact the formulation of Assignment Problem belong to P hard class. We still need to add constraints to avoid subtour and we will find that TSP belong to NP hard level class. I choose to add $n$ auxiliary variables so that I just need to add $n(n-1)$ constrain. 
+But these constraints are not sufficient conditions for TSP. This formulation is, in fact, the ILP formulation of Assignment Problem which belong to P hard class. We still need to add constraints to avoid subtour and we will find that TSP belong to NP hard   class. Next we will add $n$ auxiliary variables so that we just need to add $n(n-1)$ constrain. 
 \begin{align}
 	\mathop{\mathrm{Minmize \ \  }}       & \sum _{i=0}^{n-1}\sum _{j=0,j\neq i}^{n-1}c_{ij}x_{ij} &  & \notag                     \\
 	\mathop{\mathrm{subject \  to \ \  }} & \sum _{i=0,i\neq j}^{n-1}x_{ij}=1                    &  & j=0,\ldots ,n-1;  \notag     \\
@@ -106,47 +106,53 @@ Note that $j \ge 1 $ in \eqref{eq:new} means we do not consider salesman going b
 \begin{equation}\label{eq:my}
 t_{n}=t_{n-1}+1=n 
 \end{equation}
- To prove correctness.  First, Cyclic permutation without subtour conclude \eqref{eq:new}. Because \eqref{eq:new} is equivalent to statement that   if the next visited city for $i$ is $j$ ($x_{ij}=1$) ,then $t_j=t_i+1$. If $x_{ij}=0$, then we add a trivial constraint $t_j \ge t_j +1-n$.  The equivalent statement is satisfied. Second, \eqref{eq:new} eliminates all subtour. We can prove it by tricky contrapositive. Suppose the feasible solution $\mX$ contain more than one subtour. Then there exist $\vs=(i_1,\dots,i_r)$ not containing 0. Note that $i_r$ in this circle will go back to $i_1$, so there is additional equation $t_{i_1}=t_{i_r}+1$  quite different with \eqref{eq:my}. Go along this cycle, we find that $0=r$, and the contradiction lies in the fact that the cycle do not containing 0.
+ Then we prove that this ILP is equivalent to TSP. \quad \textbf{(I).} cyclic permutation without subtour conclude constraint \eqref{eq:new}. Because \eqref{eq:new} is equivalent to statement that   if the next visited city for $i$ is $j$ ($x_{ij}=1$) ,then $t_j=t_i+1$. If $x_{ij}=0$, then we add a trivial constraint $t_j \ge t_j +1-n$.  The equivalent statement is satisfied.  \quad \textbf{(II).} constraint \eqref{eq:new} eliminates all subtour. We can prove it by tricky reductio ad absurdum. Suppose the feasible solution $\mX$ contain more than one subtour. Then there exist $\vs=(i_1,\dots,i_r)$ not containing 0. Note that $i_r$ in this circle will go back to $i_1$, so there is additional equation $t_{i_1}=t_{i_r}+1$  quite different with \eqref{eq:my}. Go along this cycle, we find that $0=r$, and the contradiction lies in the fact that the cycle do not containing 0.
 
 \section{Experiments}
 
-The steps to solve the ILP include: prepare location data for landmarks around HangZhou, solve the ILP by MILP class and visualize the final results on Map. The equivalent code for \eqref{eq:new} is shown below:
+The steps to solve the ILP include: 
+\begin{itemize}[noitemsep,nolistsep]
+	\item Collect location data for landmarks around HangZhou. 
+	\item Transform from (latitude,longitude)  to distance matrix $\mC$. Following guide of \href{https://en.wikipedia.org/wiki/Haversine_formula}{Haversine\_formula}. 
+	\item Solve the ILP by MILP class. The equivalent code for ILP system \eqref{eq:new} is more human-friendly and powerful compared with \textit{`intlinprog`} function of Matlab.  Ref. to \vref{code:sage}. I put the code in the Appendix, hope do not impact the compactness of this report.
+	\item Visualize on GMap. 
+\end{itemize}
+%\begin{lstlisting}[language=Python]
+%p=MixedIntegerLinearProgram(maximization=False) 
+%# Define Varibles:
+%x=p.new_variable(nonnegative=True,integer=True)
+%t=p.new_variable(nonnegative=True,integer=True)
+%n=dist.nrows()
+%obj_func=0
+%# Define Obj Function:
+%for i in range(n):
+%	for j in range(n):
+%		obj_func+=x[i,j]*dist[i,j] if i!=j else 0
+%p.set_objective(obj_func)
+%# Add Constrains
+%for i in range(n):
+%	p.add_constraint(sum([x[i,j] for j in range(n) if i!=j ])==1)
+%for j in range(n):
+%	p.add_constraint(sum([x[i,j] for i in range(n) if i!=j ])==1)
+%for i in range(n):
+%	for j in range(1,n):
+%		if i==j :
+%			continue
+%		p.add_constraint(t[j]>=t[i]+1-n*(1-x[i,j]))
+%for i in range(n):
+%	p.add_constraint(t[i]<=n-1)
+%
+%#p.show()
+%p.solve()
+%\end{lstlisting}
 
-\begin{lstlisting}[language=Python]
-p=MixedIntegerLinearProgram(maximization=False) 
-# Define Varibles:
-x=p.new_variable(nonnegative=True,integer=True)
-t=p.new_variable(nonnegative=True,integer=True)
-n=dist.nrows()
-obj_func=0
-# Define Obj Function:
-for i in range(n):
-	for j in range(n):
-		obj_func+=x[i,j]*dist[i,j] if i!=j else 0
-p.set_objective(obj_func)
-# Add Constrains
-for i in range(n):
-	p.add_constraint(sum([x[i,j] for j in range(n) if i!=j ])==1)
-for j in range(n):
-	p.add_constraint(sum([x[i,j] for i in range(n) if i!=j ])==1)
-for i in range(n):
-	for j in range(1,n):
-		if i==j :
-			continue
-		p.add_constraint(t[j]>=t[i]+1-n*(1-x[i,j]))
-for i in range(n):
-	p.add_constraint(t[i]<=n-1)
-
-#p.show()
-p.solve()
-\end{lstlisting}
-
-Apply ILP to a toy case with 20 landmarks around HangZhou, we get a optimal strategy to travel around HangZhou, which is quite interesting. Ref. to Fig~\vref{fig:tsp_res}. Then I also use TSP solver in Sage to partially verify that my code is correct. The approximate optimal solution got by some heuristic algorithm is the same as the exact optimal solution. The I try to not just travelling Hangzhou, and travel JiangZheHu Region(Yangtze River delta). Visualized on the map, Ref. to Fig~\vref{fig:jiangzhehu}. 
+Apply ILP to a toy case with 20 landmarks around HangZhou, we get a optimal strategy to travel around HangZhou. It is quite interesting and exciting. Ref. to Fig~\vref{fig:tsp_res}. Then I also use TSP solver in Sage to partially verify that my code is correct. The approximate optimal solution got by some heuristic algorithm is the same as the exact optimal solution. I make some try, and guess that when $n$ is small, it is easier for heuristic algorithm to find exact optimal solution.  Then I also try to travel around JiangZheHu Region(Yangtze River delta) and visualize it on the map, Ref. to Fig~\vref{fig:jiangzhehu}. 
 
 \begin{figure}
 	\centering
-	\subfloat[Initial feasible solution for TSP]{\includegraphics[width=.4\columnwidth]{init_map}} \quad  
-	\subfloat[Transform into complete weight graph]{\includegraphics[width=.4\columnwidth]{topology}} 
+	\subfloat[Initial feasible solution for TSP]{\includegraphics[width=.3\columnwidth]{init_map}} \quad  
+	\subfloat[Transform into complete weight graph]{\includegraphics[width=.25\columnwidth]{topology}}  \quad
+	\subfloat[Plot according to locations]{\includegraphics[width=.35\columnwidth]{trans_map}}
 	\\
 	\subfloat[The optimal solution find by ILP]{\includegraphics[width=.4\columnwidth]{tsp_res}\label{fig:tsp_res}}  \quad 
 	\subfloat[Approximately optimal find by Sage]{\includegraphics[width=.4\columnwidth]{tsp_sage} \label{fig:tsp_sage} }
@@ -154,28 +160,29 @@ Apply ILP to a toy case with 20 landmarks around HangZhou, we get a optimal stra
 \end{figure}
 \begin{figure}
 	\centering
-	\subfloat[TSP on Hangzhou]{\includegraphics[width=.48\columnwidth]{GMap}} \   
+	\subfloat[TSP on Hangzhou]{\includegraphics[width=.48\columnwidth]{GMap_Cn}} \   
 	\subfloat[TSP on JiangZheHu]{\includegraphics[width=.47\columnwidth]{GMap_Jzh}\label{fig:jiangzhehu}} 
 	\caption[Results]{JiangZheHu is a wider range than Hangzhou. We limit number of landmarks to about 20 for speed.} 
 \end{figure}
 
-I just take 20 landmarks from 49 collected coordinate data. The reason lies in I find 50 points consume seemingly endless time. I also have some basic test on running time, and find it grow explosively. Ref. to Fig~\vref{fig:elaspe}
+I just take 20 landmarks from 49 collected coordinate data. The reason lies in  the fact that I find 50 points consume seemingly endless time. I also have some basic test on running time, and find it grow explosively(and unstably), Ref. to Fig~\vref{fig:elaspe}. We can conclude that the time complexity of  branch-bound method is of  exponential time complexity.
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=.5\columnwidth]{benchmark}
-	\caption[Running time]{X-axis: number of landmarks, Y-axis: elapsed time in seconds. Running time starts to grow explosively at $n=17$ and becomes $200s$  at  $n=19$  suddenly}
+	\caption[Running time]{X-axis: number of landmarks, Y-axis: elapsed time in seconds. Running time starts to grow explosively at $n=17$ and becomes $200s$  at  $n=19$  suddenly.}
 	\label{fig:elaspe}.
 \end{figure}
 		
 
 \begin{appendices}
 \section{Lab Code}
-My codes are somewhat lengthy, so I just put some important code, hope not to impact the compactness of this report.
+My codes are somewhat lengthy, so I just put some important code, hope not to impact the compactness of this report. 
 	\subsection{Crawling Data of CHINA Landmarks}
 	\lstinputlisting[language=Python]{./code/test.py}
-	\subsection{Solve By Sage}
+	\subsection{Solve by Sage} \label{code:sage}
 	\lstinputlisting[language=Python]{./code/sage.py}
+	\lstinputlisting[language=Python]{./code/sage2.py}
 	\subsection{Draw on GMap}
 	\lstinputlisting[language=Matlab]{./code/lOptHw.m}	
 	%\textbf{\textcolor[rgb]{0.98,0.00,0.00}{Input matlab source:}}
@@ -187,5 +194,10 @@ My codes are somewhat lengthy, so I just put some important code, hope not to im
 %			\input{./code/city_data.tex}		
 \end{appendices}
 
+\begin{thebibliography}{99}
+	\bibitem{bib:o} \url{http://www.openstreetmap.org/export#map=16/30.2802/120.1700}
+	\bibitem{bib:github/sage/tsp} \url{https://github.com/sagemath/sagelib/blob/master/sage/graphs/generic_graph.py}	
+	
+\end{thebibliography}
 	
 \end{document}
