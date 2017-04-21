@@ -58,7 +58,7 @@
 \MCM@opt@abstracttrue
 \newcommand{\mcmsetup}[1]{\setkeys{MCM}{#1}}
 \ProcessOptionsX\relax
-\LoadClass[a4paper, 12pt]{article}
+\LoadClass[a4paper,12pt]{article}
 \newcommand{\team}{Team \#\ {\color{Black}\MCM@opt@tcn} }
 \RequirePackage{fancyhdr, fancybox}
 \RequirePackage{ifthen}
@@ -116,7 +116,7 @@
   	linkcolor=RoyalBlue,          % color of internal links (change box color with linkbordercolor)
   	citecolor=ForestGreen,        % color of links to bibliography
   	filecolor=magenta,      % color of file links
-  	urlcolor=cyan           % color of external links
+  	urlcolor=Brown,           % color of external links
   	bookmarksopen=true,
     breaklinks=true,bookmarksnumbered,
 %    urlcolor=Brown, linkcolor=RoyalBlue, citecolor=ForestGreen % Link colors
@@ -131,7 +131,7 @@
     \hypersetup{dvipdfm, hidelinks}
   \fi
 \fi
-\geometry{a4paper, margin = 0.8in}
+\geometry{a4paper, margin = 0.7in}
 \pagestyle{fancy}
 \fancyhf{}
 %\renewcommand{\sectionmark}[1]{\markright{\spacedlowsmallcaps{#1}}} % The header for all pages (oneside) or for even pages (twoside)

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/W32TeX) (preloaded format=pdflatex 2017.2.2)  13 APR 2017 17:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/W32TeX) (preloaded format=pdflatex 2017.2.2)  21 APR 2017 21:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -553,6 +553,7 @@ Package hyperref Info: Option `pdfmenubar' set `true' on input line 123.
 Package hyperref Info: Option `pdffitwindow' set `false' on input line 123.
 Package hyperref Info: Option `pdfnewwindow' set `true' on input line 123.
 Package hyperref Info: Option `colorlinks' set `true' on input line 123.
+Package hyperref Info: Option `bookmarksopen' set `true' on input line 123.
 Package hyperref Info: Option `breaklinks' set `true' on input line 123.
 Package hyperref Info: Option `bookmarksnumbered' set `true' on input line 123.
 
@@ -673,6 +674,14 @@ Package tocloft Info: The document has section divisions on input line 44.
 \cftbeforesubtabskip=\skip116
 \cftsubtabindent=\skip117
 \cftsubtabnumwidth=\skip118
+)
+(c:/texlive/2016/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count152
+\float@exts=\toks41
+\float@box=\box38
+\@float@everytoks=\toks42
+\@floatcapt=\box39
 ) (./mmstyles.sty
 (c:/texlive/2016/texmf-dist/tex/latex/tools/xspace.sty
 Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
@@ -687,43 +696,43 @@ Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 ) (./l-opt.aux)
 \openout1 = `l-opt.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Try loading font information for T1+ppl on input line 50.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Try loading font information for T1+ppl on input line 51.
 
 (c:/texlive/2016/texmf-dist/tex/latex/psnfss/t1ppl.fd
 File: t1ppl.fd 2001/06/04 font definitions for T1/ppl.
 )
 Package lastpage Info: Please have a look at the pageslts package at
 (lastpage)             https://www.ctan.org/pkg/pageslts
-(lastpage)             ! on input line 50.
-\c@lstlisting=\count152
+(lastpage)             ! on input line 51.
+\c@lstlisting=\count153
 
 (c:/texlive/2016/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count153
+\scratchcounter=\count154
 \scratchdimen=\dimen164
-\scratchbox=\box38
-\nofMPsegments=\count154
-\nofMParguments=\count155
-\everyMPshowfont=\toks41
-\MPscratchCnt=\count156
+\scratchbox=\box40
+\nofMPsegments=\count155
+\nofMParguments=\count156
+\everyMPshowfont=\toks43
+\MPscratchCnt=\count157
 \MPscratchDim=\dimen165
-\MPnumerator=\count157
-\makeMPintoPDFobject=\count158
-\everyMPtoPDFconversion=\toks42
+\MPnumerator=\count158
+\makeMPintoPDFobject=\count159
+\everyMPtoPDFconversion=\toks44
 )
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -733,15 +742,15 @@ Package lastpage Info: Please have a look at the pageslts package at
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
-* h-part:(L,W,R)=(57.81621pt, 481.87546pt, 57.81621pt)
-* v-part:(T,H,B)=(57.81621pt, 729.41443pt, 57.81621pt)
+* h-part:(L,W,R)=(50.58878pt, 496.33032pt, 50.58878pt)
+* v-part:(T,H,B)=(50.58878pt, 743.8693pt, 50.58878pt)
 * \paperwidth=597.50787pt
 * \paperheight=845.04684pt
-* \textwidth=481.87546pt
-* \textheight=729.41443pt
-* \oddsidemargin=-14.45378pt
-* \evensidemargin=-14.45378pt
-* \topmargin=-51.45378pt
+* \textwidth=496.33032pt
+* \textheight=743.8693pt
+* \oddsidemargin=-21.68121pt
+* \evensidemargin=-21.68121pt
+* \topmargin=-58.68121pt
 * \headheight=12.0pt
 * \headsep=25.0pt
 * \topskip=12.0pt
@@ -759,51 +768,52 @@ Package lastpage Info: Please have a look at the pageslts package at
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\AtBeginShipoutBox=\box39
-Package hyperref Info: Link coloring ON on input line 50.
+\AtBeginShipoutBox=\box41
+Package hyperref Info: Link coloring ON on input line 51.
 (c:/texlive/2016/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
 (c:/texlive/2016/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count159
+\c@section@level=\count160
 LaTeX Info: Redefining \Ref on input line 513.
 )
-LaTeX Info: Redefining \ref on input line 50.
-LaTeX Info: Redefining \pageref on input line 50.
-LaTeX Info: Redefining \nameref on input line 50.
+LaTeX Info: Redefining \ref on input line 51.
+LaTeX Info: Redefining \pageref on input line 51.
+LaTeX Info: Redefining \nameref on input line 51.
 
 (./l-opt.out) (./l-opt.out)
 \@outlinefile=\write4
 \openout4 = `l-opt.out'.
 
-LaTeX Info: Redefining \Ref on input line 50.
+LaTeX Info: Redefining \Ref on input line 51.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
+Package caption Info: float package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Try loading font information for U+msa on input line 53.
+LaTeX Font Info:    Try loading font information for U+msa on input line 54.
 
 (c:/texlive/2016/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 53.
+LaTeX Font Info:    Try loading font information for U+msb on input line 54.
 
 (c:/texlive/2016/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+rsfs on input line 53.
+LaTeX Font Info:    Try loading font information for U+rsfs on input line 54.
 
 (c:/texlive/2016/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
-LaTeX Font Info:    Try loading font information for U+lasy on input line 53.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 54.
 
 (c:/texlive/2016/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
 LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/ppl/b/n' tried instead on input line 55.
+(Font)              Font shape `T1/ppl/b/n' tried instead on input line 56.
  (./l-opt.toc
 LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <12> not available
 (Font)              Font shape `T1/ppl/b/n' tried instead on input line 1.
@@ -811,19 +821,19 @@ LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <12> not available
 \tf@toc=\write5
 \openout5 = `l-opt.toc'.
 
-LaTeX Font Info:    Try loading font information for OMS+ppl on input line 64.
-
-(c:/texlive/2016/texmf-dist/tex/latex/psnfss/omsppl.fd
-File: omsppl.fd 
-)
-LaTeX Font Info:    Font shape `OMS/ppl/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 64.
 LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <14.4> not available
 (Font)              Font shape `T1/ppl/b/n' tried instead on input line 67.
  [1
 
 {c:/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for T1+phv on input line 106.
+LaTeX Font Info:    Try loading font information for OMS+ppl on input line 91.
+
+(c:/texlive/2016/texmf-dist/tex/latex/psnfss/omsppl.fd
+File: omsppl.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ppl/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 91.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 110.
 
 (c:/texlive/2016/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
@@ -834,70 +844,7 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[2] (c:/texlive/2016/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2015/06/04 1.6 listings language file
-)
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 111.
-
-(c:/texlive/2016/texmf-dist/tex/latex/psnfss/t1pcr.fd
-File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
-)
-LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <10> not available
-(Font)              Font shape `T1/pcr/b/n' tried instead on input line 119.
-
-<./figures/init_map.pdf, id=90, 566.94562pt x 420.72371pt>
-File: ./figures/init_map.pdf Graphic file (type pdf)
-
-<use ./figures/init_map.pdf>
-Package pdftex.def Info: ./figures/init_map.pdf used on input line 144.
-(pdftex.def)             Requested size: 216.84248pt x 160.91666pt.
-
-<./figures/topology.pdf, id=91, 477.14975pt x 422.05681pt>
-File: ./figures/topology.pdf Graphic file (type pdf)
-
-<use ./figures/topology.pdf>
-Package pdftex.def Info: ./figures/topology.pdf used on input line 145.
-(pdftex.def)             Requested size: 216.84248pt x 191.8043pt.
-
-<./figures/tsp_res.pdf, id=92, 566.94562pt x 423.16783pt>
-File: ./figures/tsp_res.pdf Graphic file (type pdf)
-
-<use ./figures/tsp_res.pdf>
-Package pdftex.def Info: ./figures/tsp_res.pdf used on input line 147.
-(pdftex.def)             Requested size: 216.84248pt x 161.85147pt.
-
-<./figures/tsp_sage.pdf, id=93, 486.13686pt x 422.05681pt>
-File: ./figures/tsp_sage.pdf Graphic file (type pdf)
-
-<use ./figures/tsp_sage.pdf>
-Package pdftex.def Info: ./figures/tsp_sage.pdf used on input line 148.
-(pdftex.def)             Requested size: 216.84248pt x 188.26227pt.
-
-<./figures/GMap.pdf, id=94, 373.14406pt x 309.155pt>
-File: ./figures/GMap.pdf Graphic file (type pdf)
- <use ./figures/GMap.pdf>
-Package pdftex.def Info: ./figures/GMap.pdf used on input line 153.
-(pdftex.def)             Requested size: 226.48204pt x 187.64081pt.
-
-<./figures/GMap_Jzh.pdf, id=95, 361.09906pt x 309.155pt>
-File: ./figures/GMap_Jzh.pdf Graphic file (type pdf)
-
-<use ./figures/GMap_Jzh.pdf>
-Package pdftex.def Info: ./figures/GMap_Jzh.pdf used on input line 154.
-(pdftex.def)             Requested size: 226.48204pt x 193.90068pt.
-
-<./figures/benchmark.pdf, id=97, 482.75357pt x 214.74228pt>
-File: ./figures/benchmark.pdf Graphic file (type pdf)
-
-<use ./figures/benchmark.pdf>
-Package pdftex.def Info: ./figures/benchmark.pdf used on input line 162.
-(pdftex.def)             Requested size: 240.93773pt x 107.17426pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <24.88> not available
-(Font)              Font shape `T1/ppl/b/n' tried instead on input line 168.
+[2]
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 13.59999pt.
@@ -905,16 +852,90 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [3]
+Overfull \hbox (7.48932pt too wide) in paragraph at lines 183--184
+[]\T1/ppl/m/n/12 Transform from (lat-i-tude,longitude) to dis-tance ma-trix $\O
+T1/cmr/bx/n/12 C$\T1/ppl/m/n/12 . Fol-low-ing guide of [][]Wik-i/Haver-
+ []
+
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 13.59999pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[4 <./figures/init_map.pdf> <./figures/topology.pdf
+[4]
+LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <24.88> not available
+(Font)              Font shape `T1/ppl/b/n' tried instead on input line 224.
+ <./figures/init_map.pdf, id=117, 567.22597pt x 420.72371pt>
+File: ./figures/init_map.pdf Graphic file (type pdf)
+
+<use ./figures/init_map.pdf>
+Package pdftex.def Info: ./figures/init_map.pdf used on input line 229.
+(pdftex.def)             Requested size: 148.9006pt x 110.43842pt.
+
+<./figures/topology.pdf, id=118, 422.26633pt x 422.05681pt>
+File: ./figures/topology.pdf Graphic file (type pdf)
+
+<use ./figures/topology.pdf>
+Package pdftex.def Info: ./figures/topology.pdf used on input line 230.
+(pdftex.def)             Requested size: 124.08258pt x 124.02267pt.
+
+<./figures/trans_map.pdf, id=119, 566.59679pt x 413.14151pt>
+File: ./figures/trans_map.pdf Graphic file (type pdf)
+
+<use ./figures/trans_map.pdf>
+Package pdftex.def Info: ./figures/trans_map.pdf used on input line 231.
+(pdftex.def)             Requested size: 173.71863pt x 126.66675pt.
+
+<./figures/tsp_res.pdf, id=120, 567.22597pt x 423.16783pt>
+File: ./figures/tsp_res.pdf Graphic file (type pdf)
+
+<use ./figures/tsp_res.pdf>
+Package pdftex.def Info: ./figures/tsp_res.pdf used on input line 233.
+(pdftex.def)             Requested size: 198.5291pt x 148.10449pt.
+
+<./figures/tsp_sage.pdf, id=121, 564.58928pt x 417.5503pt>
+File: ./figures/tsp_sage.pdf Graphic file (type pdf)
+
+<use ./figures/tsp_sage.pdf>
+Package pdftex.def Info: ./figures/tsp_sage.pdf used on input line 234.
+(pdftex.def)             Requested size: 198.5291pt x 146.8265pt.
+
+<./figures/GMap_Cn.pdf, id=128, 367.87437pt x 309.155pt>
+File: ./figures/GMap_Cn.pdf Graphic file (type pdf)
+
+<use ./figures/GMap_Cn.pdf>
+Package pdftex.def Info: ./figures/GMap_Cn.pdf used on input line 239.
+(pdftex.def)             Requested size: 238.23642pt x 200.21718pt.
+
+<./figures/GMap_Jzh.pdf, id=129, 360.34625pt x 309.155pt>
+File: ./figures/GMap_Jzh.pdf Graphic file (type pdf)
+
+<use ./figures/GMap_Jzh.pdf>
+Package pdftex.def Info: ./figures/GMap_Jzh.pdf used on input line 240.
+(pdftex.def)             Requested size: 233.27585pt x 200.13698pt.
+
+<./figures/benchmark.pdf, id=130, 453.3738pt x 213.10616pt>
+File: ./figures/benchmark.pdf Graphic file (type pdf)
+
+<use ./figures/benchmark.pdf>
+Package pdftex.def Info: ./figures/benchmark.pdf used on input line 245.
+(pdftex.def)             Requested size: 248.16516pt x 116.64943pt.
+
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+ Make it at least 13.59999pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[5 <./figures/init_map.pdf> <./figures/topology.pdf
 
 pdfTeX warning: pdflatex.exe (file ./figures/topology.pdf): PDF inclusion: mult
 iple pdfs with page group included in a single page
+> <./figures/trans_map.pdf
+
+pdfTeX warning: pdflatex.exe (file ./figures/trans_map.pdf): PDF inclusion: mul
+tiple pdfs with page group included in a single page
 > <./figures/tsp_res.pdf
 
 pdfTeX warning: pdflatex.exe (file ./figures/tsp_res.pdf): PDF inclusion: multi
@@ -923,28 +944,43 @@ ple pdfs with page group included in a single page
 
 pdfTeX warning: pdflatex.exe (file ./figures/tsp_sage.pdf): PDF inclusion: mult
 iple pdfs with page group included in a single page
-> <./figures/GMap.pdf> <./figures/GMap_Jzh.pdf>] (./code/test.py)
+>] (c:/texlive/2016/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 257.
+
+(c:/texlive/2016/texmf-dist/tex/latex/psnfss/t1pcr.fd
+File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
+) (./code/sage.py
+LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <10> not available
+(Font)              Font shape `T1/pcr/b/n' tried instead on input line 9.
+
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 13.59999pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[5 <./figures/benchmark.pdf>] (./code/sage.py
+[6 <./figures/GMap_Cn.pdf> <./figures/GMap_Jzh.pdf> <./figures/benchmark.pdf>])
+(./code/sage2.py)
+Underfull \hbox (badness 10000) in paragraph at lines 275--276
+[][][]$\T1/pcr/m/n/12 https : / / github . com / sagemath / sagelib / blob / ma
+ster / sage / graphs /
+ []
+
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 13.59999pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[6]) (./code/lOptHw.m
+[7]
+Underfull \hbox (badness 10000) in paragraph at lines 277--278
+[][][]$\T1/pcr/m/n/12 https : / / en . wikipedia . org / wiki / Travelling _ sa
+lesman _ problem #
+ []
 
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
- Make it at least 13.59999pt.
- We now make it that large for the rest of the document.
- This may cause the page layout to be inconsistent, however.
 
-[7]) 
 AED: lastpage setting LastPage
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -953,22 +989,22 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [8]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 187.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 187.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 280.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 280.
  (./l-opt.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 187.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 187.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 280.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 280.
 Package rerunfilecheck Info: File `l-opt.out' has not changed.
-(rerunfilecheck)             Checksum: CA2480351851C5A4EBB7FDB6F58FD45A;561.
+(rerunfilecheck)             Checksum: 11E075DB658A4DC64FF073BA342A8BE0;529.
  ) 
 Here is how much of TeX's memory you used:
- 13921 strings out of 493014
- 197411 string characters out of 6137002
- 490465 words of memory out of 5000000
- 16894 multiletter control sequences out of 15000+600000
- 42054 words of font info for 105 fonts, out of 8000000 for 9000
+ 13275 strings out of 493014
+ 189889 string characters out of 6137002
+ 476012 words of memory out of 5000000
+ 16371 multiletter control sequences out of 15000+600000
+ 44228 words of font info for 109 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 61i,20n,96p,884b,2369s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 61i,13n,96p,926b,1995s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}<c:/texlive/2016/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2016/texmf-dist/fo
 nts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2016/texmf-dist/fonts/type1
@@ -978,17 +1014,18 @@ msfonts/cm/cmmi6.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm
 ><c:/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texliv
 e/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2016/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2016/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2016/texmf-dist/fonts/type1/
-public/amsfonts/symbols/msbm10.pfb><c:/texlive/2016/texmf-dist/fonts/type1/urw/
-courier/ucrb8a.pfb><c:/texlive/2016/texmf-dist/fonts/type1/urw/courier/ucrr8a.p
-fb><c:/texlive/2016/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/texlive/
-2016/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><c:/texlive/2016/texmf-dist
-/fonts/type1/urw/palatino/uplr8a.pfb><c:/texlive/2016/texmf-dist/fonts/type1/ur
-w/palatino/uplri8a.pfb>
-Output written on l-opt.pdf (8 pages, 1838058 bytes).
+nts/type1/public/amsfonts/cm/cmsy6.pfb><c:/texlive/2016/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmsy8.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/ams
+fonts/symbols/msbm10.pfb><c:/texlive/2016/texmf-dist/fonts/type1/urw/courier/uc
+rb8a.pfb><c:/texlive/2016/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb><c:/tex
+live/2016/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/texlive/2016/texmf
+-dist/fonts/type1/urw/palatino/uplb8a.pfb><c:/texlive/2016/texmf-dist/fonts/typ
+e1/urw/palatino/uplr8a.pfb><c:/texlive/2016/texmf-dist/fonts/type1/urw/palatino
+/uplri8a.pfb>
+Output written on l-opt.pdf (8 pages, 1126605 bytes).
 PDF statistics:
- 553 PDF objects out of 1000 (max. 8388607)
- 447 compressed objects within 5 object streams
- 224 named destinations out of 1000 (max. 500000)
- 108 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 448 PDF objects out of 1000 (max. 8388607)
+ 322 compressed objects within 4 object streams
+ 98 named destinations out of 1000 (max. 500000)
+ 113 words of extra memory for PDF output out of 10000 (max. 10000000)
 
