@@ -36,6 +36,7 @@
 %\usepackage[round]{natbib}
 %\bibliographystyle{plainnat}
 \usepackage{mmstyles}
+\usepackage{xfrac}
 \usepackage{longtable}
 \usepackage{pdflscape}
 \usepackage{graphicx}
@@ -89,7 +90,7 @@ TSP is a combinatorial optimization problem to find the shortest possible Hamilt
 There are several key components in the definition of TSP:
 \begin{itemize}[noitemsep,nolistsep]
 	\item Hamiltonian circuit means the travel route starting from vertex No. 0, \textbf{ending at No. 0} and visiting all vertexes \textbf{once and only once}. Note that \textbf{ending at No. 0} and  \textbf{once and only once} are not contradict! Because we consider this in our notation: $x_{ij}|_{i=n-1,j=0}$ denote the distance  go back from No.n-1 to No.0 while  $t_i$ will not consider the time consumed when going back since there is \textit{no} $t_i|_{i=n}$.
-	\item  \textbf{Asymmetric} \textbf{TSP} is more general and easy to formulate. But it can increase the size of problem doubly, Ref. to \vref{relation}. In this case,  be careful that $\mC$ is symmetric because the data I collect is distance while the solution $\mX$ is unsymmetrical because it describe \textit{directed} graph.
+	\item  \textbf{Asymmetric} \textbf{TSP} is more general and easy to formulate. But it can increase the size of problem doubly, Ref. to Sec.~\vref{relation}. In this case,  be careful that $\mC$ is symmetric because the data I collect is distance while the solution $\mX$ is unsymmetrical because it describe \textit{directed} graph.
 	\item \textbf{Symmetric} \textbf{TSP} will be formulate by undirected graph model and reduce the number of variable by $50\%$. In this case, be careful that $\mC$ and the solution $\mX$ are both symmetric, which means the subindex of  $\mX$  will be in lexicographic order (\ie $\mX = (x_{i j} ), i<j$)
 \end{itemize} 
 
@@ -134,8 +135,8 @@ So I look into Sage's code\cite{bib:github/sage/tsp}. We can introduce auxiliary
 We give  $(r_{ij})$ some physical meaning. We want to move $\dfrac{1}{n}$ from every node to 1 through now network flow $(r_{ij})$. There is a straight  sense that it can be done if the circle we find is Hamilton Circle. 
 
 Then let me prove the correctness of these constrains strictly:   \quad
-\textbf{(I).} If existing a Hamilton Circle, then exists $(r_{ij})$ satisfies constraints. Even if the original graph is not a complete graph, so we still can simply construct a \textbf{virtual} network flow. Construct in these way: if No.$i$ is connect with No.0 in the Hamilton circle we find, then modified $r_{i0}=1-\dfrac{1}{2n}$, and $r_{0i}=\dfrac{1}{2n}$. If No.$i$ is not directly connect with No.0, then  $r_{i0}= -\dfrac{1}{2n},\  r_{0i}=\dfrac{1}{2n}$. Then I think $r_{ij}$ will satisfies all constrains.
- \quad \textbf{(II).} If existing  a subtour not containing No.0, then  constrains will not be satisfied. Sum along the subtour, we will get $k-\dfrac{k}{2n} \ge k$, which is contradictory.
+\textbf{(I).} If existing a Hamilton Circle, then exists $(r_{ij})$ satisfies constraints. Even if the original graph is not a complete graph, so we still can simply construct a \textbf{virtual} network flow. Construct in these way: if No.$i$ is connect with No.0 in the Hamilton circle we find, then modified $r_{i0}=1-\nicefrac{1}{2n}$, and $r_{0i}=\sfrac{1}{2n}$. If No.$i$ is not directly connect with No.0, then  $r_{i0}= -\sfrac{1}{2n},\  r_{0i}=\sfrac{1}{2n}$. Then I think $r_{ij}$ will satisfies all constrains.
+ \quad \textbf{(II).} If existing  a subtour not containing No.0, then  constrains will not be satisfied. Sum along the subtour, we will get $k-\sfrac{k}{2n} \ge k$, which is contradictory.
 %Let me give $(r_{ij})$ some physical meaning. We want to move to 1.
 %between To explain its meaning. Imagine with some  can be explained that ...
 
@@ -144,7 +145,7 @@ Finally I want to formulate TSP use language of Graph which become elegant and s
 	\mathop{\mathrm{Minmize \ \  }}       & \sum_{(\mu,\nu)\in E} c_{\mu \nu}x_{\mu \nu}                &  & \notag                                                \\
 	\mathop{\mathrm{subject \  to \ \  }} & \sum_{\mu \in N_G(\nu)} x_{\mu' \nu'}=2                     &  & \text{ for all } \nu \in V   \notag                   \\
 	                                      & r_{\mu \nu} + r_{\nu \mu} \ge x_{\mu \nu}                   &  & \text{ for all } (\mu, \nu) \in E \notag              \\
-	                                      & \sum_{ \mu \in  N_G(\nu)} r_{\mu' \nu'}\le 1-\dfrac{1}{2n} &  & \text{ for all } \nu \in V \wedge \nu \ne 0    \notag \\
+	                                      & \sum_{ \mu \in  N_G(\nu)} r_{\mu \nu}\le 1-\dfrac{1}{2n} &  & \text{ for all } \nu \in V \wedge \nu \ne 0    \notag \\
 	                                      & x_{\mu \nu} \geq 0, x_{\mu \nu} \in \Zbb                    &  & \text{ for all } (\mu, \nu) \in E. \notag
 \end{align}
 Note that $ (\mu, \nu) \in E$ makes sure $\mu <\nu$, and $\mu',\nu'$ in above satisfies  $\begin{cases}
@@ -153,18 +154,18 @@ Note that $ (\mu, \nu) \in E$ makes sure $\mu <\nu$, and $\mu',\nu'$ in above sa
 \end{cases}$ to make sure  $\mu' <\nu'$. I write in this way to keep optimization equalities and inequalities elegant. \vspace{1em}
 \\{\textbf{\large Relation between Symmetric/Asymmetric TSP}} \label{relation}
 
-For example\cite{bib:wiki/tsp}, adjacent matrix for Symmetric TSP can transform into Asymmetric TSP by adding some\textit{ ghost nodes}  $A', B', C'$. And the link weight between original node and ghost node can be set to  small negative number. 
+For example\cite{bib:wiki/tsp}, adjacent matrix for Symmetric TSP can transform into Asymmetric TSP by adding some\textit{ ghost nodes}  $A', B', C'$. And the link weight between original node and ghost node can be set to  small negative number.   %We can expert optimal path will go to ghost nodes immediately 
 \begin{center}
-\begin{tabular}{|l|l|l|l|}
+\begin{tabular}{|l||l|l|l|}
 	\hline
-	& A & B & C \\ \hline
+	& A & B & C \\ \hline \hline
 	A &   & 1 & 2 \\ \hline
 	B & 6 &   & 3 \\ \hline
 	C & 5 & 4 &   \\ \hline
 \end{tabular} $\quad \rightarrow \quad $
-\begin{tabular}{|l|l|l|l|l|l|l|}
+\begin{tabular}{|l||l|l|l|l|l|l|}
 	\hline
-	&A  & B  & C  & A' & B' & C'     \\ \hline
+	&A  & B  & C  & A' & B' & C'     \\ \hline \hline
 	A  &    &    &    & -w & 6  & 5  \\ \hline
 	B  &    &    &    & 1  & -w & 4  \\ \hline
 	C  &    &    &    & 2  & 3  & -w \\ \hline
@@ -180,11 +181,11 @@ Apparently, the equivalent symmetric formulation of a asymmetric TSP have double
 The steps to solve the ILP include: 
 \begin{itemize}[noitemsep,nolistsep]
 	\item Crawl location data for landmarks around HangZhou and China. 
-	\item Transform from (latitude,longitude)  to distance matrix $\mC$. Following guide of \href{https://en.wikipedia.org/wiki/Haversine_formula}{Wiki/Haversine\_formula}\cite{bib:wiki}. 
+	\item Transform from (latitude,longitude)  to distance matrix $\mC$, following guide of \href{https://en.wikipedia.org/wiki/Haversine_formula}{Wiki/Haversine\_formula}\cite{bib:wiki}. 
 	\item Solve the ILP by MILP class. The equivalent code for ILP system \eqref{eq:new} is more human-friendly and powerful compared with \textit{`intlinprog`} function of Matlab.  
-%	Ref. to \vref{code:sage}. 
+	Ref. to Sec.~\vref{code:sage}. 
 	I put the code in the Appendix, hope do not impact the compactness of this report.
-	\item Visualize on GMap. 
+	\item Visualize on GMap. \cite{bib:gmap}
 \end{itemize}
 %\begin{lstlisting}[language=Python]
 %p=MixedIntegerLinearProgram(maximization=False) 
@@ -215,9 +216,9 @@ The steps to solve the ILP include:
 %p.solve()
 %\end{lstlisting}
 
-Apply ILP to a toy case with 50 landmarks around China, we get a optimal strategy to travel around China. It is quite interesting and exciting. Ref. to Fig~\vref{fig:tsp_res}.   I also try to travel around JiangZheHu Region(Yangtze River delta) and visualize it on the map, Ref. to Fig~\vref{fig:jiangzhehu}. 
+Apply ILP to a toy case with 50 landmarks around China, we get a optimal strategy to travel around China. It is quite interesting and exciting. Ref. to Fig~\vref{fig:cn}.   I also try to travel around JiangZheHu Region(Yangtze River delta) and visualize it on the map, Ref. to Fig~\vref{fig:jiangzhehu}. 
 
-I have some test about time of different formulations. Ref. to Fig~\vref{fig:elaspe}. We can observe that Symmetric formulation can solve 50 landmarks TSP while Asymmetric formulation can solve 23 landmarks TSP. We can expect them to grow explosively after 50 and 23. 
+I have some test about time of different formulations. Ref. to Fig~\vref{fig:elaspe}. We can observe that Symmetric formulation can solve 50 landmarks TSP while Asymmetric formulation can solve 23 landmarks TSP. We can expect them to grow explosively after $n=50$ and $23$. 
 
 
 
@@ -232,12 +233,12 @@ I put all figures in appendices to keep description of problem compact.
 	\\
 	\subfloat[The optimal solution find by ILP]{\includegraphics[width=.4\columnwidth]{tsp_res}\label{fig:tsp_res}}  \quad 
 	\subfloat[The optimal solution find by Sage(also formulate problem as ILP to solve )]{\includegraphics[width=.4\columnwidth]{tsp_sage} \label{fig:tsp_sage} }
-	\caption[Results]{Fig~\vref{fig:tsp_res} is equivalent to Fig~\vref{fig:jiangzhehu} with correct (longitude, latitude) as coordinate. But when set the position information for Graph I use (latitude, longitude) mistakenly. We can see the solution find by \vref{code:sage2} is the same as Sage. In fact, I look into Sage's Source code, inspired by it and write new  formulation of symmetric TSP.} 
+	\caption[Results]{Fig~\vref{fig:tsp_res} is equivalent to Fig~\vref{fig:jiangzhehu} with correct (longitude, latitude) as coordinate. But when set the position information for graph, I use (latitude, longitude) mistakenly. We can see the solution find by \vref{code:sage2} is the same as Sage. In fact, I look into Sage's Source code, inspired by it and write new  formulation of symmetric TSP.} 
 \end{figure}
 \begin{figure}[H]
 	\centering
-	\subfloat[TSP on Hangzhou]{\includegraphics[width=.48\columnwidth]{GMap_Cn}} \   
-	\subfloat[TSP on JiangZheHu]{\includegraphics[width=.47\columnwidth]{GMap_Jzh}\label{fig:jiangzhehu}} 
+	\subfloat[TSP on Hangzhou]{\includegraphics[width=.48\columnwidth]{GMap_Cn}\label{fig:cn}} \   
+	\subfloat[TSP on JiangZheHu]{\includegraphics[width=.48\columnwidth]{GMap_Jzh}\label{fig:jiangzhehu}} 
 	\caption[Results]{JiangZheHu is a wider range than Hangzhou. I am quite happy to solve a TSP on China range.} 
 \end{figure}
 \begin{figure}[H]
@@ -260,11 +261,6 @@ Here let me put some important code(the part for different ILP formulation of TS
 	\lstinputlisting[language=Python]{./code/sage2.py} \label{code:sage2}
 %	\subsubsection{Draw on GMap}
 %	\lstinputlisting[language=Matlab]{./code/lOptHw.m}	
-	%\textbf{\textcolor[rgb]{0.98,0.00,0.00}{Input matlab source:}}
-	
-	%some more text \textcolor[rgb]{0.98,0.00,0.00}{\textbf{Input C++ source:}}
-	%\lstinputlisting[language=C++]{./code/mcmthesis-sudoku.cpp}
-	
 %			\section{Landmarks Around HangZhou }
 %			\input{./code/city_data.tex}		
 \end{appendices}

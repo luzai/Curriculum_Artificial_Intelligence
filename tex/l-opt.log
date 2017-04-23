@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/W32TeX) (preloaded format=pdflatex 2017.2.2)  21 APR 2017 21:45
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/W32TeX) (preloaded format=pdflatex 2017.2.2)  23 APR 2017 13:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -686,6 +686,244 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 (c:/texlive/2016/texmf-dist/tex/latex/tools/xspace.sty
 Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
 ))
+(c:/texlive/2016/texmf-dist/tex/latex/l3packages/xfrac/xfrac.sty
+(c:/texlive/2016/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2016/05/18 v6512 L3 programming layer (loader) 
+
+(c:/texlive/2016/texmf-dist/tex/latex/l3kernel/expl3-code.tex
+Package: expl3 2016/05/18 v6512 L3 programming layer (code)
+L3 Module: l3bootstrap 2016/02/12 v6412 L3 Bootstrap code
+L3 Module: l3names 2016/03/11 v6433 L3 Namespace for primitives
+L3 Module: l3basics 2015/11/22 v6315 L3 Basic definitions
+L3 Module: l3expan 2015/09/10 v5983 L3 Argument expansion
+L3 Module: l3tl 2016/03/26 v6465 L3 Token lists
+L3 Module: l3str 2016/03/24 v6441 L3 Strings
+L3 Module: l3seq 2015/08/05 v5777 L3 Sequences and stacks
+L3 Module: l3int 2016/03/24 v6441 L3 Integers
+\c_max_int=\count153
+\l_tmpa_int=\count154
+\l_tmpb_int=\count155
+\g_tmpa_int=\count156
+\g_tmpb_int=\count157
+L3 Module: l3quark 2015/08/17 v5855 L3 Quarks
+L3 Module: l3prg 2015/11/01 v6216 L3 Control structures
+\g__prg_map_int=\count158
+L3 Module: l3clist 2015/09/02 v5901 L3 Comma separated lists
+L3 Module: l3token 2016/04/03 v6470 L3 Experimental token manipulation
+L3 Module: l3prop 2016/01/05 v6366 L3 Property lists
+L3 Module: l3msg 2016/03/26 v6464 L3 Messages
+L3 Module: l3file 2016/03/25 v6458 L3 File and I/O operations
+\l_iow_line_count_int=\count159
+\l__iow_target_count_int=\count160
+\l__iow_current_line_int=\count161
+\l__iow_current_word_int=\count162
+\l__iow_current_indentation_int=\count163
+L3 Module: l3skip 2016/01/05 v6366 L3 Dimensions and skips
+\c_zero_dim=\dimen164
+\c_max_dim=\dimen165
+\l_tmpa_dim=\dimen166
+\l_tmpb_dim=\dimen167
+\g_tmpa_dim=\dimen168
+\g_tmpb_dim=\dimen169
+\c_zero_skip=\skip119
+\c_max_skip=\skip120
+\l_tmpa_skip=\skip121
+\l_tmpb_skip=\skip122
+\g_tmpa_skip=\skip123
+\g_tmpb_skip=\skip124
+\c_zero_muskip=\muskip12
+\c_max_muskip=\muskip13
+\l_tmpa_muskip=\muskip14
+\l_tmpb_muskip=\muskip15
+\g_tmpa_muskip=\muskip16
+\g_tmpb_muskip=\muskip17
+L3 Module: l3keys 2015/11/17 v6284 L3 Key-value interfaces
+\g__keyval_level_int=\count164
+\l_keys_choice_int=\count165
+L3 Module: l3fp 2016/03/26 v6465 L3 Floating points
+\c__fp_leading_shift_int=\count166
+\c__fp_middle_shift_int=\count167
+\c__fp_trailing_shift_int=\count168
+\c__fp_big_leading_shift_int=\count169
+\c__fp_big_middle_shift_int=\count170
+\c__fp_big_trailing_shift_int=\count171
+\c__fp_Bigg_leading_shift_int=\count172
+\c__fp_Bigg_middle_shift_int=\count173
+\c__fp_Bigg_trailing_shift_int=\count174
+L3 Module: l3box 2015/08/09 v5822 L3 Experimental boxes
+\c_empty_box=\box40
+\l_tmpa_box=\box41
+\l_tmpb_box=\box42
+\g_tmpa_box=\box43
+\g_tmpb_box=\box44
+L3 Module: l3coffins 2016/05/17 v6508 L3 Coffin code layer
+\l__coffin_internal_box=\box45
+\l__coffin_internal_dim=\dimen170
+\l__coffin_offset_x_dim=\dimen171
+\l__coffin_offset_y_dim=\dimen172
+\l__coffin_x_dim=\dimen173
+\l__coffin_y_dim=\dimen174
+\l__coffin_x_prime_dim=\dimen175
+\l__coffin_y_prime_dim=\dimen176
+\c_empty_coffin=\box46
+\l__coffin_aligned_coffin=\box47
+\l__coffin_aligned_internal_coffin=\box48
+\l_tmpa_coffin=\box49
+\l_tmpb_coffin=\box50
+\l__coffin_display_coffin=\box51
+\l__coffin_display_coord_coffin=\box52
+\l__coffin_display_pole_coffin=\box53
+\l__coffin_display_offset_dim=\dimen177
+\l__coffin_display_x_dim=\dimen178
+\l__coffin_display_y_dim=\dimen179
+L3 Module: l3color 2014/08/23 v5354 L3 Experimental color support
+L3 Module: l3sys 2015/09/25 v6087 L3 Experimental system/runtime functions
+L3 Module: l3candidates 2016/05/13 v6484 L3 Experimental additions to l3kernel
+\l__box_top_dim=\dimen180
+\l__box_bottom_dim=\dimen181
+\l__box_left_dim=\dimen182
+\l__box_right_dim=\dimen183
+\l__box_top_new_dim=\dimen184
+\l__box_bottom_new_dim=\dimen185
+\l__box_left_new_dim=\dimen186
+\l__box_right_new_dim=\dimen187
+\l__box_internal_box=\box54
+\l__coffin_bounding_shift_dim=\dimen188
+\l__coffin_left_corner_dim=\dimen189
+\l__coffin_right_corner_dim=\dimen190
+\l__coffin_bottom_corner_dim=\dimen191
+\l__coffin_top_corner_dim=\dimen192
+\l__coffin_scaled_total_height_dim=\dimen193
+\l__coffin_scaled_width_dim=\dimen194
+L3 Module: l3luatex 2016/03/26 v6465 L3 Experimental LuaTeX-specific functions
+)
+(c:/texlive/2016/texmf-dist/tex/latex/l3kernel/l3pdfmode.def
+File: l3pdfmode.def 2016/03/26 v6465 L3 Experimental driver: PDF mode
+\l__driver_color_stack_int=\count175
+\l__driver_tmp_box=\box55
+))
+(c:/texlive/2016/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty
+Package: l3keys2e 2016/05/18 v6512 LaTeX2e option processing using LaTeX3 keys
+)
+(c:/texlive/2016/texmf-dist/tex/latex/base/textcomp.sty
+Package: textcomp 2005/09/27 v1.99g Standard LaTeX package
+Package textcomp Info: Sub-encoding information:
+(textcomp)               5 = only ISO-Adobe without \textcurrency
+(textcomp)               4 = 5 + \texteuro
+(textcomp)               3 = 4 + \textohm
+(textcomp)               2 = 3 + \textestimated + \textcurrency
+(textcomp)               1 = TS1 - \textcircled - \t
+(textcomp)               0 = TS1 (full)
+(textcomp)             Font families with sub-encoding setting implement
+(textcomp)             only a restricted character set as indicated.
+(textcomp)             Family '?' is the default used for unknown fonts.
+(textcomp)             See the documentation for details.
+Package textcomp Info: Setting ? sub-encoding to TS1/1 on input line 79.
+
+(c:/texlive/2016/texmf-dist/tex/latex/base/ts1enc.def
+File: ts1enc.def 2001/06/05 v3.0e (jk/car/fm) Standard LaTeX file
+)
+LaTeX Info: Redefining \oldstylenums on input line 334.
+Package textcomp Info: Setting cmr sub-encoding to TS1/0 on input line 349.
+Package textcomp Info: Setting cmss sub-encoding to TS1/0 on input line 350.
+Package textcomp Info: Setting cmtt sub-encoding to TS1/0 on input line 351.
+Package textcomp Info: Setting cmvtt sub-encoding to TS1/0 on input line 352.
+Package textcomp Info: Setting cmbr sub-encoding to TS1/0 on input line 353.
+Package textcomp Info: Setting cmtl sub-encoding to TS1/0 on input line 354.
+Package textcomp Info: Setting ccr sub-encoding to TS1/0 on input line 355.
+Package textcomp Info: Setting ptm sub-encoding to TS1/4 on input line 356.
+Package textcomp Info: Setting pcr sub-encoding to TS1/4 on input line 357.
+Package textcomp Info: Setting phv sub-encoding to TS1/4 on input line 358.
+Package textcomp Info: Setting ppl sub-encoding to TS1/3 on input line 359.
+Package textcomp Info: Setting pag sub-encoding to TS1/4 on input line 360.
+Package textcomp Info: Setting pbk sub-encoding to TS1/4 on input line 361.
+Package textcomp Info: Setting pnc sub-encoding to TS1/4 on input line 362.
+Package textcomp Info: Setting pzc sub-encoding to TS1/4 on input line 363.
+Package textcomp Info: Setting bch sub-encoding to TS1/4 on input line 364.
+Package textcomp Info: Setting put sub-encoding to TS1/5 on input line 365.
+Package textcomp Info: Setting uag sub-encoding to TS1/5 on input line 366.
+Package textcomp Info: Setting ugq sub-encoding to TS1/5 on input line 367.
+Package textcomp Info: Setting ul8 sub-encoding to TS1/4 on input line 368.
+Package textcomp Info: Setting ul9 sub-encoding to TS1/4 on input line 369.
+Package textcomp Info: Setting augie sub-encoding to TS1/5 on input line 370.
+Package textcomp Info: Setting dayrom sub-encoding to TS1/3 on input line 371.
+Package textcomp Info: Setting dayroms sub-encoding to TS1/3 on input line 372.
+
+Package textcomp Info: Setting pxr sub-encoding to TS1/0 on input line 373.
+Package textcomp Info: Setting pxss sub-encoding to TS1/0 on input line 374.
+Package textcomp Info: Setting pxtt sub-encoding to TS1/0 on input line 375.
+Package textcomp Info: Setting txr sub-encoding to TS1/0 on input line 376.
+Package textcomp Info: Setting txss sub-encoding to TS1/0 on input line 377.
+Package textcomp Info: Setting txtt sub-encoding to TS1/0 on input line 378.
+Package textcomp Info: Setting lmr sub-encoding to TS1/0 on input line 379.
+Package textcomp Info: Setting lmdh sub-encoding to TS1/0 on input line 380.
+Package textcomp Info: Setting lmss sub-encoding to TS1/0 on input line 381.
+Package textcomp Info: Setting lmssq sub-encoding to TS1/0 on input line 382.
+Package textcomp Info: Setting lmvtt sub-encoding to TS1/0 on input line 383.
+Package textcomp Info: Setting lmtt sub-encoding to TS1/0 on input line 384.
+Package textcomp Info: Setting qhv sub-encoding to TS1/0 on input line 385.
+Package textcomp Info: Setting qag sub-encoding to TS1/0 on input line 386.
+Package textcomp Info: Setting qbk sub-encoding to TS1/0 on input line 387.
+Package textcomp Info: Setting qcr sub-encoding to TS1/0 on input line 388.
+Package textcomp Info: Setting qcs sub-encoding to TS1/0 on input line 389.
+Package textcomp Info: Setting qpl sub-encoding to TS1/0 on input line 390.
+Package textcomp Info: Setting qtm sub-encoding to TS1/0 on input line 391.
+Package textcomp Info: Setting qzc sub-encoding to TS1/0 on input line 392.
+Package textcomp Info: Setting qhvc sub-encoding to TS1/0 on input line 393.
+Package textcomp Info: Setting futs sub-encoding to TS1/4 on input line 394.
+Package textcomp Info: Setting futx sub-encoding to TS1/4 on input line 395.
+Package textcomp Info: Setting futj sub-encoding to TS1/4 on input line 396.
+Package textcomp Info: Setting hlh sub-encoding to TS1/3 on input line 397.
+Package textcomp Info: Setting hls sub-encoding to TS1/3 on input line 398.
+Package textcomp Info: Setting hlst sub-encoding to TS1/3 on input line 399.
+Package textcomp Info: Setting hlct sub-encoding to TS1/5 on input line 400.
+Package textcomp Info: Setting hlx sub-encoding to TS1/5 on input line 401.
+Package textcomp Info: Setting hlce sub-encoding to TS1/5 on input line 402.
+Package textcomp Info: Setting hlcn sub-encoding to TS1/5 on input line 403.
+Package textcomp Info: Setting hlcw sub-encoding to TS1/5 on input line 404.
+Package textcomp Info: Setting hlcf sub-encoding to TS1/5 on input line 405.
+Package textcomp Info: Setting pplx sub-encoding to TS1/3 on input line 406.
+Package textcomp Info: Setting pplj sub-encoding to TS1/3 on input line 407.
+Package textcomp Info: Setting ptmx sub-encoding to TS1/4 on input line 408.
+Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 409.
+)
+(c:/texlive/2016/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+Package: xparse 2016/05/18 v6512 L3 Experimental document command parser
+\l__xparse_current_arg_int=\count176
+\l__xparse_m_args_int=\count177
+\l__xparse_mandatory_args_int=\count178
+\l__xparse_processor_int=\count179
+\l__xparse_v_nesting_int=\count180
+)
+(c:/texlive/2016/texmf-dist/tex/latex/l3packages/xtemplate/xtemplate.sty
+Package: xtemplate 2016/05/18 v6512 L3 Experimental prototype document function
+s
+\l__xtemplate_tmp_dim=\dimen195
+\l__xtemplate_tmp_int=\count181
+\l__xtemplate_tmp_muskip=\muskip18
+\l__xtemplate_tmp_skip=\skip125
+)
+Package: xfrac 2016/05/18 v6512 L3 Experimental split-level fractions
+\l__xfrac_slash_box=\box56
+\l__xfrac_tmp_box=\box57
+\l__xfrac_denominator_bot_sep_dim=\dimen196
+\l__xfrac_numerator_bot_sep_dim=\dimen197
+\l__xfrac_numerator_top_sep_dim=\dimen198
+\l__xfrac_slash_left_sep_dim=\dimen199
+\l__xfrac_slash_right_sep_dim=\dimen256
+\l__xfrac_slash_left_muskip=\muskip19
+\l__xfrac_slash_right_muskip=\muskip20
+.................................................
+. xtemplate info: "declare-object-type"
+. 
+. Declaring object type 'xfrac' taking 3 argument(s) on line 111.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \sfrac with sig. 'omom' on line 451.
+.................................................
+)
 (c:/texlive/2016/texmf-dist/tex/latex/oberdiek/pdflscape.sty
 Package: pdflscape 2016/05/14 v0.11 Display of landscape pages in PDF (HO)
 
@@ -696,42 +934,49 @@ Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 ) (./l-opt.aux)
 \openout1 = `l-opt.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Try loading font information for T1+ppl on input line 51.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 52.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 52.
+
+(c:/texlive/2016/texmf-dist/tex/latex/base/ts1cmr.fd
+File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Try loading font information for T1+ppl on input line 52.
 
 (c:/texlive/2016/texmf-dist/tex/latex/psnfss/t1ppl.fd
 File: t1ppl.fd 2001/06/04 font definitions for T1/ppl.
 )
 Package lastpage Info: Please have a look at the pageslts package at
 (lastpage)             https://www.ctan.org/pkg/pageslts
-(lastpage)             ! on input line 51.
-\c@lstlisting=\count153
+(lastpage)             ! on input line 52.
+\c@lstlisting=\count182
 
 (c:/texlive/2016/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count154
-\scratchdimen=\dimen164
-\scratchbox=\box40
-\nofMPsegments=\count155
-\nofMParguments=\count156
+\scratchcounter=\count183
+\scratchdimen=\dimen257
+\scratchbox=\box58
+\nofMPsegments=\count184
+\nofMParguments=\count185
 \everyMPshowfont=\toks43
-\MPscratchCnt=\count157
-\MPscratchDim=\dimen165
-\MPnumerator=\count158
-\makeMPintoPDFobject=\count159
+\MPscratchCnt=\count186
+\MPscratchDim=\dimen258
+\MPnumerator=\count187
+\makeMPintoPDFobject=\count188
 \everyMPtoPDFconversion=\toks44
 )
 *geometry* driver: auto-detecting
@@ -768,52 +1013,52 @@ Package lastpage Info: Please have a look at the pageslts package at
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\AtBeginShipoutBox=\box41
-Package hyperref Info: Link coloring ON on input line 51.
+\AtBeginShipoutBox=\box59
+Package hyperref Info: Link coloring ON on input line 52.
 (c:/texlive/2016/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
 (c:/texlive/2016/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count160
+\c@section@level=\count189
 LaTeX Info: Redefining \Ref on input line 513.
 )
-LaTeX Info: Redefining \ref on input line 51.
-LaTeX Info: Redefining \pageref on input line 51.
-LaTeX Info: Redefining \nameref on input line 51.
+LaTeX Info: Redefining \ref on input line 52.
+LaTeX Info: Redefining \pageref on input line 52.
+LaTeX Info: Redefining \nameref on input line 52.
 
 (./l-opt.out) (./l-opt.out)
 \@outlinefile=\write4
 \openout4 = `l-opt.out'.
 
-LaTeX Info: Redefining \Ref on input line 51.
+LaTeX Info: Redefining \Ref on input line 52.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: float package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Try loading font information for U+msa on input line 54.
+LaTeX Font Info:    Try loading font information for U+msa on input line 55.
 
 (c:/texlive/2016/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 54.
+LaTeX Font Info:    Try loading font information for U+msb on input line 55.
 
 (c:/texlive/2016/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+rsfs on input line 54.
+LaTeX Font Info:    Try loading font information for U+rsfs on input line 55.
 
 (c:/texlive/2016/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
-LaTeX Font Info:    Try loading font information for U+lasy on input line 54.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 55.
 
 (c:/texlive/2016/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
 LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/ppl/b/n' tried instead on input line 56.
+(Font)              Font shape `T1/ppl/b/n' tried instead on input line 57.
  (./l-opt.toc
 LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <12> not available
 (Font)              Font shape `T1/ppl/b/n' tried instead on input line 1.
@@ -822,18 +1067,16 @@ LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <12> not available
 \openout5 = `l-opt.toc'.
 
 LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/ppl/b/n' tried instead on input line 67.
+(Font)              Font shape `T1/ppl/b/n' tried instead on input line 68.
  [1
 
 {c:/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for OMS+ppl on input line 91.
+LaTeX Font Info:    Try loading font information for TS1+ppl on input line 92.
 
-(c:/texlive/2016/texmf-dist/tex/latex/psnfss/omsppl.fd
-File: omsppl.fd 
+(c:/texlive/2016/texmf-dist/tex/latex/psnfss/ts1ppl.fd
+File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
 )
-LaTeX Font Info:    Font shape `OMS/ppl/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 91.
-LaTeX Font Info:    Try loading font information for T1+phv on input line 110.
+LaTeX Font Info:    Try loading font information for T1+phv on input line 111.
 
 (c:/texlive/2016/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
@@ -845,6 +1088,41 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [2]
+LaTeX Font Info:    Calculating math sizes for size <8.39996> on input line 138
+.
+
+
+LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <4.19998> not available
+(Font)              size <5> substituted on input line 138.
+
+
+LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <4.19998> not available
+(Font)              size <5> substituted on input line 138.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <4.19998> not available
+(Font)              size <5> substituted on input line 138.
+
+
+LaTeX Font Warning: Font shape `OT1/cmr/bx/n' in size <4.19998> not available
+(Font)              size <5> substituted on input line 138.
+
+
+LaTeX Font Warning: Font shape `OML/cmm/b/it' in size <4.19998> not available
+(Font)              size <5> substituted on input line 138.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/b/n' in size <4.19998> not available
+(Font)              size <5> substituted on input line 138.
+
+
+LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <4.19998> not available
+(Font)              size <5> substituted on input line 138.
+
+
+LaTeX Font Warning: Font shape `U/lasy/m/n' in size <4.19998> not available
+(Font)              size <5> substituted on input line 138.
+
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 13.59999pt.
@@ -852,9 +1130,9 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [3]
-Overfull \hbox (7.48932pt too wide) in paragraph at lines 183--184
+Overfull \hbox (3.7574pt too wide) in paragraph at lines 184--185
 []\T1/ppl/m/n/12 Transform from (lat-i-tude,longitude) to dis-tance ma-trix $\O
-T1/cmr/bx/n/12 C$\T1/ppl/m/n/12 . Fol-low-ing guide of [][]Wik-i/Haver-
+T1/cmr/bx/n/12 C$\T1/ppl/m/n/12 , fol-low-ing guide of [][]Wik-i/Haver-
  []
 
 
@@ -865,61 +1143,61 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 
 [4]
 LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <24.88> not available
-(Font)              Font shape `T1/ppl/b/n' tried instead on input line 224.
- <./figures/init_map.pdf, id=117, 567.22597pt x 420.72371pt>
+(Font)              Font shape `T1/ppl/b/n' tried instead on input line 225.
+ <./figures/init_map.pdf, id=121, 567.22597pt x 420.72371pt>
 File: ./figures/init_map.pdf Graphic file (type pdf)
 
 <use ./figures/init_map.pdf>
-Package pdftex.def Info: ./figures/init_map.pdf used on input line 229.
+Package pdftex.def Info: ./figures/init_map.pdf used on input line 230.
 (pdftex.def)             Requested size: 148.9006pt x 110.43842pt.
 
-<./figures/topology.pdf, id=118, 422.26633pt x 422.05681pt>
+<./figures/topology.pdf, id=122, 422.26633pt x 422.05681pt>
 File: ./figures/topology.pdf Graphic file (type pdf)
 
 <use ./figures/topology.pdf>
-Package pdftex.def Info: ./figures/topology.pdf used on input line 230.
+Package pdftex.def Info: ./figures/topology.pdf used on input line 231.
 (pdftex.def)             Requested size: 124.08258pt x 124.02267pt.
 
-<./figures/trans_map.pdf, id=119, 566.59679pt x 413.14151pt>
+<./figures/trans_map.pdf, id=123, 566.59679pt x 413.14151pt>
 File: ./figures/trans_map.pdf Graphic file (type pdf)
 
 <use ./figures/trans_map.pdf>
-Package pdftex.def Info: ./figures/trans_map.pdf used on input line 231.
+Package pdftex.def Info: ./figures/trans_map.pdf used on input line 232.
 (pdftex.def)             Requested size: 173.71863pt x 126.66675pt.
 
-<./figures/tsp_res.pdf, id=120, 567.22597pt x 423.16783pt>
+<./figures/tsp_res.pdf, id=124, 567.22597pt x 423.16783pt>
 File: ./figures/tsp_res.pdf Graphic file (type pdf)
 
 <use ./figures/tsp_res.pdf>
-Package pdftex.def Info: ./figures/tsp_res.pdf used on input line 233.
+Package pdftex.def Info: ./figures/tsp_res.pdf used on input line 234.
 (pdftex.def)             Requested size: 198.5291pt x 148.10449pt.
 
-<./figures/tsp_sage.pdf, id=121, 564.58928pt x 417.5503pt>
+<./figures/tsp_sage.pdf, id=125, 564.58928pt x 417.5503pt>
 File: ./figures/tsp_sage.pdf Graphic file (type pdf)
 
 <use ./figures/tsp_sage.pdf>
-Package pdftex.def Info: ./figures/tsp_sage.pdf used on input line 234.
+Package pdftex.def Info: ./figures/tsp_sage.pdf used on input line 235.
 (pdftex.def)             Requested size: 198.5291pt x 146.8265pt.
 
-<./figures/GMap_Cn.pdf, id=128, 367.87437pt x 309.155pt>
+<./figures/GMap_Cn.pdf, id=132, 367.87437pt x 309.155pt>
 File: ./figures/GMap_Cn.pdf Graphic file (type pdf)
 
 <use ./figures/GMap_Cn.pdf>
-Package pdftex.def Info: ./figures/GMap_Cn.pdf used on input line 239.
+Package pdftex.def Info: ./figures/GMap_Cn.pdf used on input line 240.
 (pdftex.def)             Requested size: 238.23642pt x 200.21718pt.
 
-<./figures/GMap_Jzh.pdf, id=129, 360.34625pt x 309.155pt>
+<./figures/GMap_Jzh.pdf, id=133, 360.34625pt x 309.155pt>
 File: ./figures/GMap_Jzh.pdf Graphic file (type pdf)
 
 <use ./figures/GMap_Jzh.pdf>
-Package pdftex.def Info: ./figures/GMap_Jzh.pdf used on input line 240.
-(pdftex.def)             Requested size: 233.27585pt x 200.13698pt.
+Package pdftex.def Info: ./figures/GMap_Jzh.pdf used on input line 241.
+(pdftex.def)             Requested size: 238.23642pt x 204.392pt.
 
-<./figures/benchmark.pdf, id=130, 453.3738pt x 213.10616pt>
+<./figures/benchmark.pdf, id=134, 453.3738pt x 213.10616pt>
 File: ./figures/benchmark.pdf Graphic file (type pdf)
 
 <use ./figures/benchmark.pdf>
-Package pdftex.def Info: ./figures/benchmark.pdf used on input line 245.
+Package pdftex.def Info: ./figures/benchmark.pdf used on input line 246.
 (pdftex.def)             Requested size: 248.16516pt x 116.64943pt.
 
 
@@ -947,7 +1225,7 @@ iple pdfs with page group included in a single page
 >] (c:/texlive/2016/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 257.
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 258.
 
 (c:/texlive/2016/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
@@ -963,11 +1241,6 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
 
 [6 <./figures/GMap_Cn.pdf> <./figures/GMap_Jzh.pdf> <./figures/benchmark.pdf>])
 (./code/sage2.py)
-Underfull \hbox (badness 10000) in paragraph at lines 275--276
-[][][]$\T1/pcr/m/n/12 https : / / github . com / sagemath / sagelib / blob / ma
-ster / sage / graphs /
- []
-
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 13.59999pt.
@@ -975,7 +1248,13 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [7]
-Underfull \hbox (badness 10000) in paragraph at lines 277--278
+Underfull \hbox (badness 10000) in paragraph at lines 271--272
+[][][]$\T1/pcr/m/n/12 https : / / github . com / sagemath / sagelib / blob / ma
+ster / sage / graphs /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 273--274
 [][][]$\T1/pcr/m/n/12 https : / / en . wikipedia . org / wiki / Travelling _ sa
 lesman _ problem #
  []
@@ -989,22 +1268,27 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [8]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 280.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 280.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 276.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 276.
  (./l-opt.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 280.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 280.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 276.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 276.
 Package rerunfilecheck Info: File `l-opt.out' has not changed.
 (rerunfilecheck)             Checksum: 11E075DB658A4DC64FF073BA342A8BE0;529.
+
+
+LaTeX Font Warning: Size substitutions with differences
+(Font)              up to 2.90001pt have occurred.
+
  ) 
 Here is how much of TeX's memory you used:
- 13275 strings out of 493014
- 189889 string characters out of 6137002
- 476012 words of memory out of 5000000
- 16371 multiletter control sequences out of 15000+600000
- 44228 words of font info for 109 fonts, out of 8000000 for 9000
+ 21122 strings out of 493014
+ 351669 string characters out of 6137002
+ 604600 words of memory out of 5000000
+ 24171 multiletter control sequences out of 15000+600000
+ 54552 words of font info for 146 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 61i,13n,96p,926b,1995s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 61i,13n,96p,10380b,1995s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}<c:/texlive/2016/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2016/texmf-dist/fo
 nts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2016/texmf-dist/fonts/type1
@@ -1022,10 +1306,10 @@ live/2016/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/texlive/2016/texmf
 -dist/fonts/type1/urw/palatino/uplb8a.pfb><c:/texlive/2016/texmf-dist/fonts/typ
 e1/urw/palatino/uplr8a.pfb><c:/texlive/2016/texmf-dist/fonts/type1/urw/palatino
 /uplri8a.pfb>
-Output written on l-opt.pdf (8 pages, 1126605 bytes).
+Output written on l-opt.pdf (8 pages, 1127160 bytes).
 PDF statistics:
- 448 PDF objects out of 1000 (max. 8388607)
- 322 compressed objects within 4 object streams
+ 451 PDF objects out of 1000 (max. 8388607)
+ 325 compressed objects within 4 object streams
  98 named destinations out of 1000 (max. 500000)
  113 words of extra memory for PDF output out of 10000 (max. 10000000)
 
