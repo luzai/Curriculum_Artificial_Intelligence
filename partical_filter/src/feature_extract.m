@@ -24,13 +24,24 @@ function y = feature_extract(img, rect, sz_I, feature_type)
     rect = [x, y, width, height];
     
     roi = img(rect(2):rect(2)+rect(4), rect(1):rect(1)+rect(3));
-    roi = imresize(roi, [sz_I(2), sz_I(1)]);
+    
 
     switch feature_type
         case 'intensity'
+            roi = imresize(roi, [sz_I(2), sz_I(1)]);
             y = double(roi(:)) / 255;
         case 'HOG'
-            y = double(extractHOGFeatures(roi));
+%             pts=detectSURFFeatures(roi,'MetricThreshold',500);
+% %             size(pts,1)
+%             pts=selectStrongest(pts,3);
+%             features=extractFeatures(roi,pts);
+%             y=features(:);
+            roi = imresize(roi, [sz_I(2), sz_I(1)]);
+            y = double(extractHOGFeatures(roi));            
+            y = y';
+        case 'LBP'
+            roi = imresize(roi, [sz_I(2), sz_I(1)]);
+            y = double(extractLBPFeatures(roi));            
             y = y';
     end
  

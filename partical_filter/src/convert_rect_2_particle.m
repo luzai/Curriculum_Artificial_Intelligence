@@ -14,6 +14,4 @@ function particle = convert_rect_2_particle(rect, sz_I)
     s_y = rect(4) / sz_I(2);
     particle = [c_x, c_y, s_x, s_y]';
 
-
-
 end

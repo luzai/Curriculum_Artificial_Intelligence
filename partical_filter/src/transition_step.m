@@ -6,6 +6,8 @@ function particles = transition_step(particles, stds)
     % dimension of particle
     % Ouput:
     % particles: output particles
-    
-    
+    [n_rows,n_particles] = size(particles);
+    parfor i=1:n_rows
+        particles(i,:) = particles(i,:) + normrnd(0,stds(i),[1,n_particles]);
+    end
 end
