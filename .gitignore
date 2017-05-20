@@ -1,12 +1,10 @@
-
-_*
-*.db
-*.zip
-
 ## add bu luzai:
 ref/
 .idea/
-
+*.pkl
+*.db
+*.zip
+*.ipynb
 
 ### TeX template
 
@@ -630,6 +628,3 @@ ENV/
 *.zip
 *.ipynb
 
-## add bu luzai:
-ref/
-.idea/
