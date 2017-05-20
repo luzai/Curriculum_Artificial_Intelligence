@@ -1,3 +1,4 @@
+
 _*
 *.db
 *.zip
@@ -624,3 +625,11 @@ ENV/
 # Rope project settings
 .ropeproject
 
+*.pkl
+*.db
+*.zip
+*.ipynb
+
+## add bu luzai:
+ref/
+.idea/
