@@ -10,7 +10,7 @@ from utils import MyConfig
 config = MyConfig()
 model = single_model(input_shape=(None, None) + (config.input_channels,), kernel_size=6)
 
-model.load_weights(config.sav_dir)
+model.load_weights(config.sav_path)
 model.summary()
 
 from utils import img2x, gray2rgb

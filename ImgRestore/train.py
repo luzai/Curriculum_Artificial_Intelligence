@@ -56,27 +56,29 @@ def gen_from_dir(config):
                 yield (X, Y)
 
 
-model = single_model(input_shape=(None, None) + (config.input_channels,), kernel_size=20)
+from model import deep_model
+# model = single_model(input_shape=(None, None) + (config.input_channels,), kernel_size=20)
+model = deep_model(input_shape=(None, None) + (config.input_channels,))
 
 model.compile(optimizer='rmsprop',
               loss='mean_squared_error',
               metrics=['mse'])
+model_name='deep.h5'
 try:
-    model.load_weights(config.sav_dir, by_name=True)
+    model.load_weights(config.sav_path+model_name, by_name=True)
 except Exception as inst:
     print inst
-    import h5py
+    # import h5py
+    #
+    # with h5py.File(config.sav_path, 'r') as f:
+    #     # X_data = f['X_data']
+    #     pass
 
-    with h5py.File(config.sav_dir, 'r') as f:
-        # X_data = f['X_data']
-        pass
 model.summary()
 
 model.fit_generator(gen_from_dir(config),
                     steps_per_epoch=config.imgs // config.batch_size,
-                    epochs=10
-                    #,
-                    # callbacks=[keras.callbacks.ModelCheckpoint(
-                    #     config.sav_dir, monitor='train_loss')]
+                    epochs=2
+                    ,callbacks=[keras.callbacks.ModelCheckpoint(config.sav_path, monitor='train_loss')]
                     )
-model.save('output/model.h5')
+model.save(config.sav_path+model_name)

@@ -43,10 +43,10 @@ class MyConfig(object):
     corr_prefix='data/voc2012_corr/'
     suffix='jpg'
     train_img_shape=(512, 512)
-    batch_size=16
+    batch_size=1
     input_channels=6
     output_channels=3
-    sav_dir='output/model.h5'
+    sav_path= 'output/'
     tf_graph=tf.get_default_graph()
     _sess_config = tf.ConfigProto(
         allow_soft_placement=True,
