@@ -31,18 +31,19 @@ function y = feature_extract(img, rect, sz_I, feature_type)
             roi = imresize(roi, [sz_I(2), sz_I(1)]);
             y = double(roi(:)) / 255;
         case 'HOG'
-%             pts=detectSURFFeatures(roi,'MetricThreshold',500);
-% %             size(pts,1)
-%             pts=selectStrongest(pts,3);
-%             features=extractFeatures(roi,pts);
-%             y=features(:);
-            roi = imresize(roi, [sz_I(2), sz_I(1)]);
+            roi = imresize(roi, [sz_I(2), sz_I(1)],'nearest');
             y = double(extractHOGFeatures(roi));            
             y = y';
         case 'LBP'
             roi = imresize(roi, [sz_I(2), sz_I(1)]);
             y = double(extractLBPFeatures(roi));            
             y = y';
+        case 'Descriptor'
+            pts=detectSURFFeatures(roi,'MetricThreshold',500);
+%             size(pts,1)
+            pts=selectStrongest(pts,3);
+            features=extractFeatures(roi,pts);
+            y=features(:);
     end
  
 end

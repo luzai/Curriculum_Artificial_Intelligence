@@ -5,7 +5,7 @@ close all;
 
 %% Parameter initialization
 dataset = 'David'; % 'car' or 'David'
-sz_I = [56, 56]; % width, height
+sz_I = [28, 28]; % width, height
 if strcmp(dataset, 'car')
     data_dir = '../data/car/imgs/';
     save_dir = '../data/car/results/';
@@ -20,9 +20,10 @@ end
 
 % initial particle, [c_x, c_y, s_x, s_y], (c_x, c_y) is the center
 % location, s_x and s_y are scales compared with sz_I
+ratio=0.96;
 ini_particle = convert_rect_2_particle(ini_rect, sz_I);
 n_particles = 400; % Number of particles
-stds = [4, 4, 0.01, 0.01]; % standard deviation of [c_x, c_y, s_x, s_y]
+stds = [4, 4, 0.05, 0.05]; % standard deviation of [c_x, c_y, s_x, s_y]
 feature_type = 'HOG'; % The default feature, you may use another
 % feature if you want, see feature_extract function
 
@@ -37,11 +38,9 @@ tracked_rect = zeros(4, n_frames);
 tracked_rect(:, 1) = current_rect;
 particles = repmat(current_particle, 1, n_particles); %current state -> 400 particles
 % y is the representation of image in last tracked rect
-n_templates=5;
-templates(:,1) =feature_extract(img, current_rect, sz_I, feature_type); % 15*15 -> 255 vec  
-templates_weights(1,1)=1;
+template=feature_extract(img, current_rect, sz_I, feature_type);   
 show_and_store(tracked_rect, 1, img, s_frames, save_dir)
-
+simis=[];
 for t = 2:n_frames%3
     tic
     % "Transition" step, sample particles from gaussian model N(particles, stds)
@@ -53,7 +52,7 @@ for t = 2:n_frames%3
     % particles and use compute_similarity function to compute similarity
     % between particles and last tracked rect
     % Note: weights should be normalized to sum to 1
-    weights = weighting_step(img, particles, sz_I, templates,templates_weights, feature_type);
+    weights = weighting_step(img, particles, sz_I, template, feature_type);
 
     % choose particle with largest weight and compute feature of it
     [curr_weight, idx_max] = max(weights);
@@ -62,16 +61,13 @@ for t = 2:n_frames%3
     tracked_rect(:, t) = current_rect;
     
     % update templates
-    curr_templates = feature_extract(img, current_rect, sz_I, feature_type);
-    [templates,templates_weights]=update_templates(curr_templates,templates,n_templates);
-    templates_weights
-%     if cmp_weights(curr_weight,templates_weights)
-%        templates(:,end) =curr_templates;
-%        templates_weights(1,end)=curr_weight;
-%        templates_weights=templates_weights/sum(templates_weights);
-%        [templates_weights,sort_idxs]=sort(templates_weights,'descend');
-%        templates=templates(:,sort_idxs);
-%     end
+    curr_template = feature_extract(img, current_rect, sz_I, feature_type);
+    
+    simi=compute_similarity(template,curr_template);
+    simis(end+1)=simi;
+    if simi>0.7429
+       template=template*ratio+(1-ratio)*curr_template; 
+    end
     
     % show tracked rect
     show_and_store(tracked_rect, t, img, s_frames, save_dir);
@@ -80,5 +76,7 @@ for t = 2:n_frames%3
     particles = resample_step(particles, weights);
     toc
 end
-tracked_rect
+% tracked_rect
+% simis
+Plot(simis);
 close all;
