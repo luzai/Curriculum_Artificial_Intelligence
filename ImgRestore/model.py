@@ -4,7 +4,21 @@ from keras.layers import *
 
 
 def loss2acc(y_true, y_pred):
-    return -10. * K.log(K.mean(K.square(y_pred - y_true))) / K.log(K.cast_to_floatx(10.))
+    print type(y_true),ktf.int_shape(y_true),ktf.int_shape(y_true)
+    tt = my_mse(y_true, y_pred)
+    return -10. * K.log(tt) / K.log(K.cast_to_floatx(10.))
+
+
+def my_mse(y_true, y_pred):
+    print type(y_true), ktf.int_shape(y_true), ktf.int_shape(y_true)
+    mask = y_true[..., 3:]
+    y_tt = y_true[..., :3]
+
+    y_pred = K.prod(
+        K.stack((y_pred, mask), axis=0),
+        axis=0
+    )
+    return K.mean(K.square(y_pred - y_tt))
 
 
 def padding(x):
@@ -18,14 +32,14 @@ def padding(x):
 
 def single_model(input_shape=(None, None, 6), kernel_size=5):
     input = Input(shape=input_shape)
-    output = Conv2D(filters=3, kernel_size=kernel_size, padding=padding, activation='relu', name='conv1')(
-        input)
+    padding='same'
+    x=Conv2D(filters=64,kernel_size=kernel_size,padding=padding,activation='relu',name='conv0')(input)
+    output = Conv2D(filters=3, kernel_size=kernel_size, padding=padding, activation='relu', name='conv1')(x)
+
     model = keras.models.Model(inputs=input, outputs=output)
-    model = keras.models.Model(init, decoded)
-    adam = keras.optimizers.Adam(lr=1e-3)
-    model.compile(optimizer=adam, loss='mse', metrics=[loss2acc])
-    adam = keras.optimizers.Adam(lr=1e-3)
-    model.compile(optimizer=adam, loss='mse', metrics=[loss2acc])
+
+    adam = keras.optimizers.Adam(lr=1e-4)
+    model.compile(optimizer=adam, loss=[my_mse], metrics=[loss2acc])
     return model
 
 
@@ -63,11 +77,31 @@ def deep_model(input_shape=(None, None, 6)):
     model = keras.models.Model(inputs=input, outputs=output)
 
     adam = keras.optimizers.Adam(lr=1e-4)
-    model.compile(optimizer=adam, loss='mse', metrics=[loss2acc])
+    model.compile(optimizer=adam, loss=[my_mse], metrics=[loss2acc])
     return model
 
 
-def deep_denoise_model(input_shape=(8, 8, 3), n1=16, n2=32, n3=64):
+def denoise_model(input_shape=(8, 8, 3), n1=4,):
+    init = Input(shape=input_shape)
+    level1_1 = Convolution2D(n1, (3, 3), activation='relu', padding='same')(init)
+    level2_1 = Convolution2D(n1, (3, 3), activation='relu', padding='same')(level1_1)
+
+    level2_2 = Convolution2DTranspose(n1, (3, 3), activation='relu', padding='same')(level2_1)
+    level2 = Add()([level2_1, level2_2])
+
+    level1_2 = Convolution2DTranspose(n1, (3, 3), activation='relu', padding='same')(level2)
+    level1 = Add()([level1_1, level1_2])
+
+    decoded = Convolution2D(3, (5, 5), activation='linear', padding='same')(level1)
+
+    model = keras.models.Model(init, decoded)
+    adam = keras.optimizers.Adam(lr=1e-3)
+    model.compile(optimizer=adam, loss=[my_mse], metrics=[loss2acc])
+
+    return model
+
+
+def deep_denoise_model(input_shape=(8, 8, 3), n1=6, n2=8, n3=16):
     init = Input(shape=input_shape)
     c1 = Convolution2D(n1, (3, 3), activation='relu', padding='same')(init)
     c1 = Convolution2D(n1, (3, 3), activation='relu', padding='same')(c1)
@@ -98,12 +132,14 @@ def deep_denoise_model(input_shape=(8, 8, 3), n1=16, n2=32, n3=64):
 
     model = keras.models.Model(init, decoded)
     adam = keras.optimizers.Adam(lr=1e-3)
-    model.compile(optimizer=adam, loss='mse', metrics=[loss2acc])
+    model.compile(optimizer=adam, loss=[my_mse], metrics=[loss2acc])
 
     return model
+
 
 
 if __name__ == '__main__':
     # model = deep_model(input_shape=(512, 512, 6))
     model = deep_denoise_model()
     model.summary()
+    single_model().summary()

@@ -59,7 +59,7 @@ for x_fn, y_fn in zip(x_fns, y_fns):
 
     restore_img = np.clip(y, 0, 255).astype('uint8')
     # restore_img = utils.conserve_img(y, corr_img)
-    restore_img=utils.post_process(ori_img, restore_img)
+    restore_img=utils.post_process(corr_img, restore_img)
     import os
 
     img_restore_name = config.test_yo_path + os.path.basename(x_fn)

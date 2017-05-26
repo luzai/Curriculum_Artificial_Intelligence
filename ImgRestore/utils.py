@@ -7,8 +7,32 @@ import keras.backend as K
 from scipy.misc import imread, imsave, imshow
 from sklearn.feature_extraction.image import reconstruct_from_patches_2d, extract_patches_2d
 
+def shuffle_weights(model, weights=None):
+    """Randomly permute the weights in `model`, or the given `weights`.
+
+    This is a fast approximation of re-initializing the weights of a model.
+
+    Assumes weights are distributed independently of the dimensions of the weight tensors
+      (i.e., the weights have the same distribution along each dimension).
+
+    :param Model model: Modify the weights of the given model.
+    :param list(ndarray) weights: The model's weights will be replaced by a random permutation of these weights.
+      If `None`, permute the model's current weights.
+    """
+    if weights is None:
+        weights = model.get_weights()
+    weights = [np.random.permutation(w.flat).reshape(w.shape) for w in weights]
+    # Faster, but less random: only permutes along the first dimension
+    # weights = [np.random.permutation(w) for w in weights]
+    model.set_weights(weights)
+    return model
+
 
 def mse(x, y):
+    if len(x.shape) == 2 and len(y.shape) == 3:
+        y = y.mean(axis=2)
+    elif len(y.shape) == 2 and len(x.shape) == 3:
+        x = x.mean(axis=2)
     return ((x - y) ** 2).mean(axis=None)
 
 
@@ -26,8 +50,10 @@ def y2img(y):
     assert np.max(y) < 2.
     return (y * 255.).astype('uint8')
 
+
 def get_mask(x):
-    return (x!=0).astype('uint8') # 0 means missing
+    return (x != 0).astype('uint8')  # 0 means missing
+
 
 def post_process(x, y):
     assert x.shape == y.shape, 'shape same'
@@ -35,8 +61,8 @@ def post_process(x, y):
     assert mask_dd.shape == y.shape, 'shape same'
     y[mask_dd] = x[mask_dd]
 
-    if np.array_equal(x[...,0],x[...,1]):
-        y=y.mean(axis=2)
+    if np.array_equal(x[..., 0], x[..., 1]):
+        y = y.mean(axis=2)
 
     return y
 
@@ -207,14 +233,16 @@ class MyConfig(object):
     K.set_session(sess)
     K.set_image_data_format("channels_last")
 
-    def __init__(self, type="deep_denoise", epochs=20, batch_size=6, input_channels=3):
+    def __init__(self, type="deep_denoise",rgb_in=True,pos_in=False,epochs=20, batch_size=6, input_channels=3,train=False):
         self.epochs = epochs
         self.batch_size = batch_size
-        self.input_channels = input_channels
-        if type == "deep_denoise":
-            self.model_name = type + ".h5"
-            self.model_path = "output/" + self.model_name
-
+        self.input_channels = 3 * (int(rgb_in)+int(pos_in)+1)
+        if rgb_in :
+            type+='_rgb'
+        elif pos_in:
+            type+='_pos'
+        self.model_name = type  + ".h5"
+        self.model_path = "output/" + self.model_name
 
 if __name__ == "__main__":
     import time

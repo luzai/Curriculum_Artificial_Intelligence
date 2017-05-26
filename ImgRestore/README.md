@@ -2,8 +2,14 @@
 
 ## TODO 
 - [ ] LR model
-
+    
 - [ ] CNN model 
     - [X] Data preprocessing 
-    - [ ] Train on batch 
+    - [X] Load Image from Disk 
+    - [ ] Test multiprocess and GIL 
+    - [ ] Log to logger 
+    - [ ] Flexible Input Dim 
+    - [ ] Model Selection 
+    - [ ] Pretrain by voc
+    
     
