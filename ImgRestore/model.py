@@ -62,7 +62,7 @@ def deep_model(input_shape=(None, None, 6)):
 
     model = keras.models.Model(inputs=input, outputs=output)
 
-    adam = keras.optimizers.Adam(lr=1e-3)
+    adam = keras.optimizers.Adam(lr=1e-4)
     model.compile(optimizer=adam, loss='mse', metrics=[loss2acc])
     return model
 
@@ -94,7 +94,7 @@ def deep_denoise_model(input_shape=(8, 8, 3), n1=16, n2=32, n3=64):
 
     m2 = Add()([c1, c1_2])
 
-    decoded = Convolution2D(3, (5, 5), activation='linear', padding='same')(m2)
+    decoded = Convolution2D(3, (5, 5), activation='relu', padding='same')(m2)
 
     model = keras.models.Model(init, decoded)
     adam = keras.optimizers.Adam(lr=1e-3)

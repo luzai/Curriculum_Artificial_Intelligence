@@ -2,70 +2,69 @@ import glob
 
 import matplotlib.pyplot as plt
 import numpy as np
-
+from scipy.misc import imread, imsave, imshow
 import utils
-from model import single_model
-import model
+
+import model, os
 
 # model = single_model(input_shape=(None, None) + (config.input_channels,), kernel_size=6)
-# model.load_weights(config.sav_path+'model.h5')
-model = model.deep_denoise_model(input_shape=(None,None,3))
-config = utils.MyConfig(type="deep_denoise", epochs=250,batch_size=16)
+
+model = model.deep_denoise_model(input_shape=(None, None, 3))
+config = utils.MyConfig(type="deep_denoise", epochs=250, batch_size=16)
+
+try:
+    model.load_weights(config.model_path, by_name=True)
+except Exception as inst:
+    print inst
+    os.remove(config.model_path)
 
 model.summary()
 
-x_fns,y_fns=utils.common_paths('data/test_corr/','data/test_ori')
+# x_fns,y_fns=utils.gen_from_dir(config, mode=False)
+# for x_fn in x_fns:
+#     corr_img = imread(x_fn, mode='RGB')
+#
+#     plt.figure()
+#     plt.imshow(corr_img)
+#
+#     x=utils.path2x(x_fn)
+#     x=x[np.newaxis,...]
+#
+#     y=model.predict(x)
+#
+#     restore_img = utils.y2img(y[0])
+#
+#     plt.figure()
+#     plt.imshow(restore_img)
+#
+#     plt.show()
 
-for img_name in img_l:
+x_fns, y_fns = utils.common_paths(config.test_X_path, config.test_y_path, config)
+for x_fn, y_fn in zip(x_fns, y_fns):
+    corr_img = imread(x_fn, mode='RGB')
+    ori_img = imread(y_fn, mode='RGB')
 
-    img = plt.imread(img_name)
-
-    x = img.copy()
-    if not x.shape[-1] == 3:
-        x = gray2rgb(x)
-    x = utils.denorm_img(x)
-    assert x.dtype == np.uint8
     plt.figure()
-    plt.imshow(x)
+    plt.imshow(corr_img)
+    plt.figure()
+    plt.imshow(ori_img)
 
+    x = utils.path2x(x_fn)
     assert x.shape[-1] == 3
-    x = img2x(x)
-    if img.shape[0] % 4 != 0:
-        x = np.concatenate((x[:(4 - img.shape[0] % 4), :, :].copy(), x), axis=0)
-    if img.shape[1] % 4 != 0:
-        x = np.concatenate((x[:, :(4 - img.shape[1] % 4), :].copy(), x), axis=1)
-    x = utils.norm_img(x)
-    print x.shape
 
-    y = model.predict(x[np.newaxis, ...])[0]
-    if img.shape[0] % 4 != 0:
-        y = y[(4 - img.shape[0] % 4):, :, :]
-    if img.shape[1] % 4 != 0:
-        y = y[:, (4 - img.shape[1] % 4):, :]
-    y = utils.denorm_img(y)
-    assert y.dtype == np.uint8
+    x = utils.make_patches(x, patch_size=16)
+    y = model.predict(x, batch_size=1024, verbose=0)
+    y = utils.combine_patches(y, out_shape=ori_img.shape)
+    y = utils.y2img(y)
 
-    if not img.shape[-1] == 3:
-        y = utils.rgb2gray(y)
-    y = utils.conserve_img(img, y)
-
+    restore_img = np.clip(y, 0, 255).astype('uint8')
+    # restore_img = utils.conserve_img(y, corr_img)
+    restore_img=utils.post_process(ori_img, restore_img)
     import os
 
-    img_ori_name = 'data/test_ori/' + os.path.basename(img_name)
-    img_ori = plt.imread(img_ori_name)
-    img_ori = utils.denorm_img(img_ori)
-    print utils.mse(img_ori, y)
+    img_restore_name = config.test_yo_path + os.path.basename(x_fn)
+    plt.imsave(img_restore_name, restore_img)
+    plt.figure()
+    plt.imshow(restore_img,cmap='gray' if len(restore_img.shape)==2 else None)
 
-    if img.shape[-1] == 3:
-        plt.figure()
-        plt.imshow(y)
-        plt.figure()
-        plt.imshow(img_ori)
-    else:
-        plt.figure()
-        plt.imshow(y, cmap='gray')
-        plt.figure()
-        plt.imshow(img_ori, cmap='gray')
-    img_restore_name = 'data/test_restore/' + os.path.basename(img_name)
-    plt.imsave(img_restore_name, y)
-plt.show()
+    plt.show()

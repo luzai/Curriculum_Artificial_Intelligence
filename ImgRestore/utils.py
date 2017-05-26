@@ -5,6 +5,7 @@ import numpy as np
 import keras
 import keras.backend as K
 from scipy.misc import imread, imsave, imshow
+from sklearn.feature_extraction.image import reconstruct_from_patches_2d, extract_patches_2d
 
 
 def mse(x, y):
@@ -13,31 +14,44 @@ def mse(x, y):
 
 def path2x(path):
     img = imread(path, mode="RGB")
-    img = img.astype('float32') / 255.
-    return img
+    return img2x(img)
+
+
+def img2x(img):
+    assert np.max(img) > 2.
+    return img.astype('float32') / 255.
 
 
 def y2img(y):
-    y *= 255.
-    y.astype('uint8')
+    assert np.max(y) < 2.
+    return (y * 255.).astype('uint8')
+
+def get_mask(x):
+    return (x!=0).astype('uint8') # 0 means missing
+
+def post_process(x, y):
+    assert x.shape == y.shape, 'shape same'
+    mask_dd = (x != 0).astype('uint8')
+    assert mask_dd.shape == y.shape, 'shape same'
+    y[mask_dd] = x[mask_dd]
+
+    if np.array_equal(x[...,0],x[...,1]):
+        y=y.mean(axis=2)
+
     return y
 
 
-# def conserve_img(x, y):
-#     assert x.shape == y.shape, 'shape same'
-#     mask_dd = (x != 0).astype('uint8')
-#     assert mask_dd.shape == y.shape, 'shape same'
-#     y[mask_dd] = x[mask_dd]
-#     return y
-#
-#
-# def img2x(img):
-#     mask = (img == 0).astype('uint8')
-#     assert mask.shape[-1] == 3, "mask is 3 channel"
-#     x = np.concatenate((img, mask), axis=2)
-#     assert x.shape[-1] == 6, 'x is 6 channels'
-#     # x = x[:config.train_img_shape[0], :config.train_img_shape[1], :]
-#     return x
+def make_patches(x, patch_size):
+    # height, width = x.shape[:2]
+    patches = extract_patches_2d(x, (patch_size, patch_size))
+    return patches
+
+
+def combine_patches(y, out_shape):
+    recon = reconstruct_from_patches_2d(y, out_shape)
+    return recon
+
+
 import threading
 
 
@@ -80,13 +94,18 @@ def _index_generator(N, batch_size=32, shuffle=True, seed=None):
         yield (index_array[current_index: current_index + current_batch_size],
                current_index, current_batch_size)
 
-cache=None
-def gen_from_dir(config, train=True):
+
+cache = None
+
+
+def gen_from_dir(config, mode=True):
     global cache
-    if train:
+    if mode == True:
         X_filenames, y_filenames = train_paths(config)
-    else:
+    elif mode == False:
         X_filenames, y_filenames = val_paths(config)
+    # elif mode== 'test':
+    #     X_filenames, y_filenames = val_paths(config)
     assert len(X_filenames) == len(y_filenames)
     nb_images = len(X_filenames)
     index_gen = _index_generator(nb_images, config.batch_size)
@@ -112,7 +131,7 @@ def gen_from_dir(config, train=True):
     for t in threads:
         t.join()
 
-    cache=(X,Y)
+    cache = (X, Y)
 
     while 1:
 
@@ -136,10 +155,10 @@ def gen_from_dir(config, train=True):
 
         for t in threads:
             t.join()
-        cache=(X,Y)
+        cache = (X, Y)
 
 
-def get_steps(config,train=True):
+def get_steps(config, train=True):
     if train:
         x_fn, _ = train_paths(config)
     else:
@@ -149,36 +168,31 @@ def get_steps(config,train=True):
 
 
 def train_paths(config):
-    file_names = [f for f in sorted(os.listdir(config.train_X_path))
-                  if np.array([f.endswith(suffix) for suffix in config.suffixs]).any()]
-    X_filenames = [os.path.join(config.train_X_path, f) for f in file_names]
-    y_filenames = [os.path.join(config.train_y_path, f) for f in file_names]
-    # X_filenames, y_filenames=val_paths(config)
-    return X_filenames, y_filenames
+    return common_paths(config.train_X_path, config.train_y_path, config)
 
 
 def val_paths(config):
-    # file_names = [f for f in sorted(os.listdir(config.val_X_path))
-    #               if np.array([f.endswith(suffix) for suffix in config.suffixs]).any()
-    #               ]
-    # X_filenames = [os.path.join(config.val_X_path, f) for f in file_names]
-    # y_filenames = [os.path.join(config.val_X_path, f) for f in file_names]
-    X_filenames,y_filenames=train_paths(config)
-    return X_filenames, y_filenames
+    return common_paths(config.val_X_path, config.val_y_path, config)
 
-def common_paths(x_path,y_path):
+
+def common_paths(x_path, y_path, config):
     file_names = [f for f in sorted(os.listdir(x_path))
                   if np.array([f.endswith(suffix) for suffix in config.suffixs]).any()]
     X_filenames = [os.path.join(x_path, f) for f in file_names]
     y_filenames = [os.path.join(y_path, f) for f in file_names]
-    # X_filenames, y_filenames=val_paths(config)
+
     return X_filenames, y_filenames
+
 
 class MyConfig(object):
     train_y_path = 'data/voc2012_ori/'
     train_X_path = 'data/voc2012_corr/'
-    val_X_path = 'data/test_corr/'
-    val_y_path = 'data/test_ori/'
+    val_X_path = 'data/val_corr/'
+    val_y_path = 'data/val_ori/'
+    test_X_path = 'data/test_corr/'
+    test_y_path = 'data/test_ori/'
+    test_yo_path = 'data/test_restore/'
+
     suffixs = ['jpg', 'png']
     train_img_shape = (512, 512)
 
@@ -203,11 +217,13 @@ class MyConfig(object):
 
 
 if __name__ == "__main__":
-    config = MyConfig(type="deep_denoise", epochs=2, batch_size=128)
+    import time
+
+    config = MyConfig(type="deep_denoise", epochs=2, batch_size=16)
     print len(train_paths(config)[1])
     print len(val_paths(config)[1])
-    for x, y in gen_from_dir(config, train=True):
-        print x.shape, y.shape
-        imshow(x[0])
-        imshow(y[0])
+    for x, y in gen_from_dir(config, mode=True):
+        print x.shape, y.shape, time.time()
+        imshow(y2img(x[0]))
+        imshow(y2img(y[0]))
         break
