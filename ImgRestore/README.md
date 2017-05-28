@@ -6,10 +6,14 @@
 - [ ] CNN model 
     - [X] Data preprocessing 
     - [X] Load Image from Disk 
-    - [ ] Test multiprocess and GIL 
+    - [x] Test multiprocess and GIL 
     - [ ] Log to logger 
     - [ ] Flexible Input Dim 
-    - [ ] Model Selection 
+    - [x] Model Selection 
     - [ ] Pretrain by voc
-    
+    - [x] post precess
+    - [ ] gray img problem
+    - [ ] Because size or dark?
+        - [ ] Val acc on the fly
+    - [ ] Trainable = False
     

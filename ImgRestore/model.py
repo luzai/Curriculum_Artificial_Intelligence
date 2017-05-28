@@ -3,14 +3,16 @@ import keras.backend.tensorflow_backend as ktf
 from keras.layers import *
 
 
-def loss2acc(y_true, y_pred):
-    print type(y_true),ktf.int_shape(y_true),ktf.int_shape(y_true)
-    tt = my_mse(y_true, y_pred)
+def loss2acc(y_true, y_pred,train=False):
+    if train :#or  ktf.int_shape(y_true)==ktf.int_shape(y_pred):
+        tt= K.mean(K.square(y_pred-y_true))
+    else:
+        tt = my_mse(y_true, y_pred)
     return -10. * K.log(tt) / K.log(K.cast_to_floatx(10.))
 
 
 def my_mse(y_true, y_pred):
-    print type(y_true), ktf.int_shape(y_true), ktf.int_shape(y_true)
+    # print type(y_true), ktf.int_shape(y_true), ktf.int_shape(y_true)
     mask = y_true[..., 3:]
     y_tt = y_true[..., :3]
 
@@ -30,11 +32,11 @@ def padding(x):
     return x
 
 
-def single_model(input_shape=(None, None, 6), kernel_size=5):
+def single_model(input_shape=(None, None, 6), n1=5):
     input = Input(shape=input_shape)
     padding='same'
-    x=Conv2D(filters=64,kernel_size=kernel_size,padding=padding,activation='relu',name='conv0')(input)
-    output = Conv2D(filters=3, kernel_size=kernel_size, padding=padding, activation='relu', name='conv1')(x)
+    x=Conv2D(filters=64, kernel_size=n1, padding=padding, activation='relu', name='conv0')(input)
+    output = Conv2D(filters=3, kernel_size=n1, padding=padding, activation='relu', name='conv1')(x)
 
     model = keras.models.Model(inputs=input, outputs=output)
 
@@ -43,32 +45,31 @@ def single_model(input_shape=(None, None, 6), kernel_size=5):
     return model
 
 
-def deep_model(input_shape=(None, None, 6)):
+def deep_model(input_shape=(None, None, 6),n1=16):
     input = Input(shape=input_shape)
     x = input
-    filters = 64
     padding = 'same'
-    x = Conv2D(filters=filters, kernel_size=3, padding=padding, activation='relu', name='conv1')(x)
-    x = Conv2D(filters=filters, kernel_size=3, padding=padding, activation='relu', name='conv2')(x)
+    x = Conv2D(filters=n1, kernel_size=3, padding=padding, activation='relu', name='conv1')(x)
+    x = Conv2D(filters=n1, kernel_size=3, padding=padding, activation='relu', name='conv2')(x)
     x1 = x
 
     x = MaxPool2D(pool_size=2, strides=2)(x)
-    x = Conv2D(filters=filters * 2, kernel_size=3, padding=padding, activation='relu')(x)
+    x = Conv2D(filters=n1 * 2, kernel_size=3, padding=padding, activation='relu')(x)
     x2 = x
 
     x = MaxPool2D(pool_size=2, strides=2)(x)
-    x = Conv2D(filters=filters * 4, kernel_size=3, padding=padding, activation='relu')(x)
-    x = Conv2DTranspose(filters=filters * 4, kernel_size=2, strides=2, padding=padding, activation='relu')(
+    x = Conv2D(filters=n1 * 4, kernel_size=3, padding=padding, activation='relu')(x)
+    x = Conv2DTranspose(filters=n1 * 4, kernel_size=2, strides=2, padding=padding, activation='relu')(
         x)
-    x = Conv2D(filters=filters * 4, kernel_size=3, padding=padding, activation='relu')(x)
-    x = Conv2D(filters=filters * 2, kernel_size=3, padding=padding, activation='relu')(x)
+    x = Conv2D(filters=n1 * 4, kernel_size=3, padding=padding, activation='relu')(x)
+    x = Conv2D(filters=n1 * 2, kernel_size=3, padding=padding, activation='relu')(x)
 
     assert ktf.int_shape(x)[-1] == ktf.int_shape(x2)[-1]
     x = Add()([x, x2])
-    x = Conv2DTranspose(filters=filters * 2, kernel_size=2, strides=2, padding=padding, activation='relu')(
+    x = Conv2DTranspose(filters=n1 * 2, kernel_size=2, strides=2, padding=padding, activation='relu')(
         x)
-    x = Conv2D(filters=filters, kernel_size=3, padding=padding, activation='relu')(x)
-    x = Conv2D(filters=filters, kernel_size=3, padding=padding, activation='relu')(x)
+    x = Conv2D(filters=n1, kernel_size=3, padding=padding, activation='relu')(x)
+    x = Conv2D(filters=n1, kernel_size=3, padding=padding, activation='relu')(x)
     assert ktf.int_shape(x)[-1] == ktf.int_shape(x1)[-1]
     x = Add()([x, x1])
 
@@ -81,7 +82,7 @@ def deep_model(input_shape=(None, None, 6)):
     return model
 
 
-def denoise_model(input_shape=(8, 8, 3), n1=4,):
+def denoise_model(input_shape=(8, 8, 3), n1=16):
     init = Input(shape=input_shape)
     level1_1 = Convolution2D(n1, (3, 3), activation='relu', padding='same')(init)
     level2_1 = Convolution2D(n1, (3, 3), activation='relu', padding='same')(level1_1)
@@ -95,13 +96,13 @@ def denoise_model(input_shape=(8, 8, 3), n1=4,):
     decoded = Convolution2D(3, (5, 5), activation='linear', padding='same')(level1)
 
     model = keras.models.Model(init, decoded)
-    adam = keras.optimizers.Adam(lr=1e-3)
+    adam = keras.optimizers.Adam(lr=1e-4)
     model.compile(optimizer=adam, loss=[my_mse], metrics=[loss2acc])
 
     return model
 
 
-def deep_denoise_model(input_shape=(8, 8, 3), n1=6, n2=8, n3=16):
+def deep_denoise_model(input_shape=(8, 8, 3), n1=16, n2=32, n3=64):
     init = Input(shape=input_shape)
     c1 = Convolution2D(n1, (3, 3), activation='relu', padding='same')(init)
     c1 = Convolution2D(n1, (3, 3), activation='relu', padding='same')(c1)

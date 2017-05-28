@@ -35,7 +35,7 @@ def main(queue, name):
     my_metric = lambda x, y: MyModels.loss2acc(x, y, True)
     my_metric.__name__ = 'loss2acc'
     model.compile(optimizer=keras.optimizers.Adam(lr=1e-3), loss=['mse'], metrics=[my_metric])
-    dbg = False
+    dbg = True
     model.fit_generator(utils.gen_from_dir(config, mode=True),
                         steps_per_epoch=1 if dbg else utils.get_steps(config, train=True),
                         epochs=2 if dbg else config.train_epochs,
@@ -44,47 +44,52 @@ def main(queue, name):
                         validation_data=utils.gen_from_dir(config, mode=False)
                         )
 
-    model.save(config.model_path)
+    # model.save(config.model_path)
     queue.put({'model_path': config.model_path})
-    # for x,y in utils.gen_from_dir(config,True):
-    #     y_pred= model.predict(x)
-    #     utils.my_imshow(x[0][...,:3],block=False)
-    #     utils.my_imshow(y[0][..., :3],block=False)
-    #     utils.my_imshow(y_pred[0][...,:3],block=False)
-    #     break
-    #
-    # for x, y in utils.gen_from_dir(config, False):
-    #     y_pred = model.predict(x)
-    #     utils.my_imshow(x[0][..., :3],block=False)
-    #     utils.my_imshow(y[0][..., :3],block=False)
-    #     utils.my_imshow(y_pred[0][..., :3],block=False)
-    #     break
+    for x, y in utils.gen_from_dir(config, True):
+        y_pred = model.predict(x)
+        utils.my_imshow(x[0][..., :3], block=False)
+        utils.my_imshow(y[0][..., :3], block=False)
+        y_pred[0][..., :3] = utils.post_process(x[0][..., :3], y_to=y_pred[0][..., :3])
+        utils.my_imshow(y_pred[0][..., :3], block=False, name='pred_train')
+        print utils.my_mse(y_pred[0][..., :3], x[0][..., :3])
+        break
 
-    # del model
-    # import gc
-    # gc.collect()
-    # K.clear_session()
-    # tf_graph = tf.get_default_graph()
-    # _sess_config = tf.ConfigProto(
-    #     allow_soft_placement=True,
-    # )
-    # _sess_config.gpu_options.allow_growth = True
-    # sess = tf.Session(config=_sess_config, graph=tf_graph)
-    # K.set_session(sess)
-    # # if dbg:
-    # #     utils.my_dbg()
+    for x, y in utils.gen_from_dir(config, False):
+        y_pred = model.predict(x)
+        utils.my_imshow(x[0][..., :3], block=False)
+        utils.my_imshow(y[0][..., :3], block=False)
+        y_pred[0][..., :3] = utils.post_process(x[0][..., :3], y_to=y_pred[0][..., :3])
+        utils.my_imshow(y_pred[0][..., :3], block=False, name='pred_val')
+        print utils.my_mse(y_pred[0][..., :3], x[0][..., :3])
+        break
+
+        # del model
+        # import gc
+        # gc.collect()
+        # K.clear_session()
+        # tf_graph = tf.get_default_graph()
+        # _sess_config = tf.ConfigProto(
+        #     allow_soft_placement=True,
+        # )
+        # _sess_config.gpu_options.allow_growth = True
+        # sess = tf.Session(config=_sess_config, graph=tf_graph)
+        # K.set_session(sess)
+        # if dbg:
+        #     utils.my_dbg()
+        # time.sleep(9999)
 
 
 import multiprocessing, time
 
 mp_queue = multiprocessing.Queue()
 
-for name in ['deep_denoise']: # ['single', 'deep', 'denoise', 'deep_denoise']:
+for name in ['deep_denoise']:  # , 'deep', 'denoise', 'deep_denoise']:
     p = multiprocessing.Process(target=main, args=(mp_queue, name))
-    print time.time(),'\n'
-    p.start() # non-blocking
-    print time.time(),'\n'
-    print mp_queue.get() # blocking
+    print time.time(), '\n'
+    p.start()  # non-blocking
+    print time.time(), '\n'
+    print mp_queue.get()  # blocking
     print time.time(), '\n'
     p.join()
     print time.time(), '\n'

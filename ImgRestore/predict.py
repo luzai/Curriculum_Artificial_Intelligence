@@ -1,70 +1,66 @@
-import glob
-
+import sys
+import sys,os
+std_out=sys.stdout
+std_err= open('stderr', 'w')
+sys.stdout=std_err
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+import keras
+import matplotlib
+matplotlib.use('TKAgg')
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.misc import imread, imsave, imshow
-import utils
+from scipy.misc import imread
+import tensorflow as tf
+import model as MyModels
+import utils, os, multiprocessing
+import time,cv2
+import logging,sys
 
-import model, os
 
-# model = single_model(input_shape=(None, None) + (config.input_channels,), kernel_size=6)
 
-model = model.deep_denoise_model(input_shape=(None, None, 3))
-config = utils.MyConfig(type="deep_denoise", epochs=250, batch_size=16)
+name='deep_denoise'
+config = utils.MyConfig(type=name,epochs=3,batch_size=1024,verbose=2)
+model=MyModels.__dict__[name+'_model'](input_shape=(None,None)+(config.input_channels,))
+# consider todo x shufle
 
 try:
+    # os.remove(config.model_path)
     model.load_weights(config.model_path, by_name=True)
 except Exception as inst:
     print inst
-    os.remove(config.model_path)
+    exit(-2)
+    # os.remove(config.model_path)
+sys.stdout=std_out
+if config.verbose: model.summary()
 
-model.summary()
-
-# x_fns,y_fns=utils.gen_from_dir(config, mode=False)
-# for x_fn in x_fns:
-#     corr_img = imread(x_fn, mode='RGB')
-#
-#     plt.figure()
-#     plt.imshow(corr_img)
-#
-#     x=utils.path2x(x_fn)
-#     x=x[np.newaxis,...]
-#
-#     y=model.predict(x)
-#
-#     restore_img = utils.y2img(y[0])
-#
-#     plt.figure()
-#     plt.imshow(restore_img)
-#
-#     plt.show()
+callback_list = [
+    keras.callbacks.EarlyStopping(monitor='val_loss2acc', min_delta=0.1, patience=2)
+]
 
 x_fns, y_fns = utils.common_paths(config.test_X_path, config.test_y_path, config)
-for x_fn, y_fn in zip(x_fns, y_fns):
+for iter_ind, (x_fn, y_fn) in enumerate(zip(x_fns, y_fns)):
+    model=utils.shuffle_weights(model)
     corr_img = imread(x_fn, mode='RGB')
     ori_img = imread(y_fn, mode='RGB')
+    if np.array_equal(corr_img[..., 0], corr_img[..., 1]):
+        continue # todo
 
-    plt.figure()
-    plt.imshow(corr_img)
-    plt.figure()
-    plt.imshow(ori_img)
+    x=utils.img2x(corr_img,config)
 
-    x = utils.path2x(x_fn)
-    assert x.shape[-1] == 3
+    y_true = x.copy()
 
-    x = utils.make_patches(x, patch_size=16)
-    y = model.predict(x, batch_size=1024, verbose=0)
-    y = utils.combine_patches(y, out_shape=ori_img.shape)
-    y = utils.y2img(y)
+    model.fit(x, y_true, batch_size=config.batch_size,
+              epochs=config.epochs,#*2 if iter_ind==0 else config.epochs,
+              verbose=config.verbose, callbacks=callback_list,
+              validation_split=0.1)
+    y=model.predict(x)
+    restore_img = utils.y2img(y,config,corr_img)
+    cmap = 'gray' if len(restore_img.shape) == 2 else None
 
-    restore_img = np.clip(y, 0, 255).astype('uint8')
-    # restore_img = utils.conserve_img(y, corr_img)
-    restore_img=utils.post_process(corr_img, restore_img)
-    import os
+    print 'plt start'
+    utils.my_imshow(restore_img, cmap,block=False,name='restore')
+    utils.my_imshow(corr_img, cmap,block=False,name='corr')
 
-    img_restore_name = config.test_yo_path + os.path.basename(x_fn)
-    plt.imsave(img_restore_name, restore_img)
-    plt.figure()
-    plt.imshow(restore_img,cmap='gray' if len(restore_img.shape)==2 else None)
-
-    plt.show()
+    print(utils.my_mse(ori_img, restore_img))
+    # from IPython import  embed;embed()
+    # model.save(config.model_path)
