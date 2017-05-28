@@ -36,7 +36,7 @@ def main(queue, name):
     my_metric.__name__ = 'loss2acc'
     model.compile(optimizer=keras.optimizers.Adam(lr=1e-3), loss=['mse'], metrics=[my_metric])
     dbg = False
-    model.fit_generator(utils.gen_from_dir(config, mode=True),
+    model.fit_generator(utils.gen_from_dir(config, mode=False),
                         steps_per_epoch=1 if dbg else utils.get_steps(config, train=True),
                         epochs=2 if dbg else config.train_epochs,
                         callbacks=callback_list,
@@ -44,7 +44,7 @@ def main(queue, name):
                         validation_data=utils.gen_from_dir(config, mode=False)
                         )
 
-    model.save(config.model_path)
+    model.save('tmp'+config.model_path)
     queue.put({'model_path': config.model_path})
     # for x,y in utils.gen_from_dir(config,True):
     #     y_pred= model.predict(x)

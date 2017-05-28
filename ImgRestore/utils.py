@@ -33,11 +33,19 @@ def shuffle_weights(model, weights=None):
 
 
 def my_mse(x, y):
-    if len(x.shape) == 2 and len(y.shape) == 3:
-        y = y.mean(axis=2)
-    elif len(y.shape) == 2 and len(x.shape) == 3:
-        x = x.mean(axis=2)
-    return ((x - y) ** 2).mean(axis=None)
+    if len(x.shape) == 2:
+        x = x[..., np.newaxis]
+    elif len(y.shape) == 2:
+        y = y[..., np.newaxis]
+    assert len(x.shape) == 3, '3 dims'
+    x, y = x.astype('float'), y.astype('float')
+    if x.max() > 2.:
+        x /= 255.
+    if y.max() > 2.:
+        y /= 255.
+    from numpy import linalg as LA
+    res = LA.norm(x.ravel() - y.ravel(), 2)
+    return res
 
 
 # def path2x(path):
@@ -67,6 +75,7 @@ def img2x(img, config):
     res = np.concatenate(res, axis=2)
     if not config.train:
         res = make_patches(res, patch_size=8)
+
     else:
         res = res[np.newaxis, ...]
         assert len(res.shape) == 4
@@ -74,15 +83,16 @@ def img2x(img, config):
     return res
 
 
-def y2img(y, config, corr_img):
-    assert np.max(y) < 2.
-    if len(y.shape) == 4:
-        y = combine_patches(y, corr_img.shape)
-    y = (y * 255.).astype('uint8')
-    y = np.clip(y, 0, 255).astype('uint8')
+def y2img(restore_img, corr_img, config=None):
+    assert np.max(restore_img) < 2.
+    assert np.max(corr_img) > 2.
+    if len(restore_img.shape) == 4:
+        restore_img = combine_patches(restore_img, corr_img.shape)
+    restore_img = (restore_img * 255.).astype('uint8')
+    restore_img = np.clip(restore_img, 0, 255).astype('uint8')
 
-    y = post_process(corr_img, y)
-    return y
+    restore_img = post_process(x_from=corr_img, y_to=restore_img)
+    return restore_img
 
 
 def post_process(x_from, y_to):
@@ -112,24 +122,25 @@ import threading
 
 
 class ReadData(threading.Thread):
-    def __init__(self, X_name, ind, X, lock,config):
+    def __init__(self, X_name, ind, X, lock, config):
         self.X_name = X_name
         self.ind = ind
         self.X = X
-        self.config=config
+        self.config = config
         self.lock = lock
         super(ReadData, self).__init__()
 
     def run(self):
         with self.lock:
-            if self.X.shape[-1] >3 :
-                x = imread(self.X_name,mode='RGB')
-                x= img2x(x,self.config)
+            if self.X.shape[-1] > 3:
+                x = imread(self.X_name, mode='RGB')
+                x = img2x(x, self.config)
                 self.X[self.ind] = x
             else:
-                y=imread(self.X_name,mode='RGB')
-                y=y.astype('float32')/255.
-                self.X[self.ind]=y
+                y = imread(self.X_name, mode='RGB')
+                y = y.astype('float32') / 255.
+                self.X[self.ind] = y
+
 
 def _index_generator(N, batch_size=32, shuffle=True, seed=None):
     batch_index = 0
@@ -167,7 +178,7 @@ def gen_from_dir(config, mode=True):
         X_filenames, y_filenames = train_paths(config)
     else:
         X_filenames, y_filenames = val_paths(config)
-    assert len(X_filenames) == len(y_filenames)  # todo todo relation between loss and uint loss observe
+    assert len(X_filenames) == len(y_filenames)  # todo relation between loss and uint loss observe
     nb_images = len(X_filenames)
     index_gen = _index_generator(nb_images, config.train_batch_size)
 
@@ -181,11 +192,11 @@ def gen_from_dir(config, mode=True):
 
     for i, j in enumerate(index_array):
         x_fn = X_filenames[j]
-        tx = ReadData(x_fn, i, X, lock,config)
+        tx = ReadData(x_fn, i, X, lock, config)
         tx.start()
         threads.append(tx)
         y_fn = y_filenames[j]
-        ty = ReadData(y_fn, i, Y, lock,config)
+        ty = ReadData(y_fn, i, Y, lock, config)
         ty.start()
         threads.append(ty)
 
@@ -204,11 +215,11 @@ def gen_from_dir(config, mode=True):
 
         for i, j in enumerate(index_array):
             x_fn = X_filenames[j]
-            tx = ReadData(x_fn, i, X, lock,config)
+            tx = ReadData(x_fn, i, X, lock, config)
             tx.start()
             threads.append(tx)
             y_fn = y_filenames[j]
-            ty = ReadData(y_fn, i, Y, lock,config)
+            ty = ReadData(y_fn, i, Y, lock, config)
             ty.start()
             threads.append(ty)
 
@@ -237,7 +248,7 @@ def val_paths(config):
 
 
 def common_paths(x_path, y_path, config):
-    file_names = [f for f in sorted(os.listdir(x_path))
+    file_names = [f for f in sorted(os.listdir(x_path), reverse=True)
                   if np.array([f.endswith(suffix) for suffix in config.suffixs]).any()]
     X_filenames = [os.path.join(x_path, f) for f in file_names]
     y_filenames = [os.path.join(y_path, f) for f in file_names]
@@ -269,8 +280,8 @@ class MyConfig(object):
     K.set_image_data_format("channels_last")
 
     def __init__(self, type="deep_denoise", rgb_in=True, pos_in=False, train_epochs=None, train_batch_size=None,
-                 epochs=3, batch_size=1024,verbose=2):
-        self.verbose=verbose
+                 epochs=3, batch_size=1024, verbose=2):
+        self.verbose = verbose
         self.epochs = epochs
         if train_batch_size is not None:
             self.train = True
@@ -294,23 +305,28 @@ class MyConfig(object):
         self.model_path = "output/" + self.model_name
 
 
-def my_imshow(img, cmap=None,block=True,name='default'):
+def my_imshow(img, cmap=None, block=True, name='default'):
     if block:
         fig, ax = plt.subplots()
+        if len(img.shape) == 3 and img.shape[2] == 3 and img.max() > 2. :
+            img = img.astype('uint8')
         ax.imshow(img, cmap)
         ax.set_title(name)
         fig.canvas.set_window_title(name)
         plt.show()
     else:
         import multiprocessing
-        multiprocessing.Process(target=my_imshow,args=(img,cmap,True,name)).start()
+        multiprocessing.Process(target=my_imshow, args=(img, cmap, True, name)).start()
 
 
 def my_dbg():
-    from IPython import embed;embed()
+    from IPython import embed;
+    embed()
+
 
 if __name__ == "__main__":
     import time
+
     #
     config = MyConfig(type="deep_denoise", train_epochs=2, train_batch_size=16)
     print len(train_paths(config)[1])
@@ -323,11 +339,11 @@ if __name__ == "__main__":
         break
 
 
-    # def my_plot(i):
-    #     fig, ax = plt.subplots()
-    #     ax.plot(np.arange(i))
-    #     plt.show()
-    # import multiprocessing
-    # for i in range(5):
-    #     multiprocessing.Process(target=my_plot, args=(i,)).start()
-    #     multiprocessing.Process(target=my_plot, args=(i+1,)).start()
+        # def my_plot(i):
+        #     fig, ax = plt.subplots()
+        #     ax.plot(np.arange(i))
+        #     plt.show()
+        # import multiprocessing
+        # for i in range(5):
+        #     multiprocessing.Process(target=my_plot, args=(i,)).start()
+        #     multiprocessing.Process(target=my_plot, args=(i+1,)).start()

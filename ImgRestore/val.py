@@ -38,7 +38,7 @@ def main(queue, name):
     dbg = True
     model.fit_generator(utils.gen_from_dir(config, mode=True),
                         steps_per_epoch=1 if dbg else utils.get_steps(config, train=True),
-                        epochs=2 if dbg else config.train_epochs,
+                        epochs=0 if dbg else config.train_epochs,
                         callbacks=callback_list,
                         validation_steps=utils.get_steps(config, train=False),
                         validation_data=utils.gen_from_dir(config, mode=False)
@@ -50,16 +50,19 @@ def main(queue, name):
         y_pred = model.predict(x)
         utils.my_imshow(x[0][..., :3], block=False)
         utils.my_imshow(y[0][..., :3], block=False)
-        y_pred[0][..., :3] = utils.post_process(x[0][..., :3], y_to=y_pred[0][..., :3])
+        # y_pred[0][..., :3] = utils.post_process(x[0][..., :3], y_to=y_pred[0][..., :3])
         utils.my_imshow(y_pred[0][..., :3], block=False, name='pred_train')
         print utils.my_mse(y_pred[0][..., :3], x[0][..., :3])
+        # from numpy import linalg as LA
+        # print LA.norm(x.ravel() - y.ravel(), 2)
+        # print LA.norm(x.ravel() - y_pred.ravel(), 2)
         break
 
     for x, y in utils.gen_from_dir(config, False):
         y_pred = model.predict(x)
         utils.my_imshow(x[0][..., :3], block=False)
         utils.my_imshow(y[0][..., :3], block=False)
-        y_pred[0][..., :3] = utils.post_process(x[0][..., :3], y_to=y_pred[0][..., :3])
+        # y_pred[0][..., :3] = utils.post_process(x[0][..., :3], y_to=y_pred[0][..., :3])
         utils.my_imshow(y_pred[0][..., :3], block=False, name='pred_val')
         print utils.my_mse(y_pred[0][..., :3], x[0][..., :3])
         break
