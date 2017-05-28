@@ -19,4 +19,5 @@
         - [ ] medianfilters test 
         - [X] Val acc on the fly
     - [ ] Trainable = False
+    - [ ] png v.s. jpg
     

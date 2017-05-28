@@ -38,7 +38,7 @@ def main(queue, name):
     dbg = True
     model.fit_generator(utils.gen_from_dir(config, mode=True),
                         steps_per_epoch=1 if dbg else utils.get_steps(config, train=True),
-                        epochs=0 if dbg else config.train_epochs,
+                        epochs=2 if dbg else config.train_epochs,
                         callbacks=callback_list,
                         validation_steps=utils.get_steps(config, train=False),
                         validation_data=utils.gen_from_dir(config, mode=False)
@@ -50,19 +50,20 @@ def main(queue, name):
         y_pred = model.predict(x)
         utils.my_imshow(x[0][..., :3], block=False)
         utils.my_imshow(y[0][..., :3], block=False)
-        # y_pred[0][..., :3] = utils.post_process(x[0][..., :3], y_to=y_pred[0][..., :3])
+        y_pred[0][..., :3] = utils.post_process(x[0][..., :3], y_to=y_pred[0][..., :3])
         utils.my_imshow(y_pred[0][..., :3], block=False, name='pred_train')
         print utils.my_mse(y_pred[0][..., :3], x[0][..., :3])
         # from numpy import linalg as LA
         # print LA.norm(x.ravel() - y.ravel(), 2)
         # print LA.norm(x.ravel() - y_pred.ravel(), 2)
+        # utils.my_dbg()
         break
 
     for x, y in utils.gen_from_dir(config, False):
         y_pred = model.predict(x)
         utils.my_imshow(x[0][..., :3], block=False)
         utils.my_imshow(y[0][..., :3], block=False)
-        # y_pred[0][..., :3] = utils.post_process(x[0][..., :3], y_to=y_pred[0][..., :3])
+        y_pred[0][..., :3] = utils.post_process(x[0][..., :3], y_to=y_pred[0][..., :3])
         utils.my_imshow(y_pred[0][..., :3], block=False, name='pred_val')
         print utils.my_mse(y_pred[0][..., :3], x[0][..., :3])
         break
@@ -87,13 +88,15 @@ import multiprocessing, time
 
 mp_queue = multiprocessing.Queue()
 
-for name in ['deep_denoise']:  # , 'deep', 'denoise', 'deep_denoise']:
-    p = multiprocessing.Process(target=main, args=(mp_queue, name))
-    print time.time(), '\n'
-    p.start()  # non-blocking
-    print time.time(), '\n'
-    print mp_queue.get()  # blocking
-    print time.time(), '\n'
-    p.join()
-    print time.time(), '\n'
-    print '-' * 10
+# for name in ['deep_denoise']:  # , 'deep', 'denoise', 'deep_denoise']:
+#     p = multiprocessing.Process(target=main, args=(mp_queue, name))
+#     print time.time(), '\n'
+#     p.start()  # non-blocking
+#     print time.time(), '\n'
+#     print mp_queue.get()  # blocking
+#     print time.time(), '\n'
+#     p.join()
+#     print time.time(), '\n'
+#     print '-' * 10
+
+main(mp_queue,'deep_denoise')

@@ -265,7 +265,7 @@ class MyConfig(object):
     test_y_path = 'data/test_ori/'
     test_yo_path = 'data/test_restore/'
 
-    suffixs = ['jpg', 'png']
+    suffixs = ['png']#, 'jpg']
     train_img_shape = (512, 512)
 
     output_channels = 3
@@ -305,10 +305,10 @@ class MyConfig(object):
         self.model_path = "output/" + self.model_name
 
 
-def my_imshow(img, cmap=None, block=True, name='default'):
+def my_imshow(img, cmap=None, block=False, name='default'):
     if block:
         fig, ax = plt.subplots()
-        if len(img.shape) == 3 and img.shape[2] == 3 and img.max() > 2. :
+        if len(img.shape) == 3 and img.shape[2] == 3 and img.max() > 2.:
             img = img.astype('uint8')
         ax.imshow(img, cmap)
         ax.set_title(name)
@@ -333,9 +333,12 @@ if __name__ == "__main__":
     print len(val_paths(config)[1])
     for x, y in gen_from_dir(config, mode=True):
         print x.shape, y.shape, time.time()
-        # my_dbg()
-        # imshow(y2img(x[0],config))
-        # imshow(y2img(y[0]))
+        xt = x[0][..., :3]
+        xt=(xt*255).astype('uint8')
+        yt = y[0][..., :3]
+        yt=(yt*255).astype('uint8')
+        my_imshow(xt)
+        my_imshow(yt,name='yt')
         break
 
 
