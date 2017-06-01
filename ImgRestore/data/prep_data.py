@@ -16,20 +16,19 @@ corr_prefix = 'voc2012_corr/'
 cmd = 'mkdir -p ' + corr_prefix
 subprocess.call(cmd.split())
 
-
 def gen_img(img_name):
-    print os.path.basename(img_name)
+    # print os.path.basename(img_name)
     ori_img_name = ori_prefix + os.path.basename(img_name).split('.')[0] + '.png'
     corr_img_name = corr_prefix + os.path.basename(img_name).split('.')[0] + '.png'
 
     img_np = imread(img_name, mode='RGB')
 
-    ori_img = imresize(img_np, (512, 512, 3))
+    ori_img = imresize(img_np, (256, 256, 3))
     ori_img[ori_img == 0] = 1
-    # assert ori_img.all(), "All should not be corrupted"
+    assert ori_img.all(), "All should not be corrupted"
     # print img_np.shape, ori_img.shape
 
-    # assert ori_img.dtype == np.uint8
+    assert ori_img.dtype == np.uint8
     imsave(ori_img_name, ori_img)
 
     noise_mask = np.ones(shape=ori_img.shape, dtype=np.uint8)
@@ -58,8 +57,8 @@ def gen_img(img_name):
     summary(corr_img)
     summary(corr_img2)
 
-    # assert np.array_equal(ori_img, ori_img2), 'should equal'
-    # assert np.array_equal(corr_img, corr_img2), 'same'
+    assert np.array_equal(ori_img, ori_img2), 'should equal'
+    assert np.array_equal(corr_img, corr_img2), 'same'
 
 
 img_l = glob.glob('voc2012/*.jpg')
@@ -70,3 +69,6 @@ pool = mp.Pool(processes=pool_size)
 pool.map(gen_img, img_l)
 pool.close()
 pool.join()
+
+if __name__=='__main__':
+    pass

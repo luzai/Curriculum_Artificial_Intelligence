@@ -33,11 +33,12 @@ def shuffle_weights(model, weights=None):
 
 
 def my_mse(x, y):
-    if len(x.shape) == 2:
-        x = x[..., np.newaxis]
-    elif len(y.shape) == 2:
-        y = y[..., np.newaxis]
-    assert len(x.shape) == 3, '3 dims'
+    if len(x.shape) == 2 and len(y.shape)==3:
+        y=y.mean(axis=-1)
+    elif len(y.shape) == 2 and len(x.shape)==3:
+        x=x.mean(axis=-1)
+
+    assert len(x.shape) == len(y.shape), 'dims should same'
     x, y = x.astype('float'), y.astype('float')
     if x.max() > 2.:
         x /= 255.
@@ -60,7 +61,7 @@ def get_mask(x, bool=False):
         return (x != 0).astype('uint8')  # 0 means missing
 
 
-def img2x(img, config):
+def img2x(img, config,patch_size=8):
     assert np.max(img) > 2.
     img_01 = img.astype('float32') / 255.
     res = []
@@ -74,7 +75,7 @@ def img2x(img, config):
         res += [mask]
     res = np.concatenate(res, axis=2)
     if not config.train:
-        res = make_patches(res, patch_size=8)
+        res = make_patches(res, patch_size=patch_size)
 
     else:
         res = res[np.newaxis, ...]
@@ -83,15 +84,22 @@ def img2x(img, config):
     return res
 
 
+import time
+
+
 def y2img(restore_img, corr_img, config=None):
-    assert np.max(restore_img) < 2.
+    assert np.max(restore_img) < 2., 'assert fail {}'.format(np.max(restore_img))
     assert np.max(corr_img) > 2.
+    # print  time.time()
     if len(restore_img.shape) == 4:
         restore_img = combine_patches(restore_img, corr_img.shape)
+    # print  time.time()
     restore_img = (restore_img * 255.).astype('uint8')
     restore_img = np.clip(restore_img, 0, 255).astype('uint8')
 
+    # print  time.time()
     restore_img = post_process(x_from=corr_img, y_to=restore_img)
+    # print  time.time()
     return restore_img
 
 
@@ -178,11 +186,11 @@ def gen_from_dir(config, mode=True):
         X_filenames, y_filenames = train_paths(config)
     else:
         X_filenames, y_filenames = val_paths(config)
-    assert len(X_filenames) == len(y_filenames)  # todo relation between loss and uint loss observe
+    assert len(X_filenames) == len(y_filenames)
     nb_images = len(X_filenames)
     index_gen = _index_generator(nb_images, config.train_batch_size)
 
-    lock = threading.Lock()  # todo move to multiprocessing
+    lock = threading.Lock()
 
     index_array, current_index, current_batch_size = next(index_gen)
 
@@ -204,7 +212,7 @@ def gen_from_dir(config, mode=True):
         t.join()
 
     cache = (X, Y)
-
+    assert X.max() < 2. and Y.max() < 2.
     while 1:
 
         index_array, current_index, current_batch_size = next(index_gen)
@@ -228,6 +236,7 @@ def gen_from_dir(config, mode=True):
         for t in threads:
             t.join()
         cache = (X, Y)
+        assert X.min() < 2. and Y.min() < 2.
 
 
 def get_steps(config, train=True):
@@ -265,8 +274,8 @@ class MyConfig(object):
     test_y_path = 'data/test_ori/'
     test_yo_path = 'data/test_restore/'
 
-    suffixs = ['png']#, 'jpg']
-    train_img_shape = (512, 512)
+    suffixs = ['png']  # , 'jpg']
+    train_img_shape = (256, 256)
 
     output_channels = 3
 
@@ -324,29 +333,22 @@ def my_dbg():
     embed()
 
 
+
+
 if __name__ == "__main__":
     import time
 
-    #
+
     config = MyConfig(type="deep_denoise", train_epochs=2, train_batch_size=16)
     print len(train_paths(config)[1])
     print len(val_paths(config)[1])
     for x, y in gen_from_dir(config, mode=True):
         print x.shape, y.shape, time.time()
         xt = x[0][..., :3]
-        xt=(xt*255).astype('uint8')
+        xt = (xt * 255).astype('uint8')
         yt = y[0][..., :3]
-        yt=(yt*255).astype('uint8')
+        yt = (yt * 255).astype('uint8')
         my_imshow(xt)
-        my_imshow(yt,name='yt')
+        my_imshow(yt, name='yt')
         break
 
-
-        # def my_plot(i):
-        #     fig, ax = plt.subplots()
-        #     ax.plot(np.arange(i))
-        #     plt.show()
-        # import multiprocessing
-        # for i in range(5):
-        #     multiprocessing.Process(target=my_plot, args=(i,)).start()
-        #     multiprocessing.Process(target=my_plot, args=(i+1,)).start()
