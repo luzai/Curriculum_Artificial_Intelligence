@@ -112,6 +112,8 @@ deep_wide_denoise_model = lambda input_shape,trainable=True: deep_denoise_model(
                                                                  trainable=trainable)
 deep_wide_denoise_model.__name__ = 'deep_wide_denoise_model'
 
+gray_denoise_model=lambda input_shape:deep_denoise_model(input_shape=input_shape)
+gray_denoise_model.__name__='gray_denoise_model'
 
 def deep_denoise_model(input_shape=(8, 8, 3), n1=16, n2=32, n3=64, trainable=True):
     init = Input(shape=input_shape)

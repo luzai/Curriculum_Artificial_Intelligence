@@ -1,9 +1,8 @@
 # Artificial Intelligence 
 
 ## TODO 
-- [ ] LR model
-    - [ ] Auto selection ? 
-        - [ ] Known pixel overffiting?
+- [X] LR model
+    - [X] SVD 
         
 - [ ] CNN model 
     - [X] Data preprocessing 
@@ -12,12 +11,13 @@
     - [x] Log to logger 
     - [x] Flexible Input Dim 
     - [x] Model Selection 
-    - [ ] Pretrain by voc
+    - [x] Pretrain by voc
     - [x] post precess
     - [ ] gray img problem
-    - [ ] problem Because size or dark or jpg ?
-        - [ ] medianfilters test 
-        - [X] Val acc on the fly
-    - [ ] Trainable = False
-    - [ ] png v.s. jpg
+        - [x] problem Because size or dark or jpg 
+        - [x] medianfilters test 
+        - [x] png v.s. jpg    
+    - [x] Grid Search Hyper-parameter 
+        - [x] Trainable = False
+    
     

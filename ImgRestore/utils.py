@@ -1,13 +1,13 @@
-import os, glob, sys, subprocess, pprint
-import tensorflow as tf
+import os
+
 import matplotlib
+import tensorflow as tf
 
 matplotlib.use('TKAgg')
 import matplotlib.pyplot as plt
 import numpy as np
-import keras
 import keras.backend as K
-from scipy.misc import imread, imsave, imshow
+from scipy.misc import imread
 from sklearn.feature_extraction.image import reconstruct_from_patches_2d, extract_patches_2d
 
 
@@ -33,10 +33,10 @@ def shuffle_weights(model, weights=None):
 
 
 def my_mse(x, y):
-    if len(x.shape) == 2 and len(y.shape)==3:
-        y=y.mean(axis=-1)
-    elif len(y.shape) == 2 and len(x.shape)==3:
-        x=x.mean(axis=-1)
+    if len(x.shape) == 2 and len(y.shape) == 3:
+        y = y.mean(axis=-1)
+    elif len(y.shape) == 2 and len(x.shape) == 3:
+        x = x.mean(axis=-1)
 
     assert len(x.shape) == len(y.shape), 'dims should same'
     x, y = x.astype('float'), y.astype('float')
@@ -61,7 +61,7 @@ def get_mask(x, bool=False):
         return (x != 0).astype('uint8')  # 0 means missing
 
 
-def img2x(img, config,patch_size=8):
+def img2x(img, config, patch_size=8):
     assert np.max(img) > 2.
     img_01 = img.astype('float32') / 255.
     res = []
@@ -76,7 +76,6 @@ def img2x(img, config,patch_size=8):
     res = np.concatenate(res, axis=2)
     if not config.train:
         res = make_patches(res, patch_size=patch_size)
-
     else:
         res = res[np.newaxis, ...]
         assert len(res.shape) == 4
@@ -84,22 +83,21 @@ def img2x(img, config,patch_size=8):
     return res
 
 
-import time
-
-
 def y2img(restore_img, corr_img, config=None):
     assert np.max(restore_img) < 2., 'assert fail {}'.format(np.max(restore_img))
     assert np.max(corr_img) > 2.
-    # print  time.time()
+
     if len(restore_img.shape) == 4:
         restore_img = combine_patches(restore_img, corr_img.shape)
-    # print  time.time()
+
     restore_img = (restore_img * 255.).astype('uint8')
     restore_img = np.clip(restore_img, 0, 255).astype('uint8')
 
-    # print  time.time()
+
     restore_img = post_process(x_from=corr_img, y_to=restore_img)
-    # print  time.time()
+
+
+
     return restore_img
 
 
@@ -109,8 +107,7 @@ def post_process(x_from, y_to):
     assert mask_dd.shape == y_to.shape, 'shape same'
     y_to[mask_dd] = x_from[mask_dd]
 
-    # if np.array_equal(x_from[..., 0], x_from[..., 1]):
-    #     y_to = y_to.mean(axis=2)
+
 
     return y_to
 
@@ -264,6 +261,13 @@ def common_paths(x_path, y_path, config):
 
     return X_filenames, y_filenames
 
+def flush_screen():
+    import sys
+    sys.stdout.write('\r' + str('-') + ' ' * 20)
+    sys.stdout.flush()  # important
+
+def rgb2gray(rgb):
+    return np.dot(rgb[..., :3], [0.299, 0.587, 0.114])
 
 class MyConfig(object):
     train_y_path = 'data/voc2012_ori/'
@@ -274,7 +278,7 @@ class MyConfig(object):
     test_y_path = 'data/test_ori/'
     test_yo_path = 'data/test_restore/'
 
-    suffixs = ['png']  # , 'jpg']
+    suffixs = ['png', 'jpg']
     train_img_shape = (256, 256)
 
     output_channels = 3
@@ -300,6 +304,7 @@ class MyConfig(object):
             self.train = False
             self.epochs = epochs
             self.batch_size = batch_size
+
         self.input_channels = 3 * (int(rgb_in) + int(pos_in) + 1)
 
         self.rgb_in = rgb_in
@@ -333,11 +338,8 @@ def my_dbg():
     embed()
 
 
-
-
 if __name__ == "__main__":
     import time
-
 
     config = MyConfig(type="deep_denoise", train_epochs=2, train_batch_size=16)
     print len(train_paths(config)[1])
@@ -351,4 +353,3 @@ if __name__ == "__main__":
         my_imshow(xt)
         my_imshow(yt, name='yt')
         break
-

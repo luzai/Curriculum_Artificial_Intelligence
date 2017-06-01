@@ -17,8 +17,10 @@ def main(queue, name):
 
     try:
         model.load_weights(config.model_path, by_name=True)
+        # model.load_weights('output/deep_denoise_rgb.h5', by_name=True)
     except Exception as inst:
         print inst
+        exit(-2)
 
     model.summary()
 
@@ -26,10 +28,6 @@ def main(queue, name):
         config.model_path,
         monitor='val_loss2acc', save_best_only=True,
         mode='max', save_weights_only=False)
-        # ,
-        # keras.callbacks.EarlyStopping(
-        #     monitor='val_loss2acc',
-        #     min_delta=0.00001, patience=3)
     ]
     my_metric = lambda x, y: MyModels.loss2acc(x, y, True)
     my_metric.__name__ = 'loss2acc'
@@ -64,8 +62,8 @@ def main(queue, name):
 import multiprocessing, time
 
 mp_queue = multiprocessing.Queue()
-# Todo train
-for name in ['deep_wide_denoise']:  # ['single', 'deep', 'denoise', 'deep_denoise']:
+
+for name in ['gray_denoise']:  # ['deep_wide_denoise','single', 'deep', 'denoise', 'deep_denoise']:
     p = multiprocessing.Process(target=main, args=(mp_queue, name))
     print time.time(), '\n'
     p.start()  # non-blocking
