@@ -1,5 +1,5 @@
+*.mat
 *.h5
-!deep_denoise_rgb.h5
 *.pkl
 *.db
 *.zip

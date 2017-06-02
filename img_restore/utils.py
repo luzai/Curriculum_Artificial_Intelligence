@@ -1,14 +1,68 @@
-import os
-
 import matplotlib
-import tensorflow as tf
 
 matplotlib.use('TKAgg')
-import matplotlib.pyplot as plt
-import numpy as np
-import keras.backend as K
 from scipy.misc import imread
 from sklearn.feature_extraction.image import reconstruct_from_patches_2d, extract_patches_2d
+import os
+from keras.utils import vis_utils
+from IPython.display import display, HTML, SVG
+
+import keras.backend as K
+import matplotlib
+import numpy as np
+import tensorflow as tf
+
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
+
+
+def strip_consts(graph_def, max_const_size=32):
+    """Strip large constant values from graph_def."""
+    strip_def = tf.GraphDef()
+    for n0 in graph_def.node:
+        n = strip_def.node.add()
+        n.MergeFrom(n0)
+        if n.op == 'Const':
+            tensor = n.attr['value'].tensor
+            size = len(tensor.tensor_content)
+            if size > max_const_size:
+                tensor.tensor_content = tf.compat.as_bytes("<stripped %d bytes>" % size)
+    return strip_def
+
+
+def i_vis_graph(graph_def, max_const_size=32):
+    """Visualize TensorFlow graph."""
+    if hasattr(graph_def, 'as_graph_def'):
+        graph_def = graph_def.as_graph_def()
+    strip_def = strip_consts(graph_def, max_const_size=max_const_size)
+    code = """
+        <script>
+          function load() {{
+            document.getElementById("{id}").pbtxt = {data};
+          }}
+        </script>
+        <link rel="import" href="https://tensorboard.appspot.com/tf-graph-basic.build.html" onload=load()>
+        <div style="height:600px">
+          <tf-graph-basic id="{id}"></tf-graph-basic>
+        </div>
+    """.format(data=repr(str(strip_def)), id='graph' + str(np.random.rand()))
+
+    iframe = """
+        <iframe seamless style="width:800px;height:620px;border:0" srcdoc="{}"></iframe>
+    """.format(code.replace('"', '&quot;'))
+    display(HTML(iframe))
+
+
+def i_vis_model(model):
+    SVG(vis_utils.model_to_dot(model, show_shapes=True).create(prog='dot', format='svg'))
+import os.path as osp
+def vis_model(model, name='net2net', show_shapes=True):
+    try:
+        # vis_utils.plot_model(model, to_file=name + '.pdf', show_shapes=show_shapes)
+        vis_utils.plot_model(model, to_file=name + '.png', show_shapes=show_shapes)
+    except Exception as inst:
+        print("cannot keras.plot_model {}".format(inst))
+
 
 
 def shuffle_weights(model, weights=None):
@@ -53,11 +107,6 @@ def my_mse(x, y):
     return res
 
 
-# def path2x(path):
-#     img = imread(path, mode="RGB")
-#     return img2x(img)
-
-
 def get_mask(x, bool=False):
     if bool:
         return (x != 0).astype('bool')
@@ -81,12 +130,13 @@ def img2x(img, config, patch_size=8):
         if 'gray' in config.type:
             mask = rgb2gray(mask)
         res += [mask]
+    assert not np.array_equal(res[0], res[1])
     res = np.concatenate(res, axis=2)
     if not config.train:
         res = make_patches(res, patch_size=patch_size)
     else:
         res = res[np.newaxis, ...]
-        assert len(res.shape) == 4
+    assert len(res.shape) == 4
 
     return res
 
@@ -100,7 +150,8 @@ def y2img(restore_img, corr_img, config=None):
             shape = corr_img.shape
         else:
             shape = corr_img.shape[:-1] + (1,)
-        restore_img = combine_patches(restore_img, shape)
+        # restore_img=restore_img[0]
+        restore_img = combine_patches(restore_img, corr_img.shape)
 
     restore_img = (restore_img * 255.).astype('uint8')
     restore_img = np.clip(restore_img, 0, 255).astype('uint8')
@@ -111,10 +162,12 @@ def y2img(restore_img, corr_img, config=None):
 
 
 def post_process(x_from_in, y_to, config=None):
-    if 'gray' in config.type and x_from_in.shape[-1]==3:
+    if 'gray' in config.type and x_from_in.shape[-1] == 3:
         x_from = rgb2gray(x_from_in)
     else:
-        x_from=x_from_in
+        x_from = x_from_in
+    # x_from = x_from.mean(axis=-1)
+    # y_to = y_to.mean(axis=-1)
     assert x_from.shape == y_to.shape, 'shape same'
     mask_dd = (x_from != 0).astype('bool')
     assert mask_dd.shape == y_to.shape, 'shape same'
@@ -151,6 +204,7 @@ class ReadData(threading.Thread):
             if self.X.shape[-1] > 3:
                 x = imread(self.X_name, mode='RGB')
                 x = img2x(x, self.config)
+                assert not np.array_equal(x[0], x[1])
                 self.X[self.ind] = x
             else:
                 y = imread(self.X_name, mode='RGB')
@@ -187,9 +241,6 @@ def _index_generator(N, batch_size=32, shuffle=True, seed=None):
                current_index, current_batch_size)
 
 
-cache = None
-
-
 def gen_from_dir(config, mode=True):
     global cache
     if mode == True:
@@ -202,27 +253,6 @@ def gen_from_dir(config, mode=True):
 
     lock = threading.Lock()
 
-    index_array, current_index, current_batch_size = next(index_gen)
-
-    X = np.ones((config.train_batch_size,) + config.train_img_shape + (config.input_channels,), dtype=np.float)
-    Y = np.ones((config.train_batch_size,) + config.train_img_shape + (config.output_channels,), dtype=np.float)
-    threads = []
-
-    for i, j in enumerate(index_array):
-        x_fn = X_filenames[j]
-        tx = ReadData(x_fn, i, X, lock, config)
-        tx.start()
-        threads.append(tx)
-        y_fn = y_filenames[j]
-        ty = ReadData(y_fn, i, Y, lock, config)
-        ty.start()
-        threads.append(ty)
-
-    for t in threads:
-        t.join()
-
-    cache = (X, Y)
-    assert X.max() < 2. and Y.max() < 2.
     while 1:
 
         index_array, current_index, current_batch_size = next(index_gen)
@@ -241,11 +271,7 @@ def gen_from_dir(config, mode=True):
             ty.start()
             threads.append(ty)
 
-        yield cache
-
-        for t in threads:
-            t.join()
-        cache = (X, Y)
+        yield (X, Y)
         assert X.min() < 2. and Y.min() < 2.
 
 
@@ -294,7 +320,7 @@ def flush_screen():
 
 
 def rgb2gray(rgb):
-    res = np.dot(rgb[..., :3], [0.299, 0.587, 0.114])
+    res = np.dot(rgb[..., :3], [1 / 3., 1 / 3., 1 / 3.])
     res = res[..., np.newaxis]
     return res
 
@@ -337,6 +363,7 @@ class MyConfig(object):
             self.train = False
             self.epochs = epochs
             self.batch_size = batch_size
+
         if 'gray' in type:
             self.input_channels = 2
         else:

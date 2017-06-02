@@ -8,24 +8,26 @@ import pandas as pd
 from scipy.misc import imread, imsave
 
 
-def predict(name='deep_noise', epochs=0, verbose=2, trainable=True, show=False):
+def predict(name='deep_denoise', epochs=0, verbose=2, trainable=True, show=False):
     import keras, utils
+    import model as MyModels
 
     config = utils.MyConfig(type=name, epochs=epochs, batch_size=1024, verbose=verbose)
     model = MyModels.__dict__[name + '_model'](input_shape=(None, None) + (config.input_channels,), trainable=trainable)
-    config2 = utils.MyConfig(type='gray_denoise', epochs=epochs, batch_size=1024, verbose=verbose)  # _wide
-    model2 = MyModels.gray_denoise_model((None, None, 2))
+    # config2 = utils.MyConfig(type='gray_denoise', epochs=epochs, batch_size=1024, verbose=verbose)  # _wide
+    # model2 = MyModels.gray_denoise_model((None, None, 2))
     try:
         model.load_weights(config.model_path, by_name=True)
-        model2.load_weights(config2.model_path, by_name=True)
+        # model2.load_weights(config2.model_path, by_name=True)
+        pass
     except Exception as inst:
         print inst
         exit(-2)
 
-    if config.verbose != 2: model.summary()
+    # if config.verbose != 2: model2.summary()
 
     callback_list = [
-        keras.callbacks.EarlyStopping(monitor='val_loss2acc', min_delta=0.001, patience=30)
+        keras.callbacks.EarlyStopping(monitor='val_loss2acc', min_delta=0.001, patience=20)
     ]
 
     x_fns, y_fns = utils.common_paths(config.test_X_path, config.test_y_path, config)
@@ -38,26 +40,32 @@ def predict(name='deep_noise', epochs=0, verbose=2, trainable=True, show=False):
         ori_img = imread(y_fn, mode='RGB')
 
         # if np.array_equal(corr_img[..., 0], corr_img[..., 1]) or epochs != 0:
-        #     def limits(res):
-        #         res = res.copy()
-        #         choose_to = min(102400, res.shape[0])
-        #         ind = np.random.permutation(res.shape[0])[:choose_to]
-        #         res = res[ind]
-        #         return res, res.copy()
-        #     x_train, y_train = limits(x)
-        #     model2.fit(x_train, y_train, batch_size=config.batch_size * 2,
-        #                epochs=9,  # config.epochs
-        #                verbose=config.verbose, callbacks=callback_list,
-        #                validation_split=0.1)
+        def limits(res):
+            res = res.copy()
+            # choose_to = min(102400, res.shape[0])
+            choose_to=res.shape[0]
+            ind = np.random.permutation(res.shape[0])[:choose_to]
+            res = res[ind]
+            return res, res.copy()
         if np.array_equal(corr_img[..., 0], corr_img[..., 1]):
+            continue
             x = utils.img2x(corr_img, config2, patch_size=8)
             assert x.max() < 2.
+            x[..., 1] = x[..., 0].copy()
             y = model2.predict(x, batch_size=config.batch_size)
             assert y.max() < 2.
             restore_img = utils.y2img(restore_img=y, corr_img=corr_img, config=config2)
         else:
+            # continue
             x = utils.img2x(corr_img, config, patch_size=8)
+            x_train, y_train = limits(x)
+            model.fit(x_train, y_train, batch_size=config.batch_size * 2,
+                      epochs=100,
+                      verbose=2, callbacks=callback_list,
+                      validation_split=0.1)
+
             assert x.max() < 2.
+            # x[..., 3:] = x[..., 0:3].copy()
             y = model.predict(x, batch_size=config.batch_size)
             assert y.max() < 2.
             restore_img = utils.y2img(restore_img=y, corr_img=corr_img, config=config)
@@ -68,6 +76,7 @@ def predict(name='deep_noise', epochs=0, verbose=2, trainable=True, show=False):
         print 'MSE is', mse_t, 'Take Time', toc - tic
         if restore_img.shape[-1] == 1 and np.array_equal(corr_img[..., 0], corr_img[..., 1]):
             restore_img = restore_img.mean(axis=-1)
+        restore_img = restore_img.astype('uint8')
         imsave(osp.join(
             config.test_yo_path,
             osp.basename(x_fn))
@@ -86,6 +95,8 @@ def predict(name='deep_noise', epochs=0, verbose=2, trainable=True, show=False):
             utils.my_imshow(restore_img, cmap, block=False, name='restore')
             # utils.my_imshow(corr_img, cmap, block=False, name='corr')
             # if osp.basename(x_fn) == 'A.png': break
+            # break
+
     return res
 
 

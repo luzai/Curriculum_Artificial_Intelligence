@@ -51,7 +51,7 @@ def restore(x):
                      sparse_mat.data
                      ], axis=1).astype('int')
     np.savetxt('tmp.txt', data, fmt='%d')
-    reader = Reader(line_format='user item rating', sep=' ',rating_scale=(0, 255))
+    reader = Reader(line_format='user item rating', sep=' ', rating_scale=(0, 255))
     dataset = Dataset.load_from_file('tmp.txt', reader=reader)
     trainset = dataset.build_full_trainset()
 
@@ -63,14 +63,16 @@ def restore(x):
 
     y3, x3 = np.meshgrid(yy, xx)
     testset = zip(x3.ravel().tolist(), y3.ravel().tolist())
-    testset=[str(a)+' '+str(b) for (a,b) in testset]
+    testset = [str(a) + ' ' + str(b) for (a, b) in testset]
     print testset[:10]
+
     # pool = mp.Pool(mp.cpu_count() * 2)
 
     def my_predict(test):
-        a,b=test.split()
+        a, b = test.split()
         return algo.predict(uid=a, iid=b)
-    predictions=[]
+
+    predictions = []
     for test in testset:
         predictions.append(int(my_predict(test).est))
     # predictions=pool.map(my_predict, testset)
@@ -81,17 +83,17 @@ def restore(x):
 
     return np.array(predictions).reshape(x.shape)
 
+
 import os.path as osp
+
 x_fns, y_fns = utils.common_paths(config.test_X_path, config.test_y_path, config)
 for iter_ind, (x_fn, y_fn) in enumerate(zip(x_fns, y_fns)):
     print iter_ind, x_fn, y_fn
     corr_img = imread(x_fn, mode='RGB')
     ori_img = imread(y_fn, mode='RGB')
-    img_l=[]
+    img_l = []
     for chl in range(corr_img.shape[-1]):
-        img_l.append( restore(corr_img[..., chl]))
-    img=np.stack(img_l,-1)
+        img_l.append(restore(corr_img[..., chl]))
+    img = np.stack(img_l, -1)
     print img.shape
-    utils.my_imshow(img,name=osp.basename(x_fn))
-
-
+    utils.my_imshow(img, name=osp.basename(x_fn))

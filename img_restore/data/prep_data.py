@@ -16,6 +16,7 @@ corr_prefix = 'voc2012_corr/'
 cmd = 'mkdir -p ' + corr_prefix
 subprocess.call(cmd.split())
 
+
 def gen_img(img_name):
     print os.path.basename(img_name)
     ori_img_name = ori_prefix + os.path.basename(img_name).split('.')[0] + '.png'
@@ -25,8 +26,9 @@ def gen_img(img_name):
 
     def rgb2gray(rgb):
         return np.dot(rgb[..., :3], [0.299, 0.587, 0.114])
-    img_np=rgb2gray(img_np)
-    img_np=np.stack([img_np,img_np.copy(),img_np.copy()],axis=-1)
+
+    img_np = rgb2gray(img_np)
+    img_np = np.stack([img_np, img_np.copy(), img_np.copy()], axis=-1)
 
     ori_img = imresize(img_np, (256, 256, 3))
     # ori_img[ori_img == 0] = 1
@@ -45,9 +47,9 @@ def gen_img(img_name):
     for row in range(rows):
         choose_col = np.random.permutation(cols)[:noise_num]
         noise_mask[row, choose_col, 0] = 0
-    noise_mask=np.stack([noise_mask[..., 0].copy(),
-                         noise_mask[..., 0].copy(),
-                         noise_mask[..., 0].copy()],axis=-1)
+    noise_mask = np.stack([noise_mask[..., 0].copy(),
+                           noise_mask[..., 0].copy(),
+                           noise_mask[..., 0].copy()], axis=-1)
 
     corr_img = np.multiply(ori_img, noise_mask)
     assert corr_img.dtype == np.uint8
@@ -85,5 +87,5 @@ pool.map(gen_img, img_l)
 pool.close()
 pool.join()
 
-if __name__=='__main__':
+if __name__ == '__main__':
     pass

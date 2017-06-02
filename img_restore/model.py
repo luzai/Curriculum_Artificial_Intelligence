@@ -5,28 +5,30 @@ from keras.layers import *
 
 
 def loss2acc(y_true, y_pred, train=False):
-    y_true = tf.to_float(y_true)
-    y_pred = tf.to_float(y_pred)
-    if train:  # or  ktf.int_shape(y_true)==ktf.int_shape(y_pred):
-        tt = K.mean(K.square(y_pred - y_true), axis=-1)  # when training we just compare the output 3chnls and gt 3chnls
-    else:
-        tt = my_mse(y_true, y_pred)  # when finetune we use compare between 6 chnls and 3 chnls
-    return -tt  # -10. * K.log(tt) / K.log(K.cast_to_floatx(10.))
+    with ktf.name_scope('acc'):
+        y_true = tf.to_float(y_true)
+        y_pred = tf.to_float(y_pred)
+        if train:  # or  ktf.int_shape(y_true)==ktf.int_shape(y_pred):
+            tt = K.mean(K.square(y_pred - y_true), axis=-1)  # when training we just compare the output 3chnls and gt 3chnls
+        else:
+            tt = my_mse(y_true, y_pred)  # when finetune we use compare between 6 chnls and 3 chnls
+        return -tt  # -10. * K.log(tt) / K.log(K.cast_to_floatx(10.))
 
 
 def my_mse(y_true, y_pred):
-    # print type(y_true), ktf.int_shape(y_true), ktf.int_shape(y_true)
-    y_true = tf.to_float(y_true)
-    y_pred = tf.to_float(y_pred)
+    with ktf.name_scope('loss'):
+        # print type(y_true), ktf.int_shape(y_true), ktf.int_shape(y_true)
+        y_true = tf.to_float(y_true)
+        y_pred = tf.to_float(y_pred)
 
-    mask = y_true[..., 3:]
-    y_tt = y_true[..., :3]
+        mask = y_true[..., 3:]
+        y_tt = y_true[..., :3]
 
-    y_pred = K.prod(
-        K.stack((y_pred, mask), axis=0),
-        axis=0
-    )
-    return K.mean(K.square(y_pred - y_tt), axis=-1)
+        y_pred = K.prod(
+            K.stack((y_pred, mask), axis=0),
+            axis=0
+        )
+        return K.mean(K.square(y_pred - y_tt), axis=-1)
 
 
 def padding(x):
@@ -120,6 +122,7 @@ gray_wide_denoise_model = lambda input_shape: deep_denoise_model(input_shape=inp
                                                                  n3=128)
 gray_wide_denoise_model.__name__ = 'gray_wide_denoise_model'
 
+
 def deep_denoise_model(input_shape=(8, 8, 3), n1=16, n2=32, n3=64, trainable=True, out_dim=3):
     init = Input(shape=input_shape)
     c1 = Convolution2D(n1, (3, 3), activation='relu', padding='same', trainable=trainable)(init)
@@ -158,6 +161,10 @@ def deep_denoise_model(input_shape=(8, 8, 3), n1=16, n2=32, n3=64, trainable=Tru
 
 if __name__ == '__main__':
     # model = deep_model(input_shape=(512, 512, 6))
-    model = deep_denoise_model()
-    model.summary()
-    single_model().summary()
+    for model, name in zip([deep_denoise_model(), single_model(), deep_model(), denoise_model()],
+                           ['deep_denoise', 'single', 'deep', 'denoise']):
+        model.summary()
+        single_model().summary()
+        import utils
+
+        utils.vis_model(model, name)

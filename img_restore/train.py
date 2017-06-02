@@ -45,4 +45,3 @@ mp_queue = multiprocessing.Queue()
 
 # main(mp_queue, 'gray_denoise')
 main(mp_queue, 'gray_wide_denoise')
-

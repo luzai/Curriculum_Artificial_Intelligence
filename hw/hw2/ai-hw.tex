@@ -127,37 +127,33 @@ The complete state space:
 \begin{description}
 	\item[a).] branching factor $b=4$.
 	\item[b).] Since a step means $|x|$ or $|y|$ increase by 1, the final state satisfies $|x|+|y|=k \wedge |x|\le k \wedge |y| \le k$, which has $4k$ distinct states.
-	\item[c).] Notation: frontier = set of nodes in frontier; |frontier| = number of nodes in frontier;   Acc. |frontier| = number of nodes expanded. The ${\color{red}-1}$ in tableau shows that  I think the destination node will be 'unfortunately' evaluated at the last among the nodes with the same depth, do not need to be expand (just evaluate/test). 
+	\item[c).] Notation: frontier = set of nodes in frontier; |frontier| = number of nodes in frontier;   Acc. |frontier| = number of nodes expanded. The ${\color{red}-1}$ in tableau means starting point is not counted in while target point is counted in .
 	
 	\begin{tabular}{llll}
 		\toprule
-		depth & frontier & |frontier| & Acc. |frontier|\\
-		\midrule 
-		$d=0$ & $\{(0,0)\}$ & 1 & $1{\color{red}-1}$ \\
-		$d=1$&$\{(0,1),(1,0),(-1,0),(0,-1)\}$&4&$5-1$\\
-		$d=2$&   $\{(-1,1),(1,1),(0,0),(0,2),...,...,...\}$&16&$21-1$\\
-		...&...&...&\\
-		$d=k$&...&$4^k$&$(\sum_{n=0}^{k} 4^k) -1$\\
-		\bottomrule
+		depth & frontier                                   & |frontier| & Acc. |frontier|           \\ \midrule
+		$d=0$ & $ \phi, (\{(0,0)\}$ is not counted in $)$  & 1-1        & $1{\color{red}-1}$        \\
+		$d=1$ & $\{(0,1),(1,0),(-1,0),(0,-1)\}$            & 4          & $4$                       \\
+		$d=2$ & $\{(-1,1),(1,1),(0,0),(0,2),...,...,...\}$ & 16         & $4+16$                    \\
+		...   & ...                                        & ...        &  \\
+		$d=k$ & ...                                        & $4^k$      & $\sum_{n=1}^{k} 4^k$ \\ \bottomrule
 	\end{tabular}
 
-	Therefore, Acc. |frontier|$=-1+\sum_{n=0}^{k} 4^k={(4^{k+1}-4)}/{3}={(4^{x+y+1}-4)}/{3}$
+	Therefore, Acc. |frontier|$=\sum_{n=1}^{k} 4^k={(4^{k+1}-4)}/{3}={(4^{x+y+1}-4)}/{3}$
 	
 	\item[d).] Similarly, 
 	
 	\begin{tabular}{llll}
 		\toprule
-		depth & frontier & |frontier| & Acc. |frontier|\\
-		\midrule 
-		$d=0$ &$\{(0,0)\}$ & 1 & $1-1$ \\
-		$d=1$&$\{(0,1),(1,0),(-1,0),(0,-1)\}$&4&$5-1$\\
-		$d=2$&   $\{(x,y) \in \mathbb{R}^2; |x|+|y|=2\wedge |x|\le 2 \wedge |y|\le 2\}$&8&$13-1$\\
-		...&...&...&\\
-		$d=k$&$\{(x,y)\in \mathbb{R}^2; |x|+|y|=k\wedge |x|\le k \wedge |y|\le k\}$&$4k$&$-1+\sum_{n=0}^{k} 4k$\\
-		\bottomrule
+		depth & frontier                                                               & |frontier| & Acc. |frontier|        \\ \midrule
+		$d=0$ & $\phi$                                                            & 0          & $0$                  \\
+		$d=1$ & $\{(0,1),(1,0),(-1,0),(0,-1)\}$                                        & 4          & $4$                  \\
+		$d=2$ & $\{(x,y) \in \mathbb{R}^2; |x|+|y|=2\wedge |x|\le 2 \wedge |y|\le 2\}$ & 8          & $4+8$                 \\
+		...   & ...                                                                    & ...        &  \\
+		$d=k$ & $\{(x,y)\in \mathbb{R}^2; |x|+|y|=k\wedge |x|\le k \wedge |y|\le k\}$  & $4k$       & $\sum_{n=1}^{k} 4k$ \\ \bottomrule
 	\end{tabular}
 
-	Therefore, Acc. |frontier|$=-1+\sum_{n=0}^{k} 4k=2k(k+1)=2(x+y)(x+y+1)$
+	Therefore, Acc. |frontier|$=\sum_{n=1}^{k} 4k=2k(k+1)=2(x+y)(x+y+1)$
 
 	\item[e).] Yes, $h(n)=h^*(n)$ in this case and is admissible.
 	\item[f).]  $\text{A}^*$ will search the nodes 'towards' destination, i.e. $\{(a,b)\in \mathbb{R}^2; 0\le a \le x \wedge 0 \le b \le y \}$. Totally, $(x+1)(y+1)-1$
