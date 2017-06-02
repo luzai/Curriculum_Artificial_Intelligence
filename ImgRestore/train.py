@@ -1,13 +1,6 @@
 def main(queue, name):
     import keras
-    import matplotlib.pyplot as plt
-    import numpy as np
-    from scipy.misc import imread
-    import tensorflow as tf
-    import model as MyModels
-    import utils, os, multiprocessing
-    import time
-    import keras.backend as K
+    import utils
     import model as MyModels
 
     assert name + '_model' in MyModels.__dict__.keys()
@@ -17,21 +10,22 @@ def main(queue, name):
 
     try:
         model.load_weights(config.model_path, by_name=True)
-        # model.load_weights('output/deep_denoise_rgb.h5', by_name=True)
+        pass
     except Exception as inst:
         print inst
-        exit(-2)
+        # exit(-2)
 
     model.summary()
 
     callback_list = [keras.callbacks.ModelCheckpoint(
         config.model_path,
-        monitor='val_loss2acc', save_best_only=True,
-        mode='max', save_weights_only=False)
+        monitor='loss2acc', save_best_only=True,
+        mode='max', save_weights_only=False),
+        keras.callbacks.TensorBoard(log_dir='tf_tmp/')
     ]
     my_metric = lambda x, y: MyModels.loss2acc(x, y, True)
     my_metric.__name__ = 'loss2acc'
-    model.compile(optimizer=keras.optimizers.Adam(lr=1e-4), loss=['mse'], metrics=[my_metric])
+    model.compile(optimizer=keras.optimizers.adam(lr=1e-3), loss=['mse'], metrics=[my_metric])
     dbg = False
     model.fit_generator(utils.gen_from_dir(config, mode=True),
                         steps_per_epoch=1 if dbg else utils.get_steps(config, train=True),
@@ -44,32 +38,11 @@ def main(queue, name):
     # model.save(config.model_path)
     queue.put({'model_path': config.model_path})
 
-    # del model
-    # import gc
-    # gc.collect()
-    # K.clear_session()
-    # tf_graph = tf.get_default_graph()
-    # _sess_config = tf.ConfigProto(
-    #     allow_soft_placement=True,
-    # )
-    # _sess_config.gpu_options.allow_growth = True
-    # sess = tf.Session(config=_sess_config, graph=tf_graph)
-    # K.set_session(sess)
-    # # if dbg:
-    # #     utils.my_dbg()
 
-
-import multiprocessing, time
+import multiprocessing
 
 mp_queue = multiprocessing.Queue()
 
-for name in ['gray_denoise']:  # ['deep_wide_denoise','single', 'deep', 'denoise', 'deep_denoise']:
-    p = multiprocessing.Process(target=main, args=(mp_queue, name))
-    print time.time(), '\n'
-    p.start()  # non-blocking
-    print time.time(), '\n'
-    print mp_queue.get()  # blocking
-    print time.time(), '\n'
-    p.join()
-    print time.time(), '\n'
-    print '-' * 10
+# main(mp_queue, 'gray_denoise')
+main(mp_queue, 'gray_wide_denoise')
+

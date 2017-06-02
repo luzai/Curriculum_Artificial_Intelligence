@@ -1,13 +1,7 @@
 def main(queue, name):
     import keras
-    import matplotlib.pyplot as plt
-    import numpy as np
-    from scipy.misc import imread
-    import tensorflow as tf
     import model as MyModels
-    import utils, os, multiprocessing
-    import time
-    import keras.backend as K
+    import utils
 
     assert name + '_model' in MyModels.__dict__.keys()
 
@@ -34,34 +28,31 @@ def main(queue, name):
     ]
     my_metric = lambda x, y: MyModels.loss2acc(x, y, True)
     my_metric.__name__ = 'loss2acc'
-    model.compile(optimizer=keras.optimizers.Adam(lr=1e-3), loss=['mse'], metrics=[my_metric])
+    model.compile(optimizer=keras.optimizers.Adam(lr=1-3), loss=['mse'], metrics=[my_metric])
     dbg = True
-    # model.fit_generator(utils.gen_from_dir(config, mode=True),
-    #                     steps_per_epoch=1 if dbg else utils.get_steps(config, train=True),
-    #                     epochs=2 if dbg else config.train_epochs,
-    #                     callbacks=callback_list,
-    #                     validation_steps=utils.get_steps(config, train=False),
-    #                     validation_data=utils.gen_from_dir(config, mode=False)
-    #                     )
-
-    # model.save(config.model_path)
     queue.put({'model_path': config.model_path})
+    if 'gray' in config.type:
+        ind=1
+    else:
+        ind=3
     for x, y in utils.gen_from_dir(config, True):
-        y_pred = model.predict(x)
-        utils.my_imshow(x[0][..., :3], block=False)
-        utils.my_imshow(y[0][..., :3], block=False)
-        y_pred[0][..., :3] = utils.post_process(x[0][..., :3], y_to=y_pred[0][..., :3])
-        utils.my_imshow(y_pred[0][..., :3], block=False, name='pred_train')
-        print utils.my_mse(y_pred[0][..., :3], x[0][..., :3])
-
         break
-
+        y_pred = model.predict(x)
+        utils.my_imshow(x[0][..., :ind], block=False)
+        utils.my_imshow(y[0][..., :ind], block=False)
+        y_pred[0][..., :ind] = utils.post_process(x[0][..., :ind], y_to=y_pred[0][..., :1], config=config)
+        utils.my_imshow(y_pred[0][..., :ind], block=False, name='pred_train')
+        print utils.my_mse(y_pred[0][..., :ind], x[0][..., :ind])
+        break
+    cnt=0
     for x, y in utils.gen_from_dir(config, False):
         y_pred = model.predict(x)
-        utils.my_imshow(x[0][..., :3], block=False)
-        utils.my_imshow(y[0][..., :3], block=False)
-        y_pred[0][..., :3] = utils.post_process(x[0][..., :3], y_to=y_pred[0][..., :3])
-        utils.my_imshow(y_pred[0][..., :3], block=False, name='pred_val')
-        print utils.my_mse(y_pred[0][..., :3], x[0][..., :3])
-        break
-
+        # utils.my_imshow(x[0][..., :ind], block=False)
+        # utils.my_imshow(y[0][..., :ind], block=False)
+        y_pred[0][..., :ind] = utils.post_process(x[0][..., :ind], y_to=y_pred[0][..., :1], config=config)
+        utils.my_imshow(y_pred[0][..., :ind], block=False, name='pred_val')
+        print utils.my_mse(y_pred[0][..., :ind], x[0][..., :ind])
+        cnt+=1
+        if cnt >30:
+            break
+#

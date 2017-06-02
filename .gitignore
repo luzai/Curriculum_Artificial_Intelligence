@@ -1,6 +1,5 @@
-data
-ref/
-.idea/
+*.h5
+!deep_denoise_rgb.h5
 *.pkl
 *.db
 *.zip
@@ -623,8 +622,4 @@ ENV/
 # Rope project settings
 .ropeproject
 
-*.pkl
-*.db
-*.zip
-*.ipynb
 

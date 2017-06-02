@@ -1,7 +1,7 @@
 import keras
 import keras.backend.tensorflow_backend as ktf
-from keras.layers import *
 import tensorflow as tf
+from keras.layers import *
 
 
 def loss2acc(y_true, y_pred, train=False):
@@ -102,20 +102,25 @@ def denoise_model(input_shape=(8, 8, 3), n1=16):
     decoded = Convolution2D(3, (5, 5), activation='sigmoid', padding='same')(level1)
 
     model = keras.models.Model(init, decoded)
-    adam = keras.optimizers.Adam(lr=1e-4)
+    adam = keras.optimizers.Adam(lr=1e-2)
     model.compile(optimizer=adam, loss=[my_mse], metrics=[loss2acc])
 
     return model
 
 
-deep_wide_denoise_model = lambda input_shape,trainable=True: deep_denoise_model(input_shape=input_shape, n1=32, n2=64, n3=128,
-                                                                 trainable=trainable)
+deep_wide_denoise_model = lambda input_shape, trainable=True: deep_denoise_model(input_shape=input_shape, n1=32, n2=64,
+                                                                                 n3=128,
+                                                                                 trainable=trainable)
 deep_wide_denoise_model.__name__ = 'deep_wide_denoise_model'
 
-gray_denoise_model=lambda input_shape:deep_denoise_model(input_shape=input_shape)
-gray_denoise_model.__name__='gray_denoise_model'
+gray_denoise_model = lambda input_shape: deep_denoise_model(input_shape=input_shape, out_dim=1)
+gray_denoise_model.__name__ = 'gray_denoise_model'
 
-def deep_denoise_model(input_shape=(8, 8, 3), n1=16, n2=32, n3=64, trainable=True):
+gray_wide_denoise_model = lambda input_shape: deep_denoise_model(input_shape=input_shape, out_dim=1, n1=32, n2=64,
+                                                                 n3=128)
+gray_wide_denoise_model.__name__ = 'gray_wide_denoise_model'
+
+def deep_denoise_model(input_shape=(8, 8, 3), n1=16, n2=32, n3=64, trainable=True, out_dim=3):
     init = Input(shape=input_shape)
     c1 = Convolution2D(n1, (3, 3), activation='relu', padding='same', trainable=trainable)(init)
     c1 = Convolution2D(n1, (3, 3), activation='relu', padding='same', trainable=trainable)(c1)
@@ -142,7 +147,7 @@ def deep_denoise_model(input_shape=(8, 8, 3), n1=16, n2=32, n3=64, trainable=Tru
 
     m2 = Add()([c1, c1_2])
 
-    decoded = Convolution2D(3, (5, 5),activation='tanh', padding='same')(m2)
+    decoded = Convolution2D(out_dim, (5, 5), activation='tanh', padding='same')(m2)
 
     model = keras.models.Model(init, decoded)
     adam = keras.optimizers.Adam(lr=1e-4)

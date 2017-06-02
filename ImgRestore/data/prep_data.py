@@ -29,8 +29,8 @@ def gen_img(img_name):
     img_np=np.stack([img_np,img_np.copy(),img_np.copy()],axis=-1)
 
     ori_img = imresize(img_np, (256, 256, 3))
-    ori_img[ori_img == 0] = 1
-    assert ori_img.all(), "All should not be corrupted"
+    # ori_img[ori_img == 0] = 1
+    # assert ori_img.all(), "All should not be corrupted"
     # print img_np.shape, ori_img.shape
 
     assert ori_img.dtype == np.uint8
@@ -71,6 +71,12 @@ def gen_img(img_name):
 
 
 img_l = glob.glob('voc2012/*.jpg')
+import subprocess
+# subprocess.call('rm voc2012_corr -rf'.split())
+# subprocess.call('mkdir voc2012_corr -p'.split())
+# limits=len(img_l)//5
+# limits=32
+# img_l = img_l[:limits]
 import multiprocessing as mp
 
 pool_size = mp.cpu_count() * 4

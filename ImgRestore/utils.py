@@ -33,6 +33,10 @@ def shuffle_weights(model, weights=None):
 
 
 def my_mse(x, y):
+    if x.shape[-1] == 1:
+        x = x.mean(axis=-1)
+    if y.shape[-1] == 1:
+        y = y.mean(axis=-1)
     if len(x.shape) == 2 and len(y.shape) == 3:
         y = y.mean(axis=-1)
     elif len(y.shape) == 2 and len(x.shape) == 3:
@@ -64,6 +68,8 @@ def get_mask(x, bool=False):
 def img2x(img, config, patch_size=8):
     assert np.max(img) > 2.
     img_01 = img.astype('float32') / 255.
+    if 'gray' in config.type:
+        img_01 = rgb2gray(img_01)
     res = []
     if config.rgb_in:
         res += [img_01]
@@ -72,6 +78,8 @@ def img2x(img, config, patch_size=8):
         pass
     if config.mask_in:
         mask = get_mask(img)
+        if 'gray' in config.type:
+            mask = rgb2gray(mask)
         res += [mask]
     res = np.concatenate(res, axis=2)
     if not config.train:
@@ -88,26 +96,29 @@ def y2img(restore_img, corr_img, config=None):
     assert np.max(corr_img) > 2.
 
     if len(restore_img.shape) == 4:
-        restore_img = combine_patches(restore_img, corr_img.shape)
+        if 'gray' not in config.type:
+            shape = corr_img.shape
+        else:
+            shape = corr_img.shape[:-1] + (1,)
+        restore_img = combine_patches(restore_img, shape)
 
     restore_img = (restore_img * 255.).astype('uint8')
     restore_img = np.clip(restore_img, 0, 255).astype('uint8')
 
-
-    restore_img = post_process(x_from=corr_img, y_to=restore_img)
-
-
+    restore_img = post_process(x_from_in=corr_img, y_to=restore_img, config=config)
 
     return restore_img
 
 
-def post_process(x_from, y_to):
+def post_process(x_from_in, y_to, config=None):
+    if 'gray' in config.type and x_from_in.shape[-1]==3:
+        x_from = rgb2gray(x_from_in)
+    else:
+        x_from=x_from_in
     assert x_from.shape == y_to.shape, 'shape same'
     mask_dd = (x_from != 0).astype('bool')
     assert mask_dd.shape == y_to.shape, 'shape same'
     y_to[mask_dd] = x_from[mask_dd]
-
-
 
     return y_to
 
@@ -143,6 +154,8 @@ class ReadData(threading.Thread):
                 self.X[self.ind] = x
             else:
                 y = imread(self.X_name, mode='RGB')
+                if 'gray' in self.config.type:
+                    y = rgb2gray(y)
                 y = y.astype('float32') / 255.
                 self.X[self.ind] = y
 
@@ -246,7 +259,11 @@ def get_steps(config, train=True):
 
 
 def train_paths(config):
-    return common_paths(config.train_X_path, config.train_y_path, config)
+    X_filenames, y_filenames = common_paths(config.train_X_path, config.train_y_path, config)
+    ind = np.random.permutation(len(X_filenames)).tolist()
+    X_filenames = np.array(X_filenames)[ind].tolist()
+    y_filenames = np.array(y_filenames)[ind].tolist()
+    return X_filenames, y_filenames
 
 
 def val_paths(config):
@@ -256,18 +273,31 @@ def val_paths(config):
 def common_paths(x_path, y_path, config):
     file_names = [f for f in sorted(os.listdir(x_path), reverse=True)
                   if np.array([f.endswith(suffix) for suffix in config.suffixs]).any()]
-    X_filenames = [os.path.join(x_path, f) for f in file_names]
-    y_filenames = [os.path.join(y_path, f) for f in file_names]
 
+    X_filenames = [os.path.join(x_path, f) for f in file_names]
+    y_filenames = []
+    for f in file_names:
+        for suffix in config.suffixs:
+            for possible in ['.', '_ori.']:
+                fp_t = os.path.join(y_path, f.split('.')[0] + possible + suffix)
+                if os.path.exists(fp_t):
+                    y_filenames.append(fp_t)
+
+    assert len(X_filenames) == len(y_filenames)
     return X_filenames, y_filenames
+
 
 def flush_screen():
     import sys
     sys.stdout.write('\r' + str('-') + ' ' * 20)
     sys.stdout.flush()  # important
 
+
 def rgb2gray(rgb):
-    return np.dot(rgb[..., :3], [0.299, 0.587, 0.114])
+    res = np.dot(rgb[..., :3], [0.299, 0.587, 0.114])
+    res = res[..., np.newaxis]
+    return res
+
 
 class MyConfig(object):
     train_y_path = 'data/voc2012_ori/'
@@ -278,10 +308,8 @@ class MyConfig(object):
     test_y_path = 'data/test_ori/'
     test_yo_path = 'data/test_restore/'
 
-    suffixs = ['png', 'jpg']
+    suffixs = ['png', 'jpg', 'JPEG']
     train_img_shape = (256, 256)
-
-    output_channels = 3
 
     tf_graph = tf.get_default_graph()
     _sess_config = tf.ConfigProto(
@@ -294,6 +322,11 @@ class MyConfig(object):
 
     def __init__(self, type="deep_denoise", rgb_in=True, pos_in=False, train_epochs=None, train_batch_size=None,
                  epochs=3, batch_size=1024, verbose=2):
+        if 'gray' not in type:
+            self.output_channels = 3
+        else:
+            self.output_channels = 1
+        self.type = type
         self.verbose = verbose
         self.epochs = epochs
         if train_batch_size is not None:
@@ -304,8 +337,10 @@ class MyConfig(object):
             self.train = False
             self.epochs = epochs
             self.batch_size = batch_size
-
-        self.input_channels = 3 * (int(rgb_in) + int(pos_in) + 1)
+        if 'gray' in type:
+            self.input_channels = 2
+        else:
+            self.input_channels = 3 * (int(rgb_in) + int(pos_in) + 1)
 
         self.rgb_in = rgb_in
         if rgb_in:
@@ -330,6 +365,9 @@ def my_imshow(img, cmap=None, block=False, name='default'):
         plt.show()
     else:
         import multiprocessing
+        if img.shape[-1] == 1:
+            img = img[..., 0]
+            cmap = 'gray'
         multiprocessing.Process(target=my_imshow, args=(img, cmap, True, name)).start()
 
 
@@ -341,15 +379,16 @@ def my_dbg():
 if __name__ == "__main__":
     import time
 
-    config = MyConfig(type="deep_denoise", train_epochs=2, train_batch_size=16)
+    config = MyConfig(type="gray_denoise", train_epochs=2, train_batch_size=16)
     print len(train_paths(config)[1])
     print len(val_paths(config)[1])
     for x, y in gen_from_dir(config, mode=True):
         print x.shape, y.shape, time.time()
-        xt = x[0][..., :3]
+        xt = x[0][..., :1]
         xt = (xt * 255).astype('uint8')
-        yt = y[0][..., :3]
+        yt = y[0][..., :1]
         yt = (yt * 255).astype('uint8')
         my_imshow(xt)
         my_imshow(yt, name='yt')
         break
+    my_dbg()
