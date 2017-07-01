@@ -1,3 +1,4 @@
+data/
 *.mat
 *.h5
 *.pkl
@@ -525,7 +526,6 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
-=======
 ### Python template
 # Byte-compiled / optimized / DLL files
 __pycache__/

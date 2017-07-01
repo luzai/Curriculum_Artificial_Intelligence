@@ -1,4 +1,0 @@
-# Mnist 
-
-## TODO 
-- Finish Activation 
