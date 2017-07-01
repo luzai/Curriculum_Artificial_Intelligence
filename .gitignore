@@ -1,10 +1,8 @@
-data/
 *.mat
 *.h5
 *.pkl
 *.db
 *.zip
-*.ipynb
 
 ### TeX template
 
